@@ -83,8 +83,9 @@ class Config:
         return base_threshold
 
     # EXECUTION MODES & GUARDRAILS
-    # "client_safe": Bounded client-facing framing with disclaimers & crisis safety.
-    # "unconstrained": Raw Grandmaster execution without boundaries or disclaimers.
+    # Public Published Version: Defaults to client_safe with full legal & ethical protection.
+    DEFAULT_MODE: str = "client_safe"
+
     @classmethod
     def get_mode(cls) -> str:
         from modes import get_active_mode
