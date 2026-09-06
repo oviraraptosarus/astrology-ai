@@ -218,12 +218,12 @@
                 renderWelcomeMessage();
                 fetchAndRenderKundli();
             } else {
-                // No profile found on backend, trigger onboarding
-                document.getElementById('onboardingModal').classList.add('is-active');
+                // No profile found on backend, render prompt
+                renderInitialPrompt();
             }
         } catch(e) {
             console.error("Profile fetch error:", e);
-            document.getElementById('onboardingModal').classList.add('is-active');
+            renderInitialPrompt();
         }
     }
     initSession();
@@ -348,7 +348,8 @@
 
             if (!calcRes.ok) throw new Error("Chart calculation failed");
 
-            document.getElementById('onboardingModal').classList.remove('is-active');
+            const modalNode = document.getElementById('onboardingModal');
+            if (modalNode) modalNode.classList.remove('is-active');
 
             // STEP 2: Ask the LLM to Synthesize
             const prompt = `My chart has been deterministically calculated and cached. Give me a complete overview.`;
@@ -1064,7 +1065,8 @@
 
             if (resProfile.ok) {
                 // Close modal
-                document.getElementById('onboardingModal').classList.remove('is-active');
+                const modalNode2 = document.getElementById('onboardingModal');
+                if (modalNode2) modalNode2.classList.remove('is-active');
                 
                 // Calculate chart
                 const [year, month, day] = dob.split('-');
