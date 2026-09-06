@@ -34,6 +34,27 @@ MALICIOUS_PATTERNS = [
     r"\bwhen\s+will\s+(my\s+(enemy|boss|father|mother|spouse|partner|ex|husband|wife)|he|she|they|someone)\s+die\s+so\s+i\s+(get|inherit|take|collect)\b",
 ]
 
+# Patterns for speculative gambling / lotteries (blocked in client_safe mode)
+GAMBLING_PATTERNS = [
+    r"\b(lottery|lotto|powerball|mega\s*millions)\s+(number|numbers|winning\s+numbers|prediction)\b",
+    r"\b(which|what)\s+(lottery|roulette|casino|slot|betting)\s+(number|ticket|horse)\s+(will\s+win|should\s+i\s+buy|should\s+i\s+bet)\b",
+    r"\bhow\s+to\s+win\s+(the\s+lottery|casino|gambling|sports\s+bet)\s+using\s+astrology\b",
+    r"\bgive\s+me\s+(lucky\s+lottery\s+numbers|winning\s+numbers\s+for\s+today)\b",
+]
+
+# Patterns for infidelity surveillance / partner spying (blocked in client_safe mode)
+INFIDELITY_SPYING_PATTERNS = [
+    r"\b(is\s+my|did\s+my|has\s+my)\s+(wife|husband|partner|girlfriend|boyfriend|spouse|ex)\s+(cheating|sleeping\s+with|have\s+an\s+affair|having\s+an\s+affair|betraying\s+me|unfaithful)\b",
+    r"\b(who\s+is\s+my|prove\s+my)\s+(wife|husband|partner|spouse)\s+(cheating\s+with|sleeping\s+with)\b",
+    r"\b(is\s+this|is\s+my)\s+(child|baby|son|daughter)\s+(really\s+mine|biologically\s+mine|from\s+another\s+man)\b",
+]
+
+# Patterns for medical diagnosis replacement (blocked in client_safe mode)
+MEDICAL_DIAGNOSIS_PATTERNS = [
+    r"\b(do\s+i\s+have|diagnose\s+my)\s+(cancer|tumor|stroke|heart\s+attack|fatal\s+disease|aids|hiv)\b",
+    r"\b(should\s+i|can\s+i)\s+(stop\s+taking|stop|quit|avoid)\s+(my\s+)?(chemo|chemotherapy|medication|medicine|insulin|prescription|treatment)",
+]
+
 # Patterns for exact fatal death timestamping (bounded in client_safe mode)
 FATAL_TIMESTAMP_PATTERNS = [
     r"\b(exact\s+date|exact\s+day|exact\s+time|what\s+day)\s+(will\s+i|of\s+my)\s+die\b",
@@ -64,13 +85,36 @@ Classical Jyotisha (*Brihat Parashara Hora Shastra* and *Vedanga Jyotisha*) is a
 
 The system does not generate destructive spells, curses, or predictive weaponization against others. Consultations are strictly oriented toward self-awareness, personal karma management, and ethical life navigation."""
 
+GAMBLING_REFUSAL_RESPONSE = """### ⚖️ Dharmic Wealth Principle
+
+Classical Jyotisha strictly discourages speculative gambling, random lottery guessing, or game-of-chance prediction. 
+
+In Vedic tradition, genuine prosperity (*Lakshmi*) is earned through **Dharma and Artha**—skill mastery, disciplined enterprise, righteous contracts, and patient long-term timing. The system evaluates business growth windows and financial accumulation cycles, not gambling bets."""
+
+INFIDELITY_REFUSAL_RESPONSE = """### 🕊️ Relationship Guidance & Privacy Policy
+
+Vedic astrology evaluates mutual astrological synastry, emotional temperament, and communication dynamics between consenting charts. 
+
+The system does not perform surveillance, make infidelity accusations, or judge the private personal conduct of third parties. If you are experiencing relationship distress, we encourage honest communication or licensed relationship counseling."""
+
+MEDICAL_REFUSAL_RESPONSE = """### 🩺 Medical Health Advisory
+
+Astrological analysis evaluates elemental balances (*Ayurvedic Tridoshas: Vata, Pitta, Kapha*) and anatomical sensitivities from a classical preventive perspective.
+
+Astrology cannot diagnose clinical illnesses, replace pathology testing, or advise on altering medical prescriptions. For any physical or medical concern, please consult a qualified licensed healthcare physician immediately."""
+
 
 def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
     """
     Evaluates incoming user query against safety & ethics boundaries.
     
     In all modes: Self-harm / suicide queries are immediately redirected to crisis support.
-    In client_safe mode: Malicious intent is refused; fatal timestamp queries receive bounded advice.
+    In client_safe mode:
+        - Malicious curses / black magic are refused.
+        - Speculative gambling / lottery requests are refused.
+        - Infidelity / partner surveillance requests are refused.
+        - Clinical medical diagnosis / stopping medication is refused.
+        - Fatal death timestamps are bounded to classical vitality tiers.
     In unconstrained mode: Legitimate astrological questions proceed with unmoderated astronomical calculations.
     """
     if not query or not query.strip():
@@ -88,7 +132,7 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
                 category="CRISIS_INTERVENTION"
             )
             
-    # 2. Malicious Intent / Cursing Check
+    # 2. Malicious Intent / Cursing Check (Universal across ALL modes)
     for pat in MALICIOUS_PATTERNS:
         if re.search(pat, q_lower):
             return SafetyDecision(
@@ -98,11 +142,41 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
                 category="ETHICAL_BOUNDARY"
             )
             
-    # 3. Exact Fatal Date Request in Client-Safe Mode
+    # 3. Client-Safe Public Nerfed Guardrails (Active only in client_safe mode)
     if mode == "client_safe":
+        # 3a. Gambling & Lotteries
+        for pat in GAMBLING_PATTERNS:
+            if re.search(pat, q_lower):
+                return SafetyDecision(
+                    allowed=False,
+                    violation_type="GAMBLING_SPECULATION",
+                    response=GAMBLING_REFUSAL_RESPONSE,
+                    category="SPECULATION_BLOCK"
+                )
+                
+        # 3b. Infidelity & Third-Party Surveillance
+        for pat in INFIDELITY_SPYING_PATTERNS:
+            if re.search(pat, q_lower):
+                return SafetyDecision(
+                    allowed=False,
+                    violation_type="INFIDELITY_SPYING",
+                    response=INFIDELITY_REFUSAL_RESPONSE,
+                    category="PRIVACY_BLOCK"
+                )
+                
+        # 3c. Medical Diagnosis / Stopping Rx
+        for pat in MEDICAL_DIAGNOSIS_PATTERNS:
+            if re.search(pat, q_lower):
+                return SafetyDecision(
+                    allowed=False,
+                    violation_type="MEDICAL_DIAGNOSIS_REPLACEMENT",
+                    response=MEDICAL_REFUSAL_RESPONSE,
+                    category="MEDICAL_BLOCK"
+                )
+                
+        # 3d. Exact Fatal Death Timestamp Request
         for pat in FATAL_TIMESTAMP_PATTERNS:
             if re.search(pat, q_lower):
-                # We allow the query to proceed, but flag it for bounded vitality framing
                 return SafetyDecision(
                     allowed=True,
                     violation_type=None,
