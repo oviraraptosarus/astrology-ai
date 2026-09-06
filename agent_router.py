@@ -136,10 +136,20 @@ def classify_intent(user_message: str, has_existing_chart: bool = False) -> Inte
 def get_specialist_tools(intent: IntentType, all_tools: list) -> list:
     """
     Return only the relevant tools for the given intent.
-    This shrinks the agent's tool selection space from 7 to 2-3 tools,
-    dramatically reducing hallucination and improving speed.
+    In client_safe mode, excludes sensitive or institutional raid tools to prevent abuse.
+    In unconstrained mode, allows the full suite of diagnostic tools.
     """
-    tool_names = SPECIALIST_TOOL_SETS.get(intent, SPECIALIST_TOOL_SETS["GENERAL"])
+    tool_names = list(SPECIALIST_TOOL_SETS.get(intent, SPECIALIST_TOOL_SETS["GENERAL"]))
+    
+    # Public Mode Safety Filter: In client_safe mode, omit hostile/institutional defense tools
+    try:
+        from modes import is_client_safe
+        if is_client_safe():
+            restricted_tools = {"check_institutional_defense"}
+            tool_names = [name for name in tool_names if name not in restricted_tools]
+    except Exception:
+        pass
+
     tool_map = {t.name: t for t in all_tools}
     specialist_tools = [tool_map[name] for name in tool_names if name in tool_map]
     

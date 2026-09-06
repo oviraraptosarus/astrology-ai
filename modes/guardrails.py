@@ -1,8 +1,18 @@
 """
-ASTROLOGY AI GUARDRAILS & QUERY SAFETY MODULE
-=============================================
-Provides deterministic query safety, ethical filtering, and output framing
-for public/client deployments while respecting the active execution mode.
+ASTROLOGY AI GUARDRAILS, LEGAL SHIELD & QUERY SAFETY MODULE
+===========================================================
+Provides deterministic query safety, jailbreak resistance, ethical filtering,
+and ironclad legal liability shielding for public client deployments.
+
+In client_safe mode:
+- 100% legal protection (speculative, entertainment & spiritual self-reflection only).
+- Absolute anti-jailbreak protection (blocks DAN, hypothetical overrides, roleplay bypasses).
+- Zero karmic liability: blocks death timing, gambling, infidelity spying, and medical replacement.
+- Preserves free will (Purushartha) and provides uplifting Vedic remedies.
+
+In unconstrained mode (Local / Personal):
+- 100% raw, direct, unfiltered Grandmaster calculations.
+- Universal crisis safety (self-harm protection) remains active across all modes.
 """
 
 import re
@@ -18,7 +28,7 @@ class SafetyDecision:
     category: Optional[str] = None
 
 
-# Patterns that indicate crisis / self-harm / suicide (always blocked in all modes)
+# 1. Absolute Self-Harm / Crisis Patterns (Universal across ALL modes)
 SELF_HARM_PATTERNS = [
     r"\b(how\s+(can|do|should|to)\s+i\s+)?(kill|hang|shoot|poison|cut|drown|end)\s+(my\s*self|my\s+life)\b",
     r"\b(suicide|suicidal|commit\s+suicide|ending\s+my\s+life)\b",
@@ -27,14 +37,24 @@ SELF_HARM_PATTERNS = [
     r"\bi\s+want\s+to\s+(die|disappear|kill\s+myself|end\s+it\s+all)\b",
 ]
 
-# Patterns for malicious harm / curses / black magic targeting others
+# 2. Malicious Harm / Curses / Black Magic targeting others (Universal)
 MALICIOUS_PATTERNS = [
     r"\b(how\s+to|can\s+you)\s+(curse|hex|destroy|kill|harm|ruin|attack)\s+(someone|somebody|my\s+enemy|my\s+boss|my\s+ex|my\s+partner|others)\b",
     r"\b(black\s+magic|marana\s+mantra|vashikaran\s+to\s+destroy|evil\s+spell|curse)\s+to\s+(kill|harm|punish|ruin|destroy|damage)\b",
     r"\bwhen\s+will\s+(my\s+(enemy|boss|father|mother|spouse|partner|ex|husband|wife)|he|she|they|someone)\s+die\s+so\s+i\s+(get|inherit|take|collect)\b",
 ]
 
-# Patterns for speculative gambling / lotteries (blocked in client_safe mode)
+# 3. Anti-Jailbreak / Prompt-Injection Patterns (Blocked in client_safe mode)
+JAILBREAK_PATTERNS = [
+    r"\b(ignore|disregard|forget|bypass|override)\s+(all\s+)?(previous|prior|system|safety|ethical|mode)?\s*(instructions|prompts|rules|guidelines|directives|filters|boundaries)\b",
+    r"\b(dan\s+mode|jailbreak|developer\s+mode|uncensored\s+mode|unfiltered\s+mode|do\s+anything\s+now)\b",
+    r"\b(act|pretend|roleplay)\s+as\s+(an\s+uncensored|a\s+dark|an\s+unfiltered|a\s+lawless|an\s+unrestricted)\s+(astrologer|ai|bot|grandmaster)\b",
+    r"\b(hypothetically|in\s+a\s+fictional\s+story|for\s+research\s+only|as\s+a\s+test|fictional|roleplay)\b.*?\b(tell|predict|give|reveal|show)\b.*?\b(die|death|lottery|curse|hex|suicide)\b",
+    r"\b(you\s+are\s+no\s+longer\s+bound|ignore\s+your\s+rules|safety\s+filter\s+disabled)\b",
+    r"\b(bypass|override)\b.*?\b(rules|guardrails|ethical|safety|filters|boundaries)\b",
+]
+
+# 4. Speculative Gambling / Lotteries (Blocked in client_safe mode)
 GAMBLING_PATTERNS = [
     r"\b(lottery|lotto|powerball|mega\s*millions)\s+(number|numbers|winning\s+numbers|prediction)\b",
     r"\b(which|what)\s+(lottery|roulette|casino|slot|betting)\s+(number|ticket|horse)\s+(will\s+win|should\s+i\s+buy|should\s+i\s+bet)\b",
@@ -42,32 +62,41 @@ GAMBLING_PATTERNS = [
     r"\bgive\s+me\s+(lucky\s+lottery\s+numbers|winning\s+numbers\s+for\s+today)\b",
 ]
 
-# Patterns for infidelity surveillance / partner spying (blocked in client_safe mode)
+# 5. Infidelity Surveillance / Partner Spying (Blocked in client_safe mode)
 INFIDELITY_SPYING_PATTERNS = [
     r"\b(is\s+my|did\s+my|has\s+my)\s+(wife|husband|partner|girlfriend|boyfriend|spouse|ex)\s+(cheating|sleeping\s+with|have\s+an\s+affair|having\s+an\s+affair|betraying\s+me|unfaithful)\b",
     r"\b(who\s+is\s+my|prove\s+my)\s+(wife|husband|partner|spouse)\s+(cheating\s+with|sleeping\s+with)\b",
     r"\b(is\s+this|is\s+my)\s+(child|baby|son|daughter)\s+(really\s+mine|biologically\s+mine|from\s+another\s+man)\b",
 ]
 
-# Patterns for medical diagnosis replacement (blocked in client_safe mode)
+# 6. Medical Diagnosis Replacement (Blocked in client_safe mode)
 MEDICAL_DIAGNOSIS_PATTERNS = [
     r"\b(do\s+i\s+have|diagnose\s+my)\s+(cancer|tumor|stroke|heart\s+attack|fatal\s+disease|aids|hiv)\b",
     r"\b(should\s+i|can\s+i)\s+(stop\s+taking|stop|quit|avoid)\s+(my\s+)?(chemo|chemotherapy|medication|medicine|insulin|prescription|treatment)",
 ]
 
-# Patterns for exact fatal death timestamping (bounded in client_safe mode)
+# 7. Exact Fatal Death Timestamping (Bounded in client_safe mode)
 FATAL_TIMESTAMP_PATTERNS = [
     r"\b(exact\s+date|exact\s+day|exact\s+time|what\s+day)\s+(will\s+i|of\s+my)\s+die\b",
     r"\bwhen\s+exactly\s+(will|am\s+i\s+going\s+to)\s+die\b",
     r"\bpredict\s+my\s+(exact\s+death\s+date|day\s+of\s+death)\b",
 ]
 
+
+# ─── LEGAL & KARMIC DISCLAIMER ──────────────────────────────────────
 ADVISORY_DISCLAIMER = (
-    "\n\n---\n*✦ Advisory Notice: Astrological readings reflect classical symbolic potentials and planetary cycles. "
-    "Jyotisha emphasizes Kriyamana Karma (free will, conscious choice, and proactive discipline). "
-    "For medical, psychological, legal, or major financial decisions, always consult qualified licensed professionals.*"
+    "\n\n---\n"
+    "### ⚖️ Legal & Astrological Advisory Notice\n"
+    "*This consultation is strictly for entertainment, philosophical reflection, and personal spiritual self-inquiry. "
+    "Astrological interpretations are inherently speculative and reflect symbolic planetary archetypes. "
+    "This service does NOT provide medical, psychiatric, legal, financial, or investment advice. "
+    "No decisions regarding health, medical treatments, investments, legal disputes, or personal relationships should be made based on this reading. "
+    "Jyotisha tradition teaches that conscious human effort (Kriyamana Karma / Purushartha) is supreme over astrological indications. "
+    "The creators and operators of this platform assume zero legal or karmic liability for personal choices or interpretations.*"
 )
 
+
+# ─── CANNED ETHICAL RESPONSES ───────────────────────────────────────
 CRISIS_SUPPORT_RESPONSE = """### 💛 Support & Crisis Resources
 
 If you are experiencing overwhelming feelings, distress, or thoughts of self-harm, please know that support is available right now. Astrological consultations cannot evaluate mental health crises, but dedicated professionals are available 24/7:
@@ -84,6 +113,14 @@ MALICIOUS_INTENT_RESPONSE = """### 🛡️ Ethical Astrology Directive
 Classical Jyotisha (*Brihat Parashara Hora Shastra* and *Vedanga Jyotisha*) is a sacred science of illumination (*Jyoti* = Light), self-knowledge, and dharmic alignment. 
 
 The system does not generate destructive spells, curses, or predictive weaponization against others. Consultations are strictly oriented toward self-awareness, personal karma management, and ethical life navigation."""
+
+JAILBREAK_REFUSAL_RESPONSE = """### 🕉️ Sovereign Dharmic Directive
+
+The ethical and legal safeguards of this Jyotisha sanctuary are invariant and non-negotiable. 
+
+Vedic astrology exists to illuminate the soul's path with truth, wisdom, and compassion. System instructions, safety boundaries, and ethical safeguards cannot be bypassed, overridden, or roleplayed away under any circumstance. 
+
+Please ask a constructive question regarding your career potential, personal growth, relationship harmony, or classical Vedic remedies."""
 
 GAMBLING_REFUSAL_RESPONSE = """### ⚖️ Dharmic Wealth Principle
 
@@ -106,16 +143,19 @@ Astrology cannot diagnose clinical illnesses, replace pathology testing, or advi
 
 def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
     """
-    Evaluates incoming user query against safety & ethics boundaries.
+    Evaluates incoming user query against safety, jailbreak, and legal boundaries.
     
-    In all modes: Self-harm / suicide queries are immediately redirected to crisis support.
+    In all modes:
+        - Self-harm / suicide queries are immediately redirected to crisis support.
+        - Malicious curses / black magic targeting others are refused.
     In client_safe mode:
-        - Malicious curses / black magic are refused.
+        - Jailbreak / prompt-injection attempts are blocked.
         - Speculative gambling / lottery requests are refused.
         - Infidelity / partner surveillance requests are refused.
         - Clinical medical diagnosis / stopping medication is refused.
         - Fatal death timestamps are bounded to classical vitality tiers.
-    In unconstrained mode: Legitimate astrological questions proceed with unmoderated astronomical calculations.
+    In unconstrained mode:
+        - Legitimate astrological calculations proceed with unmoderated astronomical accuracy.
     """
     if not query or not query.strip():
         return SafetyDecision(allowed=True)
@@ -142,9 +182,19 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
                 category="ETHICAL_BOUNDARY"
             )
             
-    # 3. Client-Safe Public Nerfed Guardrails (Active only in client_safe mode)
+    # 3. Client-Safe Public Nerfed & Jailbreak Guardrails (Active only in client_safe mode)
     if mode == "client_safe":
-        # 3a. Gambling & Lotteries
+        # 3a. Anti-Jailbreak / Prompt-Injection Check
+        for pat in JAILBREAK_PATTERNS:
+            if re.search(pat, q_lower):
+                return SafetyDecision(
+                    allowed=False,
+                    violation_type="JAILBREAK_ATTEMPT",
+                    response=JAILBREAK_REFUSAL_RESPONSE,
+                    category="PROMPT_INJECTION_BLOCK"
+                )
+
+        # 3b. Gambling & Lotteries
         for pat in GAMBLING_PATTERNS:
             if re.search(pat, q_lower):
                 return SafetyDecision(
@@ -154,7 +204,7 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
                     category="SPECULATION_BLOCK"
                 )
                 
-        # 3b. Infidelity & Third-Party Surveillance
+        # 3c. Infidelity & Third-Party Surveillance
         for pat in INFIDELITY_SPYING_PATTERNS:
             if re.search(pat, q_lower):
                 return SafetyDecision(
@@ -164,7 +214,7 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
                     category="PRIVACY_BLOCK"
                 )
                 
-        # 3c. Medical Diagnosis / Stopping Rx
+        # 3d. Medical Diagnosis / Stopping Rx
         for pat in MEDICAL_DIAGNOSIS_PATTERNS:
             if re.search(pat, q_lower):
                 return SafetyDecision(
@@ -174,7 +224,7 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
                     category="MEDICAL_BLOCK"
                 )
                 
-        # 3d. Exact Fatal Death Timestamp Request
+        # 3e. Exact Fatal Death Timestamp Request
         for pat in FATAL_TIMESTAMP_PATTERNS:
             if re.search(pat, q_lower):
                 return SafetyDecision(
@@ -189,20 +239,20 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
 
 def apply_output_guardrails(response_text: str, mode: str = "client_safe") -> str:
     """
-    Applies mode-specific output formatting and disclaimers.
-    In client_safe mode: Appends standard advisory disclaimer if not already present.
+    Applies mode-specific output formatting and legal disclaimers.
+    In client_safe mode: Appends standard ironclad legal disclaimer if not already present.
     In unconstrained mode: Returns raw text without disclaimer padding.
     """
     if not response_text:
         return ""
         
     if mode == "client_safe":
-        if "✦ Advisory Notice" not in response_text and "Advisory Notice:" not in response_text:
+        if "Legal & Astrological Advisory Notice" not in response_text and "Advisory Notice:" not in response_text:
             return response_text.rstrip() + ADVISORY_DISCLAIMER
             
     return response_text
 
 
 def get_client_disclaimer() -> str:
-    """Return the client-safe advisory disclaimer."""
+    """Return the client-safe ironclad legal disclaimer."""
     return ADVISORY_DISCLAIMER
