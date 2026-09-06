@@ -5,6 +5,7 @@ venv/
 __pycache__/
 *.pyc
 .git/
+.agents/
 *.zip
 *.db
 *.sqlite
@@ -18,3 +19,10 @@ downloads/
 cache/
 chroma_db/
 chroma_db_advanced/
+.env
+.env.bak*
+bm25_cache.pkl
+user_context_memory.db
+memory.sqlite
+tests/golden_baseline.json
+dependencies/

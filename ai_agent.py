@@ -32,33 +32,31 @@ EMBEDDING_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"
 
 # ─── Phase 4: DB-Backed Chart Storage ────────────────────────────────────────
 # Replaces file-system JSON cache with a database-backed solution.
-# This works correctly with multiple workers and cloud deployments.
-
-def _get_cache_db():
-    """Get connection to the SQLite cache DB (same DB used for memory)."""
-    conn = sqlite3.connect("memory.sqlite", check_same_thread=False)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS chart_cache (
-            session_id TEXT PRIMARY KEY,
-            chart_json TEXT NOT NULL,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    conn.commit()
-    return conn
-
+# Uses the unified db layer: PostgreSQL in production, SQLite locally.
 
 def save_chart(session_id: str, data: dict):
-    """Save chart to DB. Falls back to file system if DB fails."""
+    """Persist chart JSON through the unified DB layer."""
+    import db as _db
     try:
-        conn = _get_cache_db()
         chart_json = json.dumps(data)
-        conn.execute(
-            "INSERT OR REPLACE INTO chart_cache (session_id, chart_json, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP)",
-            (session_id, chart_json)
-        )
-        conn.commit()
-        conn.close()
+        if _db.is_postgres():
+            with _db.cursor() as (cur, _):
+                cur.execute(
+                    """INSERT INTO chart_cache (session_id, chart_json, updated_at)
+                       VALUES (%s, %s, NOW())
+                       ON CONFLICT (session_id) DO UPDATE SET
+                           chart_json = excluded.chart_json, updated_at = NOW()""",
+                    (session_id, chart_json),
+                )
+        else:
+            with _db.cursor() as (cur, _):
+                cur.execute(
+                    """INSERT INTO chart_cache (session_id, chart_json, updated_at)
+                       VALUES (?, ?, CURRENT_TIMESTAMP)
+                       ON CONFLICT (session_id) DO UPDATE SET
+                           chart_json = excluded.chart_json, updated_at = CURRENT_TIMESTAMP""",
+                    (session_id, chart_json),
+                )
         logger.info(f"Chart saved to DB for session {session_id}")
     except Exception as e:
         logger.warning(f"DB chart save failed: {e}. Falling back to file system.")
@@ -69,18 +67,19 @@ def save_chart(session_id: str, data: dict):
 
 def load_chart(session_id: str) -> Optional[dict]:
     """Load chart from DB. Falls back to file system for backward compatibility."""
+    import db as _db
     try:
-        conn = _get_cache_db()
-        row = conn.execute(
-            "SELECT chart_json FROM chart_cache WHERE session_id = ?",
-            (session_id,)
-        ).fetchone()
-        conn.close()
+        with _db.cursor() as (cur, db_type):
+            cur.execute(
+                f"SELECT chart_json FROM chart_cache WHERE session_id = {_db.ph(db_type)}",
+                (session_id,),
+            )
+            row = cur.fetchone()
         if row:
-            return json.loads(row[0])
+            return json.loads(row["chart_json"])
     except Exception as e:
         logger.warning(f"DB chart load failed: {e}. Trying file system fallback.")
-    
+
     # File system fallback (backward compatibility for existing cached charts)
     try:
         path = os.path.join("cache", f"chart_{session_id}.json")
@@ -92,13 +91,14 @@ def load_chart(session_id: str) -> Optional[dict]:
 
 def chart_exists_in_db(session_id: str) -> bool:
     """Check if a chart exists in DB (used by /api/chart/status endpoint)."""
+    import db as _db
     try:
-        conn = _get_cache_db()
-        row = conn.execute(
-            "SELECT 1 FROM chart_cache WHERE session_id = ?", (session_id,)
-        ).fetchone()
-        conn.close()
-        return bool(row)
+        with _db.cursor() as (cur, db_type):
+            cur.execute(
+                f"SELECT 1 FROM chart_cache WHERE session_id = {_db.ph(db_type)}",
+                (session_id,),
+            )
+            return bool(cur.fetchone())
     except Exception:
         # Fall back to file check
         return os.path.exists(os.path.join("cache", f"chart_{session_id}.json"))
@@ -423,8 +423,12 @@ ALL_TOOLS = [
     check_biorhythm_pakshi, get_remedies_and_gemstones, rectify_birth_time
 ]
 
-# Setup persistent memory
-conn = sqlite3.connect("memory.sqlite", check_same_thread=False)
+# Setup persistent memory (LangGraph checkpointer).
+# SQLite file in both dev and production: it holds conversational checkpoints
+# only — ephemeral agent memory, not user/billing state. User data lives in
+# the unified DB (PostgreSQL in production). Filesystem loss degrades only
+# chat history, never auth or billing.
+conn = sqlite3.connect(os.path.join(os.path.dirname(os.path.abspath(__file__)), "memory.sqlite"), check_same_thread=False)
 memory = SqliteSaver(conn)
 
 
@@ -510,7 +514,7 @@ def run_astrologer(user_input: str, session_id: str, provider: str = "auto") -> 
         if "429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
             return "Cosmic static detected. The AI API rate limit has been exceeded. Please wait a moment and try again, or select a different fallback provider from the model dropdown."
         logger.error(f"Agent error: {error_msg}", exc_info=True)
-        return f"An unexpected cosmic anomaly occurred: {error_msg}"
+        return "An unexpected cosmic anomaly occurred on our side. The error has been logged — please try again."
 
 
 def run_astrologer_stream(user_input: str, session_id: str, provider: str = "auto") -> Generator[str, None, None]:
@@ -593,4 +597,4 @@ def run_astrologer_stream(user_input: str, session_id: str, provider: str = "aut
             yield json.dumps({"type": "error", "content": "Rate limit exceeded. Please wait and try again."})
         else:
             logger.error(f"Stream error: {error_msg}", exc_info=True)
-            yield json.dumps({"type": "error", "content": f"Cosmic anomaly: {error_msg}"})
+            yield json.dumps({"type": "error", "content": "Cosmic anomaly on our side — the error has been logged. Please try again."})

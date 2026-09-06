@@ -1,0 +1,497 @@
+{
+ "india_1947": {
+  "ascendant": {
+   "degree": 7.73,
+   "sign": "Taurus"
+  },
+  "md_head": [
+   [
+    "Saturn",
+    "1947-08-14T18:30:00",
+    "1965-09-11T22:37:51.600000"
+   ],
+   [
+    "Mercury",
+    "1965-09-11T22:37:51.600000",
+    "1982-09-12T04:37:51.600000"
+   ],
+   [
+    "Ketu",
+    "1982-09-12T04:37:51.600000",
+    "1989-09-11T22:37:51.600000"
+   ],
+   [
+    "Venus",
+    "1989-09-11T22:37:51.600000",
+    "2009-09-11T22:37:51.600000"
+   ],
+   [
+    "Sun",
+    "2009-09-11T22:37:51.600000",
+    "2015-09-12T10:37:51.600000"
+   ]
+  ],
+  "planets": {
+   "Jupiter": {
+    "degree": 25.88,
+    "house": 6,
+    "nakshatra": "Vishakha",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Libra"
+   },
+   "Mars": {
+    "degree": 7.46,
+    "house": 2,
+    "nakshatra": "Ardra",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Gemini"
+   },
+   "Mercury": {
+    "degree": 13.67,
+    "house": 3,
+    "nakshatra": "Pushya",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Moon": {
+    "degree": 3.98,
+    "house": 3,
+    "nakshatra": "Pushya",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Rahu": {
+    "degree": 5.74,
+    "house": 1,
+    "nakshatra": "Krittika",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Taurus"
+   },
+   "Saturn": {
+    "degree": 20.47,
+    "house": 3,
+    "nakshatra": "Ashlesha",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Sun": {
+    "degree": 27.99,
+    "house": 3,
+    "nakshatra": "Ashlesha",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Venus": {
+    "degree": 22.56,
+    "house": 3,
+    "nakshatra": "Ashlesha",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Cancer"
+   }
+  }
+ },
+ "jobs_1955": {
+  "ascendant": {
+   "degree": 21.33,
+   "sign": "Aquarius"
+  },
+  "md_head": [
+   [
+    "Saturn",
+    "1955-02-24T15:15:00",
+    "1968-04-18T22:37:04.800001"
+   ],
+   [
+    "Mercury",
+    "1968-04-18T22:37:04.800001",
+    "1985-04-19T04:37:04.800001"
+   ],
+   [
+    "Ketu",
+    "1985-04-19T04:37:04.800001",
+    "1992-04-18T22:37:04.800001"
+   ],
+   [
+    "Venus",
+    "1992-04-18T22:37:04.800001",
+    "2012-04-18T22:37:04.800001"
+   ],
+   [
+    "Sun",
+    "2012-04-18T22:37:04.800001",
+    "2018-04-19T10:37:04.800001"
+   ]
+  ],
+  "planets": {
+   "Jupiter": {
+    "degree": 27.3,
+    "house": 5,
+    "nakshatra": "Punarvasu",
+    "pada": 3,
+    "retrograde": true,
+    "sign": "Gemini"
+   },
+   "Mars": {
+    "degree": 5.5,
+    "house": 3,
+    "nakshatra": "Ashwini",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Aries"
+   },
+   "Mercury": {
+    "degree": 21.16,
+    "house": 12,
+    "nakshatra": "Shravana",
+    "pada": 4,
+    "retrograde": true,
+    "sign": "Capricorn"
+   },
+   "Moon": {
+    "degree": 7.44,
+    "house": 2,
+    "nakshatra": "Uttara Bhadrapada",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Pisces"
+   },
+   "Rahu": {
+    "degree": 10.26,
+    "house": 11,
+    "nakshatra": "Mula",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Sagittarius"
+   },
+   "Saturn": {
+    "degree": 27.92,
+    "house": 9,
+    "nakshatra": "Vishakha",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Libra"
+   },
+   "Sun": {
+    "degree": 12.01,
+    "house": 1,
+    "nakshatra": "Shatabhisha",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Aquarius"
+   },
+   "Venus": {
+    "degree": 27.37,
+    "house": 11,
+    "nakshatra": "Uttara Ashadha",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Sagittarius"
+   }
+  }
+ },
+ "sajal_2006": {
+  "ascendant": {
+   "degree": 18.98,
+   "sign": "Leo"
+  },
+  "md_head": [
+   [
+    "Ketu",
+    "2006-03-03T12:50:00",
+    "2009-03-22T06:39:55.200000"
+   ],
+   [
+    "Venus",
+    "2009-03-22T06:39:55.200000",
+    "2029-03-22T06:39:55.200000"
+   ],
+   [
+    "Sun",
+    "2029-03-22T06:39:55.200000",
+    "2035-03-22T18:39:55.200000"
+   ],
+   [
+    "Moon",
+    "2035-03-22T18:39:55.200000",
+    "2045-03-22T06:39:55.200000"
+   ],
+   [
+    "Mars",
+    "2045-03-22T06:39:55.200000",
+    "2052-03-22T00:39:55.200000"
+   ]
+  ],
+  "planets": {
+   "Jupiter": {
+    "degree": 24.92,
+    "house": 3,
+    "nakshatra": "Vishakha",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Libra"
+   },
+   "Mars": {
+    "degree": 13.01,
+    "house": 10,
+    "nakshatra": "Rohini",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Taurus"
+   },
+   "Mercury": {
+    "degree": 2.94,
+    "house": 8,
+    "nakshatra": "Purva Bhadrapada",
+    "pada": 4,
+    "retrograde": true,
+    "sign": "Pisces"
+   },
+   "Moon": {
+    "degree": 7.52,
+    "house": 9,
+    "nakshatra": "Ashwini",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Aries"
+   },
+   "Rahu": {
+    "degree": 10.51,
+    "house": 8,
+    "nakshatra": "Uttara Bhadrapada",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Pisces"
+   },
+   "Saturn": {
+    "degree": 11.39,
+    "house": 12,
+    "nakshatra": "Pushya",
+    "pada": 3,
+    "retrograde": true,
+    "sign": "Cancer"
+   },
+   "Sun": {
+    "degree": 18.86,
+    "house": 7,
+    "nakshatra": "Shatabhisha",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Aquarius"
+   },
+   "Venus": {
+    "degree": 4.63,
+    "house": 6,
+    "nakshatra": "Uttara Ashadha",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Capricorn"
+   }
+  }
+ },
+ "user_2008": {
+  "ascendant": {
+   "degree": 14.21,
+   "sign": "Capricorn"
+  },
+  "md_head": [
+   [
+    "Mercury",
+    "2008-08-01T12:55:00",
+    "2024-12-10T09:20:10.200000"
+   ],
+   [
+    "Ketu",
+    "2024-12-10T09:20:10.200000",
+    "2031-12-11T03:20:10.200000"
+   ],
+   [
+    "Venus",
+    "2031-12-11T03:20:10.200000",
+    "2051-12-11T03:20:10.200000"
+   ],
+   [
+    "Sun",
+    "2051-12-11T03:20:10.200000",
+    "2057-12-10T15:20:10.200000"
+   ],
+   [
+    "Moon",
+    "2057-12-10T15:20:10.200000",
+    "2067-12-11T03:20:10.200000"
+   ]
+  ],
+  "planets": {
+   "Jupiter": {
+    "degree": 20.69,
+    "house": 12,
+    "nakshatra": "Purva Ashadha",
+    "pada": 3,
+    "retrograde": true,
+    "sign": "Sagittarius"
+   },
+   "Mars": {
+    "degree": 24.78,
+    "house": 8,
+    "nakshatra": "Purva Phalguni",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Leo"
+   },
+   "Mercury": {
+    "degree": 18.67,
+    "house": 7,
+    "nakshatra": "Ashlesha",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Moon": {
+    "degree": 17.17,
+    "house": 7,
+    "nakshatra": "Ashlesha",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Rahu": {
+    "degree": 24.54,
+    "house": 1,
+    "nakshatra": "Dhanishta",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Capricorn"
+   },
+   "Saturn": {
+    "degree": 13.82,
+    "house": 8,
+    "nakshatra": "Purva Phalguni",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Leo"
+   },
+   "Sun": {
+    "degree": 15.66,
+    "house": 7,
+    "nakshatra": "Pushya",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Cancer"
+   },
+   "Venus": {
+    "degree": 0.31,
+    "house": 8,
+    "nakshatra": "Magha",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Leo"
+   }
+  }
+ },
+ "vivekananda_1863": {
+  "ascendant": {
+   "degree": 26.14,
+   "sign": "Sagittarius"
+  },
+  "md_head": [
+   [
+    "Moon",
+    "1863-01-12T00:40:00",
+    "1867-06-11T16:38:30"
+   ],
+   [
+    "Mars",
+    "1867-06-11T16:38:30",
+    "1874-06-11T10:38:30"
+   ],
+   [
+    "Rahu",
+    "1874-06-11T10:38:30",
+    "1892-06-10T22:38:30"
+   ],
+   [
+    "Jupiter",
+    "1892-06-10T22:38:30",
+    "1908-06-11T22:38:30"
+   ],
+   [
+    "Saturn",
+    "1908-06-11T22:38:30",
+    "1927-06-12T16:38:30"
+   ]
+  ],
+  "planets": {
+   "Jupiter": {
+    "degree": 4.01,
+    "house": 11,
+    "nakshatra": "Chitra",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Libra"
+   },
+   "Mars": {
+    "degree": 6.32,
+    "house": 5,
+    "nakshatra": "Ashwini",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Aries"
+   },
+   "Mercury": {
+    "degree": 11.77,
+    "house": 2,
+    "nakshatra": "Shravana",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Capricorn"
+   },
+   "Moon": {
+    "degree": 17.45,
+    "house": 10,
+    "nakshatra": "Hasta",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Virgo"
+   },
+   "Rahu": {
+    "degree": 23.5,
+    "house": 12,
+    "nakshatra": "Jyeshtha",
+    "pada": 3,
+    "retrograde": false,
+    "sign": "Scorpio"
+   },
+   "Saturn": {
+    "degree": 13.57,
+    "house": 10,
+    "nakshatra": "Hasta",
+    "pada": 2,
+    "retrograde": false,
+    "sign": "Virgo"
+   },
+   "Sun": {
+    "degree": 29.42,
+    "house": 1,
+    "nakshatra": "Uttara Ashadha",
+    "pada": 1,
+    "retrograde": false,
+    "sign": "Sagittarius"
+   },
+   "Venus": {
+    "degree": 7.1,
+    "house": 2,
+    "nakshatra": "Uttara Ashadha",
+    "pada": 4,
+    "retrograde": false,
+    "sign": "Capricorn"
+   }
+  }
+ }
+}

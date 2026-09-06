@@ -46,15 +46,33 @@
         "Mercury"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [
+        "Moon",
+        "Jupiter"
+      ],
+      "Friends": [
+        "Mercury"
+      ],
+      "Neutrals": [
+        "Mars",
+        "Venus",
+        "Saturn"
+      ],
+      "Enemies": [],
+      "Bitter_Enemies": []
+    },
+    "functional_role": "Benefic",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 101.47,
       "dig_bala": 28.91,
-      "kala_bala": 0.0,
-      "cheshta_bala": 30.0,
+      "kala_bala": -26.01,
+      "cheshta_bala": 60.0,
       "naisargika_bala": 60.0,
       "drik_bala": 4.41,
-      "total": 224.79,
-      "is_partial": true
+      "total": 228.78,
+      "is_partial": false
     },
     "natural_karakas": [
       "Father",
@@ -62,7 +80,7 @@
       "Authority",
       "Health"
     ],
-    "chara_karaka": "AK",
+    "chara_karaka": "BK",
     "dispositor_chain": [
       "Jupiter",
       "Venus",
@@ -70,20 +88,23 @@
       "Mercury"
     ],
     "is_parivartana": false,
-    "vimsopaka_bala": 15.6,
+    "vimsopaka_bala": 12.88,
     "vargas": {
       "D1": "Sagittarius",
-      "D9": "Sagittarius",
-      "D10": "Virgo",
       "D2": "Cancer",
       "D3": "Leo",
       "D4": "Virgo",
       "D7": "Gemini",
+      "D9": "Sagittarius",
+      "D10": "Virgo",
       "D12": "Scorpio",
       "D16": "Pisces",
       "D20": "Pisces",
-      "D24": "Pisces",
+      "D24": "Cancer",
+      "D27": "Gemini",
       "D30": "Libra",
+      "D40": "Cancer",
+      "D45": "Leo",
       "D60": "Libra"
     }
   },
@@ -137,41 +158,63 @@
         "Saturn"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [
+        "Sun"
+      ],
+      "Friends": [
+        "Jupiter"
+      ],
+      "Neutrals": [
+        "Mercury"
+      ],
+      "Enemies": [
+        "Mars",
+        "Venus",
+        "Saturn"
+      ],
+      "Bitter_Enemies": []
+    },
+    "functional_role": "Malefic",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 90.18,
       "dig_bala": 2.9,
       "kala_bala": 120.0,
-      "cheshta_bala": 30.0,
+      "cheshta_bala": 12.69,
       "naisargika_bala": 51.43,
       "drik_bala": -5.56,
-      "total": 288.95,
-      "is_partial": true
+      "total": 271.64,
+      "is_partial": false
     },
     "natural_karakas": [
       "Mother",
       "Mind",
       "Emotions"
     ],
-    "chara_karaka": "AmK",
+    "chara_karaka": "PK",
     "dispositor_chain": [
       "Mercury",
       "Saturn"
     ],
     "is_parivartana": false,
-    "vimsopaka_bala": 13.25,
+    "vimsopaka_bala": 15.12,
     "vargas": {
       "D1": "Virgo",
-      "D9": "Gemini",
-      "D10": "Libra",
       "D2": "Leo",
       "D3": "Capricorn",
       "D4": "Pisces",
       "D7": "Cancer",
+      "D9": "Gemini",
+      "D10": "Libra",
       "D12": "Pisces",
       "D16": "Virgo",
       "D20": "Cancer",
-      "D24": "Virgo",
+      "D24": "Leo",
+      "D27": "Libra",
       "D30": "Pisces",
+      "D40": "Virgo",
+      "D45": "Aquarius",
       "D60": "Cancer"
     }
   },
@@ -227,15 +270,33 @@
         "Saturn"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [],
+      "Friends": [
+        "Venus"
+      ],
+      "Neutrals": [
+        "Sun",
+        "Moon",
+        "Mercury",
+        "Jupiter"
+      ],
+      "Enemies": [
+        "Saturn"
+      ],
+      "Bitter_Enemies": []
+    },
+    "functional_role": "Benefic",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 82.23,
       "dig_bala": 3.39,
-      "kala_bala": 60.0,
-      "cheshta_bala": 30.0,
+      "kala_bala": 33.99,
+      "cheshta_bala": 24.98,
       "naisargika_bala": 17.14,
-      "drik_bala": 23.98,
-      "total": 216.74,
-      "is_partial": true
+      "drik_bala": 8.2,
+      "total": 169.93,
+      "is_partial": false
     },
     "natural_karakas": [
       "Siblings",
@@ -243,25 +304,28 @@
       "Enemies",
       "Property"
     ],
-    "chara_karaka": "GK",
+    "chara_karaka": "DK",
     "dispositor_chain": [
       "Mars"
     ],
     "is_parivartana": false,
-    "vimsopaka_bala": 15.2,
+    "vimsopaka_bala": 15.28,
     "vargas": {
       "D1": "Aries",
-      "D9": "Taurus",
-      "D10": "Gemini",
       "D2": "Leo",
       "D3": "Aries",
       "D4": "Aries",
       "D7": "Taurus",
+      "D9": "Taurus",
+      "D10": "Gemini",
       "D12": "Gemini",
       "D16": "Cancer",
       "D20": "Leo",
-      "D24": "Virgo",
+      "D24": "Capricorn",
+      "D27": "Virgo",
       "D30": "Aquarius",
+      "D40": "Sagittarius",
+      "D45": "Capricorn",
       "D60": "Aries"
     }
   },
@@ -272,7 +336,7 @@
     "house": 2,
     "chalit_house": 1,
     "retrograde": false,
-    "dignity": "Neutral Sign",
+    "dignity": "Enemy Sign",
     "owns_houses": [
       7,
       10
@@ -317,15 +381,38 @@
         "Saturn"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [
+        "Sun"
+      ],
+      "Friends": [
+        "Mars",
+        "Jupiter"
+      ],
+      "Neutrals": [
+        "Venus"
+      ],
+      "Enemies": [
+        "Saturn"
+      ],
+      "Bitter_Enemies": [
+        "Moon"
+      ]
+    },
+    "functional_role": "Neutral",
+    "detailed_functional_roles": [
+      "Badhaka",
+      "Maraka"
+    ],
     "shadbala": {
       "sthana_bala": 51.08,
       "dig_bala": 54.79,
       "kala_bala": 60.0,
-      "cheshta_bala": 30.0,
+      "cheshta_bala": 18.56,
       "naisargika_bala": 25.71,
       "drik_bala": 0.48,
-      "total": 222.06,
-      "is_partial": true
+      "total": 210.62,
+      "is_partial": false
     },
     "natural_karakas": [
       "Intellect",
@@ -333,26 +420,29 @@
       "Business",
       "Education"
     ],
-    "chara_karaka": "MK",
+    "chara_karaka": "AK",
     "dispositor_chain": [
       "Saturn",
       "Mercury"
     ],
     "is_parivartana": true,
-    "vimsopaka_bala": 11.7,
+    "vimsopaka_bala": 11.85,
     "vargas": {
       "D1": "Capricorn",
-      "D9": "Aries",
-      "D10": "Sagittarius",
       "D2": "Cancer",
       "D3": "Taurus",
       "D4": "Aries",
       "D7": "Virgo",
+      "D9": "Aries",
+      "D10": "Sagittarius",
       "D12": "Taurus",
       "D16": "Libra",
       "D20": "Scorpio",
-      "D24": "Taurus",
+      "D24": "Aries",
+      "D27": "Taurus",
       "D30": "Virgo",
+      "D40": "Capricorn",
+      "D45": "Virgo",
       "D60": "Sagittarius"
     }
   },
@@ -408,15 +498,33 @@
         "Saturn"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [
+        "Sun",
+        "Moon"
+      ],
+      "Friends": [
+        "Saturn"
+      ],
+      "Neutrals": [
+        "Mars",
+        "Mercury",
+        "Venus"
+      ],
+      "Enemies": [],
+      "Bitter_Enemies": []
+    },
+    "functional_role": "Benefic",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 75.33,
       "dig_bala": 32.62,
       "kala_bala": 60.0,
-      "cheshta_bala": 30.0,
+      "cheshta_bala": 35.79,
       "naisargika_bala": 34.28,
       "drik_bala": -13.84,
-      "total": 218.39,
-      "is_partial": true
+      "total": 224.18,
+      "is_partial": false
     },
     "natural_karakas": [
       "Children",
@@ -424,27 +532,30 @@
       "Wisdom",
       "Guru"
     ],
-    "chara_karaka": "DK",
+    "chara_karaka": "MK",
     "dispositor_chain": [
       "Venus",
       "Saturn",
       "Mercury"
     ],
     "is_parivartana": false,
-    "vimsopaka_bala": 11.0,
+    "vimsopaka_bala": 9.68,
     "vargas": {
       "D1": "Libra",
-      "D9": "Scorpio",
-      "D10": "Scorpio",
       "D2": "Leo",
       "D3": "Libra",
       "D4": "Libra",
       "D7": "Libra",
+      "D9": "Scorpio",
+      "D10": "Scorpio",
       "D12": "Scorpio",
       "D16": "Gemini",
       "D20": "Gemini",
-      "D24": "Cancer",
+      "D24": "Scorpio",
+      "D27": "Capricorn",
       "D30": "Aries",
+      "D40": "Virgo",
+      "D45": "Libra",
       "D60": "Gemini"
     }
   },
@@ -500,15 +611,33 @@
         "Jupiter"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [],
+      "Friends": [
+        "Mars",
+        "Jupiter"
+      ],
+      "Neutrals": [
+        "Sun",
+        "Mercury",
+        "Saturn"
+      ],
+      "Enemies": [],
+      "Bitter_Enemies": [
+        "Moon"
+      ]
+    },
+    "functional_role": "Malefic",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 78.37,
       "dig_bala": 33.65,
       "kala_bala": 0.0,
-      "cheshta_bala": 30.0,
+      "cheshta_bala": 10.79,
       "naisargika_bala": 42.85,
       "drik_bala": -0.1,
-      "total": 184.77,
-      "is_partial": true
+      "total": 165.56,
+      "is_partial": false
     },
     "natural_karakas": [
       "Marriage",
@@ -516,26 +645,29 @@
       "Relationships",
       "Luxuries"
     ],
-    "chara_karaka": "PK",
+    "chara_karaka": "AmK",
     "dispositor_chain": [
       "Saturn",
       "Mercury"
     ],
     "is_parivartana": false,
-    "vimsopaka_bala": 12.45,
+    "vimsopaka_bala": 11.07,
     "vargas": {
       "D1": "Capricorn",
-      "D9": "Pisces",
-      "D10": "Scorpio",
       "D2": "Cancer",
       "D3": "Capricorn",
       "D4": "Capricorn",
       "D7": "Leo",
+      "D9": "Pisces",
+      "D10": "Scorpio",
       "D12": "Pisces",
       "D16": "Cancer",
       "D20": "Leo",
-      "D24": "Capricorn",
+      "D24": "Sagittarius",
+      "D27": "Capricorn",
       "D30": "Virgo",
+      "D40": "Cancer",
+      "D45": "Aquarius",
       "D60": "Pisces"
     }
   },
@@ -593,15 +725,35 @@
         "Jupiter"
       ]
     },
+    "compound_friendships": {
+      "Best_Friends": [],
+      "Friends": [
+        "Jupiter"
+      ],
+      "Neutrals": [
+        "Sun",
+        "Mercury",
+        "Venus"
+      ],
+      "Enemies": [],
+      "Bitter_Enemies": [
+        "Moon",
+        "Mars"
+      ]
+    },
+    "functional_role": "Malefic",
+    "detailed_functional_roles": [
+      "Maraka"
+    ],
     "shadbala": {
       "sthana_bala": 107.86,
       "dig_bala": 34.19,
-      "kala_bala": 60.0,
-      "cheshta_bala": 30.0,
+      "kala_bala": 33.99,
+      "cheshta_bala": 42.6,
       "naisargika_bala": 8.57,
       "drik_bala": -3.62,
-      "total": 237.0,
-      "is_partial": true
+      "total": 223.59,
+      "is_partial": false
     },
     "natural_karakas": [
       "Sorrows",
@@ -609,26 +761,29 @@
       "Longevity",
       "Career"
     ],
-    "chara_karaka": "BK",
+    "chara_karaka": "GK",
     "dispositor_chain": [
       "Mercury",
       "Saturn"
     ],
     "is_parivartana": true,
-    "vimsopaka_bala": 15.45,
+    "vimsopaka_bala": 12.2,
     "vargas": {
       "D1": "Virgo",
-      "D9": "Taurus",
-      "D10": "Virgo",
       "D2": "Cancer",
       "D3": "Capricorn",
       "D4": "Sagittarius",
       "D7": "Gemini",
+      "D9": "Taurus",
+      "D10": "Virgo",
       "D12": "Aquarius",
       "D16": "Cancer",
       "D20": "Taurus",
-      "D24": "Gemini",
+      "D24": "Taurus",
+      "D27": "Cancer",
       "D30": "Pisces",
+      "D40": "Aries",
+      "D45": "Leo",
       "D60": "Sagittarius"
     }
   },
@@ -674,6 +829,9 @@
       "natural_enemies": [],
       "natural_neutrals": []
     },
+    "compound_friendships": {},
+    "functional_role": "",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 0.0,
       "dig_bala": 0.0,
@@ -682,7 +840,7 @@
       "naisargika_bala": 0.0,
       "drik_bala": 0.0,
       "total": 0.0,
-      "is_partial": true
+      "is_partial": false
     },
     "natural_karakas": [
       "Obsessions",
@@ -697,17 +855,20 @@
     "vimsopaka_bala": 0.0,
     "vargas": {
       "D1": "Scorpio",
-      "D9": "Aquarius",
-      "D10": "Aquarius",
       "D2": "Leo",
       "D3": "Cancer",
       "D4": "Leo",
       "D7": "Libra",
+      "D9": "Aquarius",
+      "D10": "Aquarius",
       "D12": "Leo",
       "D16": "Leo",
       "D20": "Pisces",
-      "D24": "Aquarius",
+      "D24": "Capricorn",
+      "D27": "Libra",
       "D30": "Capricorn",
+      "D40": "Taurus",
+      "D45": "Cancer",
       "D60": "Libra"
     }
   },
@@ -751,6 +912,9 @@
       "natural_enemies": [],
       "natural_neutrals": []
     },
+    "compound_friendships": {},
+    "functional_role": "",
+    "detailed_functional_roles": [],
     "shadbala": {
       "sthana_bala": 0.0,
       "dig_bala": 0.0,
@@ -759,7 +923,7 @@
       "naisargika_bala": 0.0,
       "drik_bala": 0.0,
       "total": 0.0,
-      "is_partial": true
+      "is_partial": false
     },
     "natural_karakas": [
       "Moksha",
@@ -775,17 +939,20 @@
     "vimsopaka_bala": 0.0,
     "vargas": {
       "D1": "Taurus",
-      "D9": "Leo",
-      "D10": "Leo",
       "D2": "Leo",
       "D3": "Capricorn",
       "D4": "Aquarius",
       "D7": "Aries",
+      "D9": "Leo",
+      "D10": "Leo",
       "D12": "Aquarius",
       "D16": "Leo",
       "D20": "Pisces",
-      "D24": "Aquarius",
+      "D24": "Capricorn",
+      "D27": "Aries",
       "D30": "Capricorn",
+      "D40": "Taurus",
+      "D45": "Cancer",
       "D60": "Aries"
     }
   },
@@ -795,5 +962,33 @@
     "nakshatra": "Purva Ashadha",
     "nakshatra_pada": 4,
     "nakshatra_lord": "Venus"
+  },
+  "sarvashtakavarga": {
+    "1": 26,
+    "2": 25,
+    "3": 30,
+    "4": 27,
+    "5": 21,
+    "6": 34,
+    "7": 26,
+    "8": 31,
+    "9": 22,
+    "10": 32,
+    "11": 33,
+    "12": 30
+  },
+  "bhava_bala": {
+    "1": 289.41,
+    "2": 268.3,
+    "3": 273.92,
+    "4": 304.82,
+    "5": 180.77,
+    "6": 194.74,
+    "7": 203.92,
+    "8": 285.41,
+    "9": 273.69,
+    "10": 230.71,
+    "11": 205.07,
+    "12": 173.02
   }
 }

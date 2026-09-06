@@ -5,7 +5,8 @@ from langchain_core.language_models.chat_models import BaseChatModel
 load_dotenv()
 
 # ── OmniRoute local gateway (352 providers, 1200+ models, runs on localhost:20128) ───
-OMNIROUTE_BASE_URL = "http://localhost:20128/v1"
+# Local dev convenience only; never required in production. Override for remote gateways.
+OMNIROUTE_BASE_URL = os.getenv("OMNIROUTE_BASE_URL", "http://localhost:20128/v1")
 
 # ── AgentRouter (OpenAI-compatible gateway: GPT-4, Claude, etc.) ─────────────
 AGENTROUTER_API_KEY = os.getenv("AGENTROUTER_API_KEY")

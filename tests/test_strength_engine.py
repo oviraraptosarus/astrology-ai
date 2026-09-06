@@ -15,6 +15,10 @@ class TestStrengthEngine(unittest.TestCase):
         self.chart.add_planet(Planet("Saturn", "Aries", 20.0, True))  # Retrograde
         # Moon in Cancer, 4th house
         self.chart.add_planet(Planet("Moon", "Cancer", 15.0, False))
+        # Synthetic-chart fixture: attach the birth time Cheshta Bala needs
+        # (production charts get this from calculate_chart_with_object).
+        from datetime import datetime
+        self.chart.birth_time = datetime(2000, 1, 1, 12, 0)
         self.chart.build_relational_graph()
         StrengthEngine.calculate_shadbala(self.chart)
 

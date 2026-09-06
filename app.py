@@ -16,14 +16,29 @@ from ai_agent import (
     run_astrologer_stream,
     save_chart,
 )
-from auth import init_db, get_user_by_email, create_user, verify_password, create_access_token, decode_access_token, get_user_profile, save_user_profile
+from auth import init_db, get_user_by_email, create_user, verify_password, create_access_token, decode_access_token, get_user_profile, save_user_profile, set_user_plan
+import logging
 import os
 import hashlib
 import stripe
 import json
 from starlette.responses import StreamingResponse
 
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_12345") # Placeholder for dev
+import runtime_config
+
+# ── Logging (before anything else logs) ─────────────────────────────────────
+logging.basicConfig(
+    level=getattr(logging, runtime_config.LOG_LEVEL, logging.INFO),
+    format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+)
+logger = logging.getLogger("app")
+
+# Fail fast on missing production-critical configuration.
+runtime_config.validate_production()
+
+# Stripe: no hardcoded fallback key. Missing key in production already failed
+# above; in dev an unset key just means checkout returns a clear 503.
+stripe.api_key = runtime_config.STRIPE_SECRET_KEY or None
 
 app = FastAPI()
 
@@ -126,6 +141,8 @@ def chart_session_key(user: dict, session_id: str) -> str:
 
 @app.post("/api/create-checkout-session")
 def create_checkout_session(user: dict = Depends(get_current_user)):
+    if not stripe.api_key:
+        raise HTTPException(status_code=503, detail="Payments are not configured on this deployment")
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -141,40 +158,58 @@ def create_checkout_session(user: dict = Depends(get_current_user)):
                 'quantity': 1,
             }],
             mode='payment',
-            success_url='http://localhost:8000/?payment=success',
-            cancel_url='http://localhost:8000/?payment=cancelled',
+            success_url=runtime_config.stripe_success_url(),
+            cancel_url=runtime_config.stripe_cancel_url(),
             client_reference_id=user["email"] # Pass email to identify user on webhook
         )
         return {"checkout_url": session.url}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except stripe.StripeError as e:
+        logger.error(f"Stripe checkout session failed: {e}")
+        raise HTTPException(status_code=502, detail="Payment provider error. Please try again shortly.")
+    except Exception:
+        logger.exception("Unexpected error creating checkout session")
+        raise HTTPException(status_code=500, detail="Could not create checkout session")
 
 @app.post("/api/stripe/webhook")
 async def stripe_webhook(request: Request):
     payload = await request.body()
     sig_header = request.headers.get('stripe-signature')
-    endpoint_secret = os.getenv("STRIPE_WEBHOOK_SECRET", "whsec_12345") # Placeholder
+    endpoint_secret = runtime_config.STRIPE_WEBHOOK_SECRET
+
+    # Signature verification is MANDATORY. No unsigned fallback.
+    if not endpoint_secret:
+        logger.error("Stripe webhook rejected: STRIPE_WEBHOOK_SECRET not configured")
+        raise HTTPException(status_code=503, detail="Webhook not configured")
+    if not sig_header:
+        logger.warning("Stripe webhook rejected: missing stripe-signature header")
+        raise HTTPException(status_code=400, detail="Missing signature")
 
     try:
-        # For MVP/testing, we can just parse the JSON if signature validation fails without secret
-        import json
-        data = json.loads(payload)
-        
-        if data['type'] == 'checkout.session.completed':
-            session = data['data']['object']
+        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
+    except (ValueError, stripe.SignatureVerificationError) as e:
+        logger.warning(f"Stripe webhook signature verification failed: {type(e).__name__}")
+        raise HTTPException(status_code=400, detail="Invalid signature")
+    except stripe.StripeError as e:
+        logger.error(f"Stripe webhook error: {e}")
+        raise HTTPException(status_code=400, detail="Webhook error")
+
+    try:
+        if event['type'] == 'checkout.session.completed':
+            session = event['data']['object']
             user_email = session.get('client_reference_id')
-            
+
             if user_email:
-                # Update user plan in DB
-                import sqlite3
-                conn = sqlite3.connect("users.db")
-                conn.execute("UPDATE users SET plan = 'premium' WHERE email = ?", (user_email,))
-                conn.commit()
-                conn.close()
-                print(f"Upgraded user {user_email} to premium!")
+                # Billing state goes to the SAME unified database as auth
+                # (PostgreSQL in production) — never a separate SQLite file.
+                updated = set_user_plan(user_email, 'premium')
+                if updated:
+                    logger.info(f"Stripe: upgraded user {user_email} to premium")
+                else:
+                    logger.warning(f"Stripe: checkout completed for unknown email {user_email}")
         return {"status": "success"}
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    except Exception:
+        logger.exception("Stripe webhook handler error")
+        raise HTTPException(status_code=500, detail="Webhook processing error")
 
 @app.get("/api/user/status")
 def get_user_status(user: dict = Depends(get_current_user)):
@@ -210,7 +245,8 @@ async def signup(req: SignupRequest):
     response = JSONResponse({"token": token, "user": {"email": user["email"], "full_name": user["full_name"], "plan": user["plan"]}})
     response.set_cookie(
         key="astro_token", value=token,
-        httponly=True, samesite="lax", max_age=60*60*24*7
+        httponly=True, samesite="lax", max_age=60*60*24*7,
+        secure=runtime_config.IS_PRODUCTION,
     )
     return response
 
@@ -224,7 +260,8 @@ async def login(req: LoginRequest):
     response = JSONResponse({"token": token, "user": {"email": user["email"], "full_name": user["full_name"], "plan": user["plan"]}})
     response.set_cookie(
         key="astro_token", value=token,
-        httponly=True, samesite="lax", max_age=60*60*24*7
+        httponly=True, samesite="lax", max_age=60*60*24*7,
+        secure=runtime_config.IS_PRODUCTION,
     )
     return response
 
@@ -307,8 +344,12 @@ async def calculate_chart_endpoint(req: ChartCalculationRequest, current_user: d
         # but the chart_data metadata now captures the timezone and lat/lon exactly!
         
         return {"status": "success", "session_id": req.session_id}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except ValueError as e:
+        # Bad date/coordinates from the user — their fault, not a server error
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception:
+        logger.exception("Chart calculation failed")
+        raise HTTPException(status_code=500, detail="Chart calculation failed. Please check the birth details and try again.")
 
 @app.get("/api/chart/status")
 async def chart_status(session_id: str, current_user: dict = Depends(get_current_user)):
@@ -440,14 +481,43 @@ def get_mode_endpoint():
     }
 
 @app.post("/api/mode")
-def set_mode_endpoint(mode: str):
-    """Switch active application execution mode ('client_safe' or 'unconstrained')."""
-    from modes import set_active_mode, get_active_mode
+def set_mode_endpoint(mode: str, _admin: dict = Depends(get_current_user)):
+    """Switch active application execution mode. Admin-only (authenticated);
+    in production the mode is pinned by ASTRO_MODE and cannot be switched."""
+    if runtime_config.IS_PRODUCTION:
+        raise HTTPException(status_code=403, detail="Mode switching is disabled in production")
+    from modes import set_active_mode
     try:
         new_mode = set_active_mode(mode)
+        logger.info(f"Mode switched to {new_mode}")
         return {"status": "success", "mode": new_mode}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# ─── Health Checks ────────────────────────────────────────────────
+@app.get("/health")
+def health():
+    """Liveness: process is up. Never depends on optional external services."""
+    return {"status": "ok", "env": runtime_config.APP_ENV}
+
+@app.get("/health/ready")
+def health_ready():
+    """Readiness: process is up AND the primary database answers."""
+    import db as _db
+    try:
+        with _db.cursor() as (cur, _):
+            cur.execute("SELECT 1")
+            cur.fetchone()
+        db_status = "ok"
+    except Exception as e:
+        logger.error(f"Readiness check failed: DB error: {e}")
+        raise HTTPException(status_code=503, detail="Database unavailable")
+    return {
+        "status": "ok",
+        "env": runtime_config.APP_ENV,
+        "database": db_status,
+        "database_backend": "postgres" if _db.is_postgres() else "sqlite(dev)",
+    }
 
 @app.get("/api/health/ai")
 def health_ai():
@@ -493,8 +563,9 @@ def chat(req: ChatRequest, current_user: dict = Depends(get_current_user)):
         reply = run_astrologer(req.message, scoped_session, req.provider)
         chart_generated = chart_exists_in_db(scoped_session) and not had_chart_before
         return {"reply": reply, "chart_generated": chart_generated}
-    except Exception as e:
-        return {"reply": f"The stars are clouded: {str(e)}"}
+    except Exception:
+        logger.exception("Chat processing failed")
+        return {"reply": "The stars are clouded — an unexpected error occurred. Please try again."}
 
 
 @app.get("/api/chat/stream")
