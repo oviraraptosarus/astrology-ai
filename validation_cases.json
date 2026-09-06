@@ -1,0 +1,52 @@
+{
+  "_meta": {
+    "purpose": "Ground-truth retrodiction benchmark. Each case is a real chart with DOCUMENTED life outcomes. The engine is scored on whether its deterministic verdict matches recorded reality. Accuracy over comfort: a HEDGE on a decisive life is a logged calibration failure, never smoothed over.",
+    "birth_time_confidence": "AA=birth certificate/record, A=from memory/quoted, C=rectified/disputed. Low-confidence times weaken any conclusion drawn from a MISS.",
+    "expected_polarity": "POSITIVE = the native decisively achieved this; NEGATIVE = decisively did not / suffered loss here.",
+    "sources_note": "Times sourced from astro-databank / widely published. Disputed times flagged. Add cases freely; never delete a MISS to inflate the score."
+  },
+  "cases": [
+    {
+      "name": "Amitabh Bachchan",
+      "birth": {"year": 1942, "month": 10, "day": 11, "hour": 16, "minute": 0, "lat": 25.4358, "lon": 81.8463, "tz": "Asia/Kolkata"},
+      "birth_time_confidence": "A",
+      "outcomes": [
+        {"domain_question": "Will I achieve massive fame and career success as a public figure?", "achievement_year": 1975, "expected": "POSITIVE", "note": "Superstar of Indian cinema; among most famous actors alive."},
+        {"domain_question": "Will I accumulate great wealth?", "achievement_year": 2000, "expected": "POSITIVE", "note": "Multi-crore net worth; recovered from bankruptcy via KBC."}
+      ]
+    },
+    {
+      "name": "Steve Jobs",
+      "birth": {"year": 1955, "month": 2, "day": 24, "hour": 19, "minute": 15, "lat": 37.7749, "lon": -122.4194, "tz": "America/Los_Angeles"},
+      "birth_time_confidence": "A",
+      "outcomes": [
+        {"domain_question": "Will my business venture succeed and make me extremely wealthy?", "achievement_year": 1997, "expected": "POSITIVE", "note": "Co-founded Apple; billionaire tech founder."},
+        {"domain_question": "Will I face serious health problems?", "achievement_year": 2003, "expected": "POSITIVE", "note": "Pancreatic cancer diagnosed 2003, died 2011. POSITIVE = the affliction manifested."}
+      ]
+    },
+    {
+      "name": "Bill Gates",
+      "birth": {"year": 1955, "month": 10, "day": 28, "hour": 22, "minute": 0, "lat": 47.6062, "lon": -122.3321, "tz": "America/Los_Angeles"},
+      "birth_time_confidence": "A",
+      "outcomes": [
+        {"domain_question": "Will I become one of the wealthiest people through business?", "achievement_year": 1995, "expected": "POSITIVE", "note": "Microsoft founder; world's richest for years."}
+      ]
+    },
+    {
+      "name": "Dhirubhai Ambani",
+      "birth": {"year": 1932, "month": 12, "day": 28, "hour": 6, "minute": 0, "lat": 21.4614, "lon": 70.0576, "tz": "Asia/Kolkata"},
+      "birth_time_confidence": "C",
+      "outcomes": [
+        {"domain_question": "Will I build enormous business wealth from humble origins?", "achievement_year": 1985, "expected": "POSITIVE", "note": "Founder of Reliance; one of India's greatest wealth creators. Birth time disputed."}
+      ]
+    },
+    {
+      "name": "Sachin Tendulkar",
+      "birth": {"year": 1973, "month": 4, "day": 24, "hour": 16, "minute": 30, "lat": 19.0760, "lon": 72.8777, "tz": "Asia/Kolkata"},
+      "birth_time_confidence": "C",
+      "outcomes": [
+        {"domain_question": "Will I reach the highest fame and status in my field?", "achievement_year": 1998, "expected": "POSITIVE", "note": "Greatest cricketer of his generation; global fame. Birth time disputed."}
+      ]
+    }
+  ]
+}

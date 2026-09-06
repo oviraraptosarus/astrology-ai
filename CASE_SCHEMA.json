@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Astrological Case Study Schema",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "Unique identifier for the case study"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the source book/material"
+    },
+    "practitioner": {
+      "type": "string",
+      "description": "The astrologer analyzing the case (e.g., K.N. Rao, B.V. Raman)"
+    },
+    "birth_data": {
+      "type": "object",
+      "properties": {
+        "date": {"type": "string"},
+        "time": {"type": "string"},
+        "location": {"type": "string"}
+      }
+    },
+    "query_or_event": {
+      "type": "string",
+      "description": "What event or question was being analyzed?"
+    },
+    "methodology_used": {
+      "type": "string",
+      "description": "E.g., Parashari, Jaimini, Ashtakavarga"
+    },
+    "factors_examined": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Which houses, planets, or arudhas were looked at?"
+    },
+    "vargas_used": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Which divisional charts were used (e.g., D9, D10)?"
+    },
+    "dasha_used": {
+      "type": "string",
+      "description": "Which dasha system was applied to time the event?"
+    },
+    "rules_applied": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Specific astrological rules cited in the analysis"
+    },
+    "contradictions_noted": {
+      "type": "string",
+      "description": "Any conflicting indicators the astrologer had to resolve"
+    },
+    "final_conclusion": {
+      "type": "string",
+      "description": "The astrologer's prediction or conclusion"
+    },
+    "actual_outcome": {
+      "type": "string",
+      "description": "What actually happened (if known)"
+    }
+  },
+  "required": ["case_id", "source_id", "practitioner", "query_or_event", "methodology_used", "final_conclusion"]
+}

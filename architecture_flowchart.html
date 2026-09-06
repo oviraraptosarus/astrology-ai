@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroloAI — End-to-End Architecture Flowchart</title>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --card: #131722;
+    --card2: #1a2030;
+    --border: #2a3248;
+    --text: #e6e9f2;
+    --muted: #8b93a7;
+    --accent: #7c6cf0;
+    --accent2: #4cc9f0;
+    --green: #2dd4a7;
+    --warn: #f5a742;
+    --red: #f06c7e;
+    --mono: 'JetBrains Mono', 'Cascadia Code', Consolas, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 28px 24px 60px;
+    min-height: 100vh;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h1 .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+  .subtitle { color: var(--muted); font-size: 12px; margin: 6px 0 26px; }
+  .subtitle code { font-family: var(--mono); background: var(--card2); padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+  /* ── Flow container ─────────────────────────────── */
+  .flow { display: flex; flex-direction: column; align-items: center; }
+
+  /* ── Node card ──────────────────────────────────── */
+  .node {
+    width: 100%;
+    max-width: 820px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 18px;
+    position: relative;
+    box-shadow: 0 4px 18px rgba(0,0,0,.35);
+  }
+  .node .head { display: flex; align-items: center; gap: 10px; }
+  .node .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    letter-spacing: .5px;
+    white-space: nowrap;
+  }
+  .node .title { font-size: 14.5px; font-weight: 650; }
+  .node .file { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .node .desc { font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+  /* Color themes per stage */
+  .n-input    { border-left: 3px solid var(--accent2); }
+  .n-router   { border-left: 3px solid var(--accent); }
+  .n-engine   { border-left: 3px solid var(--green); }
+  .n-predict  { border-left: 3px solid var(--warn); }
+  .n-synth    { border-left: 3px solid var(--red); }
+  .n-output   { border-left: 3px solid var(--green); }
+
+  .b-input    { background: rgba(76,201,240,.14); color: var(--accent2); }
+  .b-router   { background: rgba(124,108,240,.16); color: #a99cf5; }
+  .b-engine   { background: rgba(45,212,167,.13); color: var(--green); }
+  .b-predict  { background: rgba(245,167,66,.14); color: var(--warn); }
+  .b-synth    { background: rgba(240,108,126,.13); color: var(--red); }
+  .b-output   { background: rgba(45,212,167,.14); color: var(--green); }
+
+  /* ── Sub-engine grid inside nodes ───────────────── */
+  .subgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .sub {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 8px 10px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+  .sub b { display: block; font-size: 11.5px; margin-bottom: 2px; }
+  .sub span { color: var(--muted); }
+
+  /* ── Arrow connector ────────────────────────────── */
+  .arrow {
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, var(--border), var(--accent));
+    position: relative;
+    margin: 2px 0;
+  }
+  .arrow::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--accent);
+  }
+
+  /* ── Special: dual output channel ───────────────── */
+  .dual {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+    width: 100%;
+  }
+  .chan {
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 11.5px;
+    line-height: 1.5;
+    border: 1px solid var(--border);
+  }
+  .chan.on  { background: rgba(45,212,167,.08); }
+  .chan.off { background: rgba(124,108,240,.08); }
+  .chan b { font-size: 12px; display: block; margin-bottom: 3px; }
+  .chan.on b { color: var(--green); }
+  .chan.off b { color: #a99cf5; }
+  .chan span { color: var(--muted); }
+
+  /* ── Highlight row (key principle) ──────────────── */
+  .principle {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 820px;
+    border: 1px dashed var(--accent);
+    background: rgba(124,108,240,.07);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    text-align: center;
+  }
+  .principle b { color: var(--accent2); }
+
+  .legend { font-family: var(--mono); color: var(--muted); text-align: center; margin-top: 18px; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<h1><span class="dot"></span> AstroloAI — End-to-End Architecture Flow</h1>
+<div class="subtitle">Query → Router → Chart Math → Prediction → Reconciliation → Output &nbsp;·&nbsp; <code>E:\ASTROLOGY AI</code></div>
+
+<div class="flow">
+
+  <!-- STEP 1 -->
+  <div class="node n-input">
+    <div class="head">
+      <span class="badge b-input">STEP 1</span>
+      <span class="title">User Query Arrives</span>
+    </div>
+    <div class="file">app.py → POST /api/chat</div>
+    <div class="desc">"Will I get a promotion in 2027?" arrives with a <b>session_id</b>. FastAPI calls <code>run_astrologer()</code> from <code>ai_agent.py</code>.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 2 -->
+  <div class="node n-router">
+    <div class="head">
+      <span class="badge b-router">STEP 2</span>
+      <span class="title">Intent Router Classifies Query</span>
+    </div>
+    <div class="file">agent_router.py</div>
+    <div class="desc">Query is classified into 1 of 5 intents and the tool list is pruned to only what's needed:</div>
+    <div class="subgrid">
+      <div class="sub"><b>TIMING</b><span>"When will X happen?" ← your query</span></div>
+      <div class="sub"><b>TRANSIT</b><span>"How are transits today?"</span></div>
+      <div class="sub"><b>BIRTH_CHART</b><span>"Show my chart"</span></div>
+      <div class="sub"><b>COMPATIBILITY</b><span>"Are we compatible?"</span></div>
+      <div class="sub"><b>GENERAL</b><span>"Tell me about Saturn"</span></div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 3 -->
+  <div class="node n-router">
+    <div class="head">
+      <span class="badge b-router">STEP 3</span>
+      <span class="title">Chart Loader</span>
+    </div>
+    <div class="file">ai_agent.py → @tool get_birth_chart()</div>
+    <div class="desc">Loads saved chart from SQLite (<code>load_chart(session_id)</code>). If none exists, asks DOB / time / location and runs <code>calculate_chart_with_object()</code>.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 4 -->
+  <div class="node n-engine">
+    <div class="head">
+      <span class="badge b-engine">STEP 4</span>
+      <span class="title">Math Engine — Computes the Chart (before any AI)</span>
+    </div>
+    <div class="file">astrology_engine.py → calculate_chart_with_object()</div>
+    <div class="desc">8 sub-engines run deterministically on local <b>pyswisseph</b> (NASA JPL DE431). The LLM never sees raw math — only verified results.</div>
+    <div class="subgrid">
+      <div class="sub"><b>4a · swisseph</b><span>Lahiri ayanamsha · topocentric coords · 9 planet longitudes · Sri Pati cusps · Rahu/Ketu</span></div>
+      <div class="sub"><b>4b · VargaEngine</b><span>D1–D60 divisional charts · Navamsha D9 · Dasamsha D10</span></div>
+      <div class="sub"><b>4c · ConditionEngine</b><span>Combustion · planetary war · retrogrades · dignity</span></div>
+      <div class="sub"><b>4d · StrengthEngine</b><span>Full 6-fold Shadbala (Sthana · Dig · Kala · Cheshta · Naisargika · Drik)</span></div>
+      <div class="sub"><b>4e · FunctionalBeneficEngine</b><span>Benefic/malefic roles · Panchadha Maitri</span></div>
+      <div class="sub"><b>4f · AshtakavargaEngine</b><span>BAV · SAV · Trikona + Ekadhipatya Shodhana · Shodhya Pinda</span></div>
+      <div class="sub"><b>4g · JaiminiEngine</b><span>7/8 Chara Karakas · 12 Arudha Padas</span></div>
+      <div class="sub"><b>4h · Yogas</b><span>24 classical yoga detectors · Neecha Bhanga · Vipareeta</span></div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 5 -->
+  <div class="node n-engine">
+    <div class="head">
+      <span class="badge b-engine">STEP 5</span>
+      <span class="title">Parallel Auxiliary Engines</span>
+    </div>
+    <div class="file">panchangam_engine.py · sensitive_points · remedy_engine.py · numerology_engine.py</div>
+    <div class="subgrid">
+      <div class="sub"><b>Panchangam</b><span>True sunrise/sunset · Tithi · Nakshatra · Yoga · Karana · Choghadiya · Rahu Kalam · Abhijit</span></div>
+      <div class="sub"><b>Sensitive Points</b><span>22nd Drekkana · 64th Navamsha · Mrityu Bhaga · Mandi · Gulika · Dhuma</span></div>
+      <div class="sub"><b>Remedies</b><span>Beeja mantras · Japa counts · timed Dāna · gemstone safety verdict</span></div>
+      <div class="sub"><b>Numerology</b><span>Moolank · Bhagyank · Chaldean · Katapayadi</span></div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 6 -->
+  <div class="node n-predict">
+    <div class="head">
+      <span class="badge b-predict">STEP 6</span>
+      <span class="title">Event Prediction Engine</span>
+    </div>
+    <div class="file">event_analysis.py → EventPredictionEngine</div>
+    <div class="desc">The question ("promotion?") is answered through a 5-stage pipeline:</div>
+    <div class="subgrid">
+      <div class="sub"><b>6a · Methodology Router</b><span>→ Domain: CAREER → K.N. Rao primary · focus houses 10,2,6,11 · focus karakas</span></div>
+      <div class="sub"><b>6b · Natal Promise</b><span>Scans D1+D9+D10 → signed evidence (supporting / contradicting) → verdict: MODERATE</span></div>
+      <div class="sub"><b>6c · Dasha Activation</b><span>Vimshottari Maha/Antar/Pratyantar lords checked against domain significators</span></div>
+      <div class="sub"><b>6d · Transit Activation</b><span>K.N. Rao Double Transit (Jupiter+Saturn) · SAV bindu strength in transit signs</span></div>
+      <div class="sub"><b>6e · Forward Scanner</b><span>36-month scan for triple convergence → 5 qualified windows → best: 2027-12-12 → 2028-01-02 (VERY HIGH)</span></div>
+    </div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 7 -->
+  <div class="node n-synth">
+    <div class="head">
+      <span class="badge b-synth">STEP 7</span>
+      <span class="title">Reconciliation Hub</span>
+    </div>
+    <div class="file">synthesis_engine.py</div>
+    <div class="desc">Arbitrates cross-tradition conflicts — Parashari vs Jaimini vs KP — into typed evidence triples <code>{subject, domain, polarity, strength}</code>. Verdict: <b>CONTRADICTION</b> = LLM gets both sides, no fake certainty.</div>
+  </div>
+  <div class="arrow"></div>
+
+  <!-- STEP 8 -->
+  <div class="node n-output">
+    <div class="head">
+      <span class="badge b-output">STEP 8</span>
+      <span class="title">Final Output — Dual Channel</span>
+    </div>
+    <div class="dual">
+      <div class="chan on"><b>✓ Online (LLM available)</b><span>Pre-computed JSON bundle + system prompt → LLM translates verified math into natural-language reading with exact date windows.</span></div>
+      <div class="chan off"><b>⚡ Offline fallback</b><span><code>deterministic_formatter.py</code> emits a structured markdown report instantly — zero hallucination, zero API dependency.</span></div>
+    </div>
+  </div>
+
+  <div class="principle">
+    <b>THE ONE RULE:</b>&nbsp; The LLM never does math, never looks up rules, never invents dates.<br>
+    It only translates pre-computed, verified evidence into human language — hallucination is structurally impossible.
+  </div>
+
+  <div class="legend">app.py → agent_router.py → ai_agent.py → astrology_engine.py → event_analysis.py → synthesis_engine.py → output</div>
+</div>
+
+</body>
+</html>

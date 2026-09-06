@@ -1,0 +1,799 @@
+{
+  "Sun": {
+    "planet": "Sun",
+    "sign": "Sagittarius",
+    "degree": 29.42,
+    "house": 1,
+    "chalit_house": 1,
+    "retrograde": false,
+    "dignity": "Friendly Sign",
+    "owns_houses": [
+      9
+    ],
+    "dispositor": "Jupiter",
+    "aspects_houses": [
+      7
+    ],
+    "aspected_by": [],
+    "conjunct_with": [],
+    "nakshatra": "Uttara Ashadha",
+    "nakshatra_pada": 1,
+    "nakshatra_lord": "Sun",
+    "combustion": {
+      "status": false,
+      "sun_distance": null,
+      "threshold": null
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Mrita"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Moon",
+        "Mars",
+        "Jupiter"
+      ],
+      "natural_enemies": [
+        "Venus",
+        "Saturn"
+      ],
+      "natural_neutrals": [
+        "Mercury"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 101.47,
+      "dig_bala": 28.91,
+      "kala_bala": 0.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 60.0,
+      "drik_bala": 4.41,
+      "total": 224.79,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Father",
+      "Soul",
+      "Authority",
+      "Health"
+    ],
+    "chara_karaka": "AK",
+    "dispositor_chain": [
+      "Jupiter",
+      "Venus",
+      "Saturn",
+      "Mercury"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 15.6,
+    "vargas": {
+      "D1": "Sagittarius",
+      "D9": "Sagittarius",
+      "D10": "Virgo",
+      "D2": "Cancer",
+      "D3": "Leo",
+      "D4": "Virgo",
+      "D7": "Gemini",
+      "D12": "Scorpio",
+      "D16": "Pisces",
+      "D20": "Pisces",
+      "D24": "Pisces",
+      "D30": "Libra",
+      "D60": "Libra"
+    }
+  },
+  "Moon": {
+    "planet": "Moon",
+    "sign": "Virgo",
+    "degree": 17.45,
+    "house": 10,
+    "chalit_house": 9,
+    "retrograde": false,
+    "dignity": "Friendly Sign",
+    "owns_houses": [
+      8
+    ],
+    "dispositor": "Mercury",
+    "aspects_houses": [
+      4
+    ],
+    "aspected_by": [
+      "Ketu"
+    ],
+    "conjunct_with": [
+      "Saturn"
+    ],
+    "nakshatra": "Hasta",
+    "nakshatra_pada": 3,
+    "nakshatra_lord": "Moon",
+    "combustion": {
+      "status": false,
+      "sun_distance": 101.97,
+      "threshold": 12.0
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Yuva"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Sun",
+        "Mercury"
+      ],
+      "natural_enemies": [],
+      "natural_neutrals": [
+        "Mars",
+        "Jupiter",
+        "Venus",
+        "Saturn"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 90.18,
+      "dig_bala": 2.9,
+      "kala_bala": 120.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 51.43,
+      "drik_bala": -5.56,
+      "total": 288.95,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Mother",
+      "Mind",
+      "Emotions"
+    ],
+    "chara_karaka": "AmK",
+    "dispositor_chain": [
+      "Mercury",
+      "Saturn"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 13.25,
+    "vargas": {
+      "D1": "Virgo",
+      "D9": "Gemini",
+      "D10": "Libra",
+      "D2": "Leo",
+      "D3": "Capricorn",
+      "D4": "Pisces",
+      "D7": "Cancer",
+      "D12": "Pisces",
+      "D16": "Virgo",
+      "D20": "Cancer",
+      "D24": "Virgo",
+      "D30": "Pisces",
+      "D60": "Cancer"
+    }
+  },
+  "Mars": {
+    "planet": "Mars",
+    "sign": "Aries",
+    "degree": 6.32,
+    "house": 5,
+    "chalit_house": 3,
+    "retrograde": false,
+    "dignity": "Moolatrikona",
+    "owns_houses": [
+      5,
+      12
+    ],
+    "dispositor": "Mars",
+    "aspects_houses": [
+      8,
+      11,
+      12
+    ],
+    "aspected_by": [
+      "Jupiter"
+    ],
+    "conjunct_with": [],
+    "nakshatra": "Ashwini",
+    "nakshatra_pada": 2,
+    "nakshatra_lord": "Ketu",
+    "combustion": {
+      "status": false,
+      "sun_distance": 96.9,
+      "threshold": 17.0
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Kumara"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Sun",
+        "Moon",
+        "Jupiter"
+      ],
+      "natural_enemies": [
+        "Mercury"
+      ],
+      "natural_neutrals": [
+        "Venus",
+        "Saturn"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 82.23,
+      "dig_bala": 3.39,
+      "kala_bala": 60.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 17.14,
+      "drik_bala": 23.98,
+      "total": 216.74,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Siblings",
+      "Courage",
+      "Enemies",
+      "Property"
+    ],
+    "chara_karaka": "GK",
+    "dispositor_chain": [
+      "Mars"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 15.2,
+    "vargas": {
+      "D1": "Aries",
+      "D9": "Taurus",
+      "D10": "Gemini",
+      "D2": "Leo",
+      "D3": "Aries",
+      "D4": "Aries",
+      "D7": "Taurus",
+      "D12": "Gemini",
+      "D16": "Cancer",
+      "D20": "Leo",
+      "D24": "Virgo",
+      "D30": "Aquarius",
+      "D60": "Aries"
+    }
+  },
+  "Mercury": {
+    "planet": "Mercury",
+    "sign": "Capricorn",
+    "degree": 11.77,
+    "house": 2,
+    "chalit_house": 1,
+    "retrograde": false,
+    "dignity": "Neutral Sign",
+    "owns_houses": [
+      7,
+      10
+    ],
+    "dispositor": "Saturn",
+    "aspects_houses": [
+      8
+    ],
+    "aspected_by": [
+      "Ketu"
+    ],
+    "conjunct_with": [
+      "Venus"
+    ],
+    "nakshatra": "Shravana",
+    "nakshatra_pada": 1,
+    "nakshatra_lord": "Moon",
+    "combustion": {
+      "status": true,
+      "sun_distance": 12.35,
+      "threshold": 14.0
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Vriddha"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Sun",
+        "Venus"
+      ],
+      "natural_enemies": [
+        "Moon"
+      ],
+      "natural_neutrals": [
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 51.08,
+      "dig_bala": 54.79,
+      "kala_bala": 60.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 25.71,
+      "drik_bala": 0.48,
+      "total": 222.06,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Intellect",
+      "Speech",
+      "Business",
+      "Education"
+    ],
+    "chara_karaka": "MK",
+    "dispositor_chain": [
+      "Saturn",
+      "Mercury"
+    ],
+    "is_parivartana": true,
+    "vimsopaka_bala": 11.7,
+    "vargas": {
+      "D1": "Capricorn",
+      "D9": "Aries",
+      "D10": "Sagittarius",
+      "D2": "Cancer",
+      "D3": "Taurus",
+      "D4": "Aries",
+      "D7": "Virgo",
+      "D12": "Taurus",
+      "D16": "Libra",
+      "D20": "Scorpio",
+      "D24": "Taurus",
+      "D30": "Virgo",
+      "D60": "Sagittarius"
+    }
+  },
+  "Jupiter": {
+    "planet": "Jupiter",
+    "sign": "Libra",
+    "degree": 4.01,
+    "house": 11,
+    "chalit_house": 9,
+    "retrograde": false,
+    "dignity": "Enemy Sign",
+    "owns_houses": [
+      1,
+      4
+    ],
+    "dispositor": "Venus",
+    "aspects_houses": [
+      3,
+      5,
+      7
+    ],
+    "aspected_by": [
+      "Mars"
+    ],
+    "conjunct_with": [],
+    "nakshatra": "Chitra",
+    "nakshatra_pada": 4,
+    "nakshatra_lord": "Mars",
+    "combustion": {
+      "status": false,
+      "sun_distance": 85.41,
+      "threshold": 11.0
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Bala"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Sun",
+        "Moon",
+        "Mars"
+      ],
+      "natural_enemies": [
+        "Mercury",
+        "Venus"
+      ],
+      "natural_neutrals": [
+        "Saturn"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 75.33,
+      "dig_bala": 32.62,
+      "kala_bala": 60.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 34.28,
+      "drik_bala": -13.84,
+      "total": 218.39,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Children",
+      "Wealth",
+      "Wisdom",
+      "Guru"
+    ],
+    "chara_karaka": "DK",
+    "dispositor_chain": [
+      "Venus",
+      "Saturn",
+      "Mercury"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 11.0,
+    "vargas": {
+      "D1": "Libra",
+      "D9": "Scorpio",
+      "D10": "Scorpio",
+      "D2": "Leo",
+      "D3": "Libra",
+      "D4": "Libra",
+      "D7": "Libra",
+      "D12": "Scorpio",
+      "D16": "Gemini",
+      "D20": "Gemini",
+      "D24": "Cancer",
+      "D30": "Aries",
+      "D60": "Gemini"
+    }
+  },
+  "Venus": {
+    "planet": "Venus",
+    "sign": "Capricorn",
+    "degree": 7.1,
+    "house": 2,
+    "chalit_house": 1,
+    "retrograde": false,
+    "dignity": "Friendly Sign",
+    "owns_houses": [
+      6,
+      11
+    ],
+    "dispositor": "Saturn",
+    "aspects_houses": [
+      8
+    ],
+    "aspected_by": [
+      "Ketu"
+    ],
+    "conjunct_with": [
+      "Mercury"
+    ],
+    "nakshatra": "Uttara Ashadha",
+    "nakshatra_pada": 4,
+    "nakshatra_lord": "Sun",
+    "combustion": {
+      "status": true,
+      "sun_distance": 7.68,
+      "threshold": 10.0
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Vriddha"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Mercury",
+        "Saturn"
+      ],
+      "natural_enemies": [
+        "Sun",
+        "Moon"
+      ],
+      "natural_neutrals": [
+        "Mars",
+        "Jupiter"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 78.37,
+      "dig_bala": 33.65,
+      "kala_bala": 0.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 42.85,
+      "drik_bala": -0.1,
+      "total": 184.77,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Marriage",
+      "Spouse",
+      "Relationships",
+      "Luxuries"
+    ],
+    "chara_karaka": "PK",
+    "dispositor_chain": [
+      "Saturn",
+      "Mercury"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 12.45,
+    "vargas": {
+      "D1": "Capricorn",
+      "D9": "Pisces",
+      "D10": "Scorpio",
+      "D2": "Cancer",
+      "D3": "Capricorn",
+      "D4": "Capricorn",
+      "D7": "Leo",
+      "D12": "Pisces",
+      "D16": "Cancer",
+      "D20": "Leo",
+      "D24": "Capricorn",
+      "D30": "Virgo",
+      "D60": "Pisces"
+    }
+  },
+  "Saturn": {
+    "planet": "Saturn",
+    "sign": "Virgo",
+    "degree": 13.57,
+    "house": 10,
+    "chalit_house": 9,
+    "retrograde": false,
+    "dignity": "Friendly Sign",
+    "owns_houses": [
+      2,
+      3
+    ],
+    "dispositor": "Mercury",
+    "aspects_houses": [
+      12,
+      4,
+      7
+    ],
+    "aspected_by": [
+      "Ketu"
+    ],
+    "conjunct_with": [
+      "Moon"
+    ],
+    "nakshatra": "Hasta",
+    "nakshatra_pada": 2,
+    "nakshatra_lord": "Moon",
+    "combustion": {
+      "status": false,
+      "sun_distance": 105.85,
+      "threshold": 15.0
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Yuva"
+    },
+    "friendships": {
+      "natural_friends": [
+        "Mercury",
+        "Venus"
+      ],
+      "natural_enemies": [
+        "Sun",
+        "Moon",
+        "Mars"
+      ],
+      "natural_neutrals": [
+        "Jupiter"
+      ]
+    },
+    "shadbala": {
+      "sthana_bala": 107.86,
+      "dig_bala": 34.19,
+      "kala_bala": 60.0,
+      "cheshta_bala": 30.0,
+      "naisargika_bala": 8.57,
+      "drik_bala": -3.62,
+      "total": 237.0,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Sorrows",
+      "Delays",
+      "Longevity",
+      "Career"
+    ],
+    "chara_karaka": "BK",
+    "dispositor_chain": [
+      "Mercury",
+      "Saturn"
+    ],
+    "is_parivartana": true,
+    "vimsopaka_bala": 15.45,
+    "vargas": {
+      "D1": "Virgo",
+      "D9": "Taurus",
+      "D10": "Virgo",
+      "D2": "Cancer",
+      "D3": "Capricorn",
+      "D4": "Sagittarius",
+      "D7": "Gemini",
+      "D12": "Aquarius",
+      "D16": "Cancer",
+      "D20": "Taurus",
+      "D24": "Gemini",
+      "D30": "Pisces",
+      "D60": "Sagittarius"
+    }
+  },
+  "Rahu": {
+    "planet": "Rahu",
+    "sign": "Scorpio",
+    "degree": 23.5,
+    "house": 12,
+    "chalit_house": 11,
+    "retrograde": false,
+    "dignity": "Debilitated",
+    "owns_houses": [],
+    "dispositor": "Mars",
+    "aspects_houses": [
+      4,
+      6,
+      8
+    ],
+    "aspected_by": [
+      "Mars",
+      "Saturn",
+      "Ketu"
+    ],
+    "conjunct_with": [],
+    "nakshatra": "Jyeshtha",
+    "nakshatra_pada": 3,
+    "nakshatra_lord": "Mercury",
+    "combustion": {
+      "status": false,
+      "sun_distance": null,
+      "threshold": null
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Unknown"
+    },
+    "friendships": {
+      "natural_friends": [],
+      "natural_enemies": [],
+      "natural_neutrals": []
+    },
+    "shadbala": {
+      "sthana_bala": 0.0,
+      "dig_bala": 0.0,
+      "kala_bala": 0.0,
+      "cheshta_bala": 0.0,
+      "naisargika_bala": 0.0,
+      "drik_bala": 0.0,
+      "total": 0.0,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Obsessions",
+      "Foreign",
+      "Illusions"
+    ],
+    "chara_karaka": null,
+    "dispositor_chain": [
+      "Mars"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 0.0,
+    "vargas": {
+      "D1": "Scorpio",
+      "D9": "Aquarius",
+      "D10": "Aquarius",
+      "D2": "Leo",
+      "D3": "Cancer",
+      "D4": "Leo",
+      "D7": "Libra",
+      "D12": "Leo",
+      "D16": "Leo",
+      "D20": "Pisces",
+      "D24": "Aquarius",
+      "D30": "Capricorn",
+      "D60": "Libra"
+    }
+  },
+  "Ketu": {
+    "planet": "Ketu",
+    "sign": "Taurus",
+    "degree": 23.5,
+    "house": 6,
+    "chalit_house": 5,
+    "retrograde": false,
+    "dignity": "Debilitated",
+    "owns_houses": [],
+    "dispositor": "Venus",
+    "aspects_houses": [
+      10,
+      12,
+      2
+    ],
+    "aspected_by": [
+      "Rahu"
+    ],
+    "conjunct_with": [],
+    "nakshatra": "Mrigashira",
+    "nakshatra_pada": 1,
+    "nakshatra_lord": "Mars",
+    "combustion": {
+      "status": false,
+      "sun_distance": null,
+      "threshold": null
+    },
+    "planetary_war": {
+      "in_war": false,
+      "with_planet": null,
+      "is_winner": false
+    },
+    "avasthas": {
+      "balaadi": "Unknown"
+    },
+    "friendships": {
+      "natural_friends": [],
+      "natural_enemies": [],
+      "natural_neutrals": []
+    },
+    "shadbala": {
+      "sthana_bala": 0.0,
+      "dig_bala": 0.0,
+      "kala_bala": 0.0,
+      "cheshta_bala": 0.0,
+      "naisargika_bala": 0.0,
+      "drik_bala": 0.0,
+      "total": 0.0,
+      "is_partial": true
+    },
+    "natural_karakas": [
+      "Moksha",
+      "Spirituality"
+    ],
+    "chara_karaka": null,
+    "dispositor_chain": [
+      "Venus",
+      "Saturn",
+      "Mercury"
+    ],
+    "is_parivartana": false,
+    "vimsopaka_bala": 0.0,
+    "vargas": {
+      "D1": "Taurus",
+      "D9": "Leo",
+      "D10": "Leo",
+      "D2": "Leo",
+      "D3": "Capricorn",
+      "D4": "Aquarius",
+      "D7": "Aries",
+      "D12": "Aquarius",
+      "D16": "Leo",
+      "D20": "Pisces",
+      "D24": "Aquarius",
+      "D30": "Capricorn",
+      "D60": "Aries"
+    }
+  },
+  "Ascendant": {
+    "sign": "Sagittarius",
+    "degree": 26.14,
+    "nakshatra": "Purva Ashadha",
+    "nakshatra_pada": 4,
+    "nakshatra_lord": "Venus"
+  }
+}

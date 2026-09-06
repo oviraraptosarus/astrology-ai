@@ -1,0 +1,46 @@
+[
+    {
+        "case_id": "JFK_ASSASSINATION",
+        "name": "John F. Kennedy",
+        "birth_data": {
+            "year": 1917,
+            "month": 5,
+            "day": 29,
+            "hour": 15.0,
+            "lat": 42.3314,
+            "lon": -71.1212
+        },
+        "events": [
+            {
+                "event_id": "JFK_DEATH",
+                "event_type": "DEATH",
+                "date": "1963-11-22",
+                "description": "Assassination in Dallas",
+                "expected_dashas": ["Jupiter", "Saturn"],
+                "expected_transits": ["Saturn in Capricorn", "Jupiter in Pisces"]
+            }
+        ]
+    },
+    {
+        "case_id": "QUEEN_VICTORIA_MARRIAGE",
+        "name": "Queen Victoria",
+        "birth_data": {
+            "year": 1819,
+            "month": 5,
+            "day": 24,
+            "hour": 4.25,
+            "lat": 51.5074,
+            "lon": -0.1278
+        },
+        "events": [
+            {
+                "event_id": "QV_MARRIAGE",
+                "event_type": "MARRIAGE",
+                "date": "1840-02-10",
+                "description": "Marriage to Prince Albert",
+                "expected_dashas": ["Jupiter", "Venus"],
+                "expected_transits": ["Jupiter in Scorpio"]
+            }
+        ]
+    }
+]

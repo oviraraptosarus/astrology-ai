@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrology AI — Sign In</title>
+    <meta name="description" content="Sign in to your personal Vedic astrology guide.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+</head>
+<body class="login-page">
+
+<!-- Animated Background Orbs -->
+<div class="orb-container" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- Auth Card -->
+<div class="auth-wrap">
+<div class="auth-card" style="position:relative;">
+
+    <!-- Top shimmer line handled via ::before -->
+    
+    <!-- Logo mark -->
+    <div class="auth-logo-mark">✦</div>
+    <h1 class="auth-logo-title">Astrology AI</h1>
+    <p class="auth-logo-sub">Ancient Wisdom, Modern Precision</p>
+
+    <!-- Tab switcher — pill style -->
+    <div class="auth-tabs" role="tablist">
+        <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" onclick="switchTab('login')">Sign In</button>
+        <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" onclick="switchTab('signup')">Create Account</button>
+    </div>
+
+    <!-- Alert -->
+    <div id="alert" class="alert" role="alert" aria-live="polite"></div>
+
+    <!-- Sign In Form -->
+    <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)" novalidate>
+        <div class="input-group">
+            <label class="input-label" for="login-email">Email</label>
+            <input
+                type="email"
+                id="login-email"
+                class="input-field"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+        </div>
+        <div class="input-group" style="margin-bottom: 24px;">
+            <label class="input-label" for="login-password">Password</label>
+            <input
+                type="password"
+                id="login-password"
+                class="input-field"
+                placeholder="••••••••"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+        <button type="submit" class="btn-cta" id="login-btn">Sign In</button>
+    </form>
+
+    <!-- Create Account Form -->
+    <form class="auth-form" id="form-signup" onsubmit="handleSignup(event)" novalidate>
+        <div class="input-group">
+            <label class="input-label" for="signup-name">Full Name</label>
+            <input
+                type="text"
+                id="signup-name"
+                class="input-field"
+                placeholder="Arjun Sharma"
+                autocomplete="name"
+                required
+            >
+        </div>
+        <div class="input-group">
+            <label class="input-label" for="signup-email">Email</label>
+            <input
+                type="email"
+                id="signup-email"
+                class="input-field"
+                placeholder="you@example.com"
+                autocomplete="email"
+                required
+            >
+        </div>
+        <div class="input-group" style="margin-bottom: 24px;">
+            <label class="input-label" for="signup-password">Password</label>
+            <input
+                type="password"
+                id="signup-password"
+                class="input-field"
+                placeholder="At least 6 characters"
+                autocomplete="new-password"
+                required
+                minlength="6"
+            >
+        </div>
+        <button type="submit" class="btn-cta" id="signup-btn">Create Account</button>
+    </form>
+
+    <p class="form-note" style="margin-top: 20px;">
+        By continuing you agree to our Terms &amp; Privacy Policy.
+    </p>
+
+</div><!-- /auth-card -->
+</div><!-- /auth-wrap -->
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+        });
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        document.getElementById('alert').classList.remove('show');
+
+        document.getElementById(`tab-${tab}`).classList.add('active');
+        document.getElementById(`tab-${tab}`).setAttribute('aria-selected', 'true');
+        document.getElementById(`form-${tab}`).classList.add('active');
+    }
+
+    function showAlert(message, type) {
+        const alert = document.getElementById('alert');
+        alert.textContent = message;
+        alert.className = `alert ${type} show`;
+    }
+
+    async function handleLogin(e) {
+        e.preventDefault();
+        const btn = document.getElementById('login-btn');
+        btn.disabled = true;
+        btn.textContent = 'Signing in…';
+
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                localStorage.setItem('astro_token', data.token);
+                localStorage.setItem('astro_user', JSON.stringify(data.user));
+                window.location.href = '/';
+            } else {
+                showAlert(data.detail || data.error || 'Login failed. Please try again.', 'error');
+            }
+        } catch (err) {
+            showAlert('Connection error. Is the server running?', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Sign In';
+        }
+    }
+
+    async function handleSignup(e) {
+        e.preventDefault();
+        const btn = document.getElementById('signup-btn');
+        btn.disabled = true;
+        btn.textContent = 'Creating account…';
+
+        const full_name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
+
+        try {
+            const res = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ full_name, email, password })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                showAlert('Account created! Signing you in…', 'success');
+                setTimeout(() => {
+                    localStorage.setItem('astro_token', data.token);
+                    localStorage.setItem('astro_user', JSON.stringify(data.user));
+                    window.location.href = '/';
+                }, 1200);
+            } else {
+                showAlert(data.detail || data.error || 'Signup failed. Please try again.', 'error');
+            }
+        } catch (err) {
+            showAlert('Connection error. Is the server running?', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Create Account';
+        }
+    }
+</script>
+
+</body>
+</html>

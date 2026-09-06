@@ -1,0 +1,58 @@
+[
+  {
+    "technique_id": "TECH-VARGA-D9",
+    "name": "Navamsha (D9)",
+    "tradition": "Universal",
+    "domain": ["MARRIAGE", "DHARMA", "HIDDEN_STRENGTH", "LATER_LIFE"],
+    "purpose": "To assess the 9th harmonic. Shows the true inherent strength of planets, marital happiness, and inner nature.",
+    "prerequisites": ["Accurate birth time (changes roughly every 13-15 minutes)"],
+    "calculation_requirements": ["Standard Parashari D9 calculation"],
+    "source": ["Brihat Parashara Hora Shastra"],
+    "importance": "CRITICAL",
+    "implementation": "Implemented in pyswisseph/vedic_models.py",
+    "variants": ["Parashari", "Krishna Mishra (Jaimini)"],
+    "known_conflicts": ["Ayanamsa changes can shift planets in D9 easily"]
+  },
+  {
+    "technique_id": "TECH-VARGA-D10",
+    "name": "Dashamsha (D10)",
+    "tradition": "Parashari",
+    "domain": ["CAREER", "STATUS", "KARMA"],
+    "purpose": "To assess professional achievements, power, and authority.",
+    "prerequisites": ["Highly accurate birth time (changes roughly every 12 minutes)"],
+    "calculation_requirements": ["Odd/Even sign logic for D10"],
+    "source": ["Brihat Parashara Hora Shastra"],
+    "importance": "HIGH",
+    "implementation": "Implemented in pyswisseph/vedic_models.py",
+    "variants": [],
+    "known_conflicts": []
+  },
+  {
+    "technique_id": "TECH-JAIMINI-CHARA-KARAKAS-8",
+    "name": "8 Chara Karakas",
+    "tradition": "Jaimini",
+    "domain": ["ALL"],
+    "purpose": "To identify soul-level roles (AK, AmK, BK, MK, PK, GK, DK) including Rahu.",
+    "prerequisites": ["Exact planetary degrees"],
+    "calculation_requirements": ["Compare degrees of 7 physical planets + Rahu (measured from end of sign)"],
+    "source": ["Sanjay Rath / P.V.R. Narasimha Rao interpretations of Jaimini Sutras"],
+    "importance": "HIGH",
+    "implementation": "Not fully implemented (currently using 7 scheme in codebase)",
+    "variants": ["7 Chara Karakas (K.N. Rao)"],
+    "known_conflicts": ["Fierce debate over whether Rahu should be included."]
+  },
+  {
+    "technique_id": "TECH-STRENGTH-SHADBALA",
+    "name": "Shadbala",
+    "tradition": "Parashari",
+    "domain": ["ALL"],
+    "purpose": "To measure the exact quantitative strength of a planet across six sources.",
+    "prerequisites": ["Full planetary ephemeris, declination, velocity"],
+    "calculation_requirements": ["Sthana, Dig, Kala, Cheshta, Naisargika, Drik"],
+    "source": ["Brihat Parashara Hora Shastra", "Graha and Bhava Balas by B.V. Raman"],
+    "importance": "CRITICAL",
+    "implementation": "Implemented in strength_engine.py",
+    "variants": [],
+    "known_conflicts": ["Slight variations in Drik Bala and Cheshta Bala calculation between Sripati and modern software like JHora"]
+  }
+]

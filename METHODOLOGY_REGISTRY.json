@@ -1,0 +1,53 @@
+[
+  {
+    "methodology_id": "METH-PARASHARI-CLASSICAL",
+    "tradition": "Parashari",
+    "principles": ["Graha Drishti", "Bhava Lordship", "Yogas", "Shadbala", "Vimshottari Dasha"],
+    "preferred_techniques": ["D1", "D9", "Vimshottari Dasha", "Transits from Moon"],
+    "timing_systems": ["Vimshottari Dasha"],
+    "vargas": ["D1", "D9", "D10", "D7", "D3", "D12", "D16", "D20", "D24", "D27", "D30", "D60"],
+    "karakas": ["Naisargika Karakas"],
+    "arudhas": [],
+    "yogas": ["Parashari Yogas (e.g. Raja Yoga, Dhana Yoga)"],
+    "transits": ["Gochara from Janma Rashi"],
+    "strength_methods": ["Shadbala", "Bhava Bala", "Vimsopaka Bala"],
+    "domains": ["ALL"],
+    "sources": ["Brihat Parashara Hora Shastra", "Phaladeepika", "Saravali"],
+    "known_variants": ["Modern Interpretations by K.N. Rao", "B.V. Raman"],
+    "known_conflicts": ["Ayanamsa variations", "House systems (Placidus vs Whole Sign vs Sripati)"]
+  },
+  {
+    "methodology_id": "METH-JAIMINI-CLASSICAL",
+    "tradition": "Jaimini",
+    "principles": ["Rashi Drishti", "Chara Karakas", "Arudhas", "Karakamsa", "Argala"],
+    "preferred_techniques": ["D1", "D9", "Navamsha-based timing", "Arudha Lagna"],
+    "timing_systems": ["Chara Dasha", "Narayana Dasha", "Mandook Dasha"],
+    "vargas": ["D1", "D9"],
+    "karakas": ["Atmakaraka", "Amatyakaraka", "Bhratrukaraka", "Matrukaraka", "Putrakaraka", "Gnatikaraka", "Darakaraka"],
+    "arudhas": ["AL", "UL", "A1-A12"],
+    "yogas": ["Jaimini Raja Yogas (e.g. AK + AmK)"],
+    "transits": [],
+    "strength_methods": ["Jaimini Rashi Strengths"],
+    "domains": ["ALL"],
+    "sources": ["Jaimini Sutras"],
+    "known_variants": ["Sanjay Rath interpretations", "K.N. Rao interpretations"],
+    "known_conflicts": ["Calculation of Chara Karakas (7 vs 8)", "Calculation of Chara Dasha"]
+  },
+  {
+    "methodology_id": "METH-PVR-INTEGRATED",
+    "tradition": "Integrated",
+    "principles": ["Synthesis of Parashari and Jaimini", "Advanced Varga usage", "Conditional Dashas"],
+    "preferred_techniques": ["D1", "D9", "D10", "Chara Karakas", "Vimshottari", "Narayana Dasha"],
+    "timing_systems": ["Vimshottari Dasha", "Narayana Dasha", "Conditional Dashas"],
+    "vargas": ["ALL 16 Vargas"],
+    "karakas": ["Naisargika", "Chara"],
+    "arudhas": ["All Arudhas"],
+    "yogas": ["Parashari", "Jaimini"],
+    "transits": ["From Lagna", "From Moon", "From Arudha Lagna"],
+    "strength_methods": ["Shadbala", "Vimsopaka Bala"],
+    "domains": ["ALL"],
+    "sources": ["Vedic Astrology: An Integrated Approach by P.V.R. Narasimha Rao"],
+    "known_variants": [],
+    "known_conflicts": ["Differs from K.N. Rao on some Jaimini calculations"]
+  }
+]

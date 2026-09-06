@@ -1,0 +1,53 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+.env.bak*
+
+# Databases & session state
+*.db
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.session
+*.session-journal
+
+# Archives & caches
+*.zip
+*.pkl
+cache/
+chroma_db/
+chroma_db_advanced/
+data/
+scratch/
+downloads/
+
+# Copyrighted source texts (do NOT commit — license liability)
+books/
+*.pdf
+
+# Backups & editor
+*.bak
+.vscode/
+.playwright-mcp/
+node_modules/
+
+# Vendored external skill dump
+Claude_Skills/
+
+# Debug outputs, experimental dumps, large manifests
+Check.md
+MEMORY.md
+AUDIT_FINDINGS.md
+telegram_files_manifest.json
+benchmark_results.json
+benchmark_test.txt
+dt_benchmark.txt
+sig_out.txt
+sig2_out.txt
+significance_results.json
+significance_results_fine.json
+harness_results.json

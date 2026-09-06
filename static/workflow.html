@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 12px;
+    font-family: inherit;
+    color: var(--foreground, #e6edf3);
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 900px;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    padding-bottom: 8px;
+  }
+  .title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    background: var(--accent, #6366f1);
+    color: #fff;
+    font-weight: 600;
+  }
+  .flow-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .full-width {
+    grid-column: 1 / -1;
+  }
+  .card {
+    background: var(--card, rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+    border-radius: 8px;
+    padding: 14px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  .card:hover {
+    border-color: var(--accent, #6366f1);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-tag {
+    font-size: 10px;
+    font-family: monospace;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--muted-foreground, #8b949e);
+  }
+  .card-list {
+    margin: 0;
+    padding-left: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted-foreground, #8b949e);
+  }
+  .card-list li strong {
+    color: var(--foreground, #e6edf3);
+  }
+  .connector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 0;
+    color: var(--accent, #6366f1);
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .recon-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+    border: 1px solid var(--accent, #6366f1);
+  }
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 11px;
+  }
+  .matrix-table th, .matrix-table td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  }
+  .matrix-table th {
+    color: var(--foreground, #e6edf3);
+    background: rgba(255, 255, 255, 0.03);
+    font-weight: 600;
+  }
+  .pill-pos {
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .pill-neg {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .pill-mod {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="title">
+      <span>🌌 Astrology AI System Architecture & Reconciliation Workflow</span>
+    </div>
+    <span class="badge">Architecture v2.0</span>
+  </div>
+
+  <!-- 1. Frontend -->
+  <div class="card full-width">
+    <div class="card-header">
+      <div class="card-title">1. Frontend Layer</div>
+      <span class="card-tag">HTML5 / Vanilla JS / Liquid Glassmorphism / SSE</span>
+    </div>
+    <ul class="card-list">
+      <li><strong>Onboarding & Input:</strong> Server-side OpenStreetMap geocoding + Timezone resolution.</li>
+      <li><strong>Visual Kundli Engine:</strong> Interactive D1 (Rasi), D9 (Navamsha), and Bhava Chalit chart rendering.</li>
+      <li><strong>SSE Streaming Chat:</strong> Live server-sent event tokens with transparent thought-step indicators.</li>
+    </ul>
+  </div>
+
+  <div class="connector">▼ HTTP / SSE Request</div>
+
+  <!-- 2.3 Persistence -->
+  <div class="card full-width">
+    <div class="card-header">
+      <div class="card-title">2.3 Kundli Saving & Persistence</div>
+      <span class="card-tag">users.db & memory.sqlite</span>
+    </div>
+    <ul class="card-list">
+      <li><strong>User & Profile Store:</strong> <code>users.db</code> / PostgreSQL storing users, birth profiles, and plan entitlements.</li>
+      <li><strong>Session Cache & Checkpoints:</strong> <code>memory.sqlite</code> with <code>chart_cache</code> (per-user hashed sessions) and LangGraph agent checkpoints.</li>
+    </ul>
+  </div>
+
+  <div class="connector">▼ Parallel Evaluation Pipeline</div>
+
+  <!-- Flow Grid: 2.1 vs 2.2 -->
+  <div class="flow-grid">
+    <!-- 2.1 Kundli Engine -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">2.1 Kundli Math Engine</div>
+        <span class="card-tag">Deterministic Math</span>
+      </div>
+      <ul class="card-list">
+        <li><strong>Astronomy Core:</strong> <code>pyswisseph</code> Lahiri Sidereal, Sri Pati house cusps, D1–D60 divisional vargas.</li>
+        <li><strong>Planetary States:</strong> Surya Siddhanta combustion, planetary war, Shadbala & Bhava Bala, Balaadi avasthas.</li>
+        <li><strong>Dynamic Timing:</strong> Proportional Vimshottari dasha (down to Pratyantar), Jaimini Chara Dasha, K.N. Rao double transits (Saturn/Jupiter).</li>
+      </ul>
+    </div>
+
+    <!-- 2.2 RAG Engine -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">2.2 Classical RAG Engine</div>
+        <span class="card-tag">Knowledge Retrieval</span>
+      </div>
+      <ul class="card-list">
+        <li><strong>Ancient Corpus:</strong> BPHS, Jaimini Upadesa Sutras, Phala Deepika, Saravali, Uttara Kalamrita.</li>
+        <li><strong>HyDE Query Expansion:</strong> LLM translates user queries into Sanskrit Jyotisha terminology prior to search.</li>
+        <li><strong>Hybrid RRF & Reranker:</strong> ChromaDB (vector) + BM25 keyword search fused via Reciprocal Rank Fusion, scored by cross-encoder.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="connector">▼ Mathematical Facts & Classical Rules Meet</div>
+
+  <!-- 2.4 Reconciliation Engine -->
+  <div class="card full-width recon-box">
+    <div class="card-header">
+      <div class="card-title">2.4 Kundli-RAG Verification & Ideology Reconciliation Engine</div>
+      <span class="card-tag">Deterministic Arbiter</span>
+    </div>
+    <ul class="card-list">
+      <li><strong>Step 1: Rule-Fact Binding:</strong> Evaluates classical RAG rule conditions against computed Kundli properties.</li>
+      <li><strong>Step 2: Classical Cancellations:</strong> Detects Neechabhanga Raja Yoga, Vipareeta Yoga, and planetary war overrides.</li>
+      <li><strong>Step 3: Tradition Conflict Resolution:</strong> Resolves Parashari vs. Jaimini vs. KP disagreements using weighted convergence without inflating duplicate evidence.</li>
+    </ul>
+
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Tradition / Layer</th>
+          <th>Astrological Placement Evaluated</th>
+          <th>Polarity</th>
+          <th>Reconciliation Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Parashari (D1)</strong></td>
+          <td>Debilitated 7th Lord in Dusthana</td>
+          <td><span class="pill-neg">Negative (-4)</span></td>
+          <td>Structural weakness flagged</td>
+        </tr>
+        <tr>
+          <td><strong>Parashari (Vargas)</strong></td>
+          <td>7th Lord Exalted in D9 Navamsha</td>
+          <td><span class="pill-pos">Positive (+4)</span></td>
+          <td>Modifies D1: Indicates delay but strong final result</td>
+        </tr>
+        <tr>
+          <td><strong>Classical Cancellation</strong></td>
+          <td>Neechabhanga condition fulfilled</td>
+          <td><span class="pill-mod">Modifier</span></td>
+          <td>Cancels debility penalty; converts to Raja Yoga</td>
+        </tr>
+        <tr>
+          <td><strong>Jaimini Sutras</strong></td>
+          <td>Darakaraka in 8th from Arudha Lagna</td>
+          <td><span class="pill-neg">Friction (-3)</span></td>
+          <td>Flags relationship adjustment period required</td>
+        </tr>
+        <tr>
+          <td><strong>K.N. Rao Timing</strong></td>
+          <td>Jupiter & Saturn double transit to 7th house</td>
+          <td><span class="pill-pos">Positive (+5)</span></td>
+          <td>Unlocks timing window for the event</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="connector">▼ Synthesized Deterministic JSON Payload</div>
+
+  <!-- LLM Synthesis -->
+  <div class="card full-width">
+    <div class="card-header">
+      <div class="card-title">LLM Synthesis & Grandmaster Protocol</div>
+      <span class="card-tag">LangGraph ReAct / SSE Output</span>
+    </div>
+    <ul class="card-list">
+      <li><strong>Zero Hallucination:</strong> LLM is forbidden from calculating angles or timings; acts strictly as a translator of the 2.4 JSON payload.</li>
+      <li><strong>Grandmaster Protocol:</strong> Delivers year-by-year timeline, astrological logic first, clear verdict, and specific planetary remediation (mantras, charities, gemstones).</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

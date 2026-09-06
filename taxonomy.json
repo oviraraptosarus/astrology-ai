@@ -1,0 +1,37 @@
+{
+  "categories": {
+    "A_FOUNDATIONAL_JYOTISHA": ["fundamentals", "Grahas", "Rashis", "Bhavas", "Lagna", "lordships", "relationships", "aspects", "dignity", "exaltation", "debilitation", "Moolatrikona", "friendships", "combustion", "retrogression", "Avasthas", "planetary strength", "Shadbala", "Ashtakavarga"],
+    "B_NAKSHATRA_SYSTEM": ["27 Nakshatras", "4 Padas", "Nakshatra lords", "symbolism", "placement by Nakshatra", "Nakshatra-based prediction", "compatibility", "timing"],
+    "C_DIVISIONAL_CHARTS": ["D1", "D2", "D3", "D4", "D7", "D9", "D10", "D12", "D16", "D20", "D24", "D27", "D30", "D40", "D45", "D60"],
+    "D_YOGAS": ["Raja Yogas", "Dhana Yogas", "Daridra Yogas", "Dharma-Karmadhipati", "Pancha Mahapurusha", "Gaja Kesari", "Budhaditya", "Neechabhanga", "Viparita Raja Yoga", "Parivartana", "Lakshmi", "Adhi", "Chandra-related", "wealth combinations", "authority/status combinations", "education combinations", "marriage combinations", "profession combinations", "spiritual combinations", "longevity-related combinations"],
+    "E_DASHA_SYSTEMS": ["Vimshottari", "Ashtottari", "Yogini", "Chara Dasha", "Narayana Dasha", "Kalachakra"],
+    "F_TIMING_PREDICTION": ["Dasha interpretation", "Antardasha", "Pratyantardasha", "transit timing", "Dasha + transit synthesis", "Varga confirmation", "event timing", "age-based prediction", "annual prediction", "longevity timing", "marriage timing", "career timing", "wealth timing", "education timing"],
+    "G_CAREER_PROFESSION": ["profession", "career", "employment", "entrepreneurship", "business", "authority", "government career", "politics", "public status", "leadership", "career changes", "foreign work", "business partnerships", "profession-specific combinations"],
+    "H_WEALTH_FINANCE": ["wealth", "income", "savings", "assets", "inheritance", "business wealth", "debt", "financial difficulty", "gains/losses", "property wealth"],
+    "I_MARRIAGE_RELATIONSHIPS": ["marriage", "spouse", "relationships", "compatibility", "marriage timing", "spouse characteristics", "delayed marriage", "multiple marriage indications", "separation/divorce indications", "D9", "Venus/Jupiter", "Upapada concepts", "Jaimini relationship methods"],
+    "J_CHILDREN": ["conception", "children", "childbirth", "number of children", "child-related timing", "D7", "5th house", "Jupiter", "traditional progeny rules"],
+    "K_EDUCATION": ["education", "intelligence", "academic success", "higher education", "competitive education", "specialization", "foreign education", "D24"],
+    "L_FAMILY_PARENTS": ["father", "mother", "siblings", "family", "lineage", "D3", "D12", "relevant Karakas"],
+    "M_PROPERTY_VEHICLES": ["property", "real estate", "land", "home", "vehicles", "acquisition", "sale", "disputes", "D4"],
+    "N_HEALTH_WELLBEING": ["disease indicators", "health houses", "planetary affliction", "longevity", "Ayur-related concepts", "traditional remedial approaches"],
+    "O_LONGEVITY_DEATH_MARAKA": ["Ayush", "longevity", "Maraka", "Badhaka", "8th house", "2nd and 7th", "longevity calculations", "traditional death indicators", "Dasha/transit longevity methods", "relevant Vargas"],
+    "P_SPIRITUALITY_DHARMA": ["spirituality", "meditation", "religious inclination", "moksha", "Dharma", "5th/9th/12th houses", "Jupiter", "Ketu", "D20", "Atmakaraka", "Jaimini spiritual methods"],
+    "Q_KARAKAS": ["Natural Karakas", "Chara Karakas", "Atmakaraka", "Amatyakaraka", "Bhratrukaraka", "Matrukaraka", "Pitrukaraka", "Putrakaraka", "Gnatikaraka", "Darakaraka", "Karakamsa"],
+    "R_JAIMINI": ["Rashi Drishti", "Chara Karakas", "Karakamsa", "Arudha Lagna", "Upapada", "Jaimini Dashas", "Jaimini Yogas", "Jaimini aspects", "relevant prediction methods"],
+    "S_ARUDHAS": ["Arudha Lagna", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "Upapada"],
+    "T_PRASHNA": ["Prashna Jyotisha", "horary methods", "query charts", "timing", "question-specific rules"],
+    "U_MUHURTA": ["choosing auspicious times", "Panchanga-based Muhurta", "Tithi", "Vara", "Nakshatra", "Yoga", "Karana", "Lagna", "planetary Hora", "Choghadiya", "Rahu Kalam", "Yamaganda", "Gulika", "Abhijit Muhurta", "Pushya-related Muhurtas", "Amrita Siddhi", "Siddha Yoga", "auspicious/inauspicious combinations", "marriage Muhurta", "house construction Muhurta", "house entry / Griha Pravesha", "naming ceremony", "Annaprashana", "Upanayana", "education initiation", "travel Muhurta", "business opening", "signing agreements", "vehicle purchase", "property registration", "agricultural activities", "religious ceremony timing", "festival timing"],
+    "V_PANCHANGA": ["Tithi", "Vara", "Nakshatra", "Yoga", "Karana", "sunrise", "sunset", "Moonrise", "Moonset", "solar/lunar month", "ayana", "Ritu", "Samvatsara", "Sankranti", "Ekadashi", "Amavasya", "Purnima", "eclipses", "festival calculations", "regional differences"],
+    "W_RITUALS_SAMSKARAS": ["birth-related rituals", "naming", "Annaprashana", "Upanayana", "marriage rituals", "Griha Pravesha", "funerary/ancestral rituals", "Shraddha", "Puja timing", "vrata", "festival observances", "Sankalpa", "traditional ritual Muhurta"],
+    "X_REMEDIES_UPAYAS": ["Mantra", "Japa", "Dana", "Puja", "fasting/vrata", "gemstones", "deity-related practices", "Yantra", "temple practices", "Navagraha remedies", "remedial astrology"],
+    "Y_NAVAGRAHA_RELIGIOUS": ["Surya", "Chandra", "Mangala", "Budha", "Guru", "Shukra", "Shani", "Rahu", "Ketu"],
+    "Z_FESTIVALS_CALENDAR": ["major Hindu festivals", "festival determination", "lunar/solar calendar rules", "regional differences", "Sankranti", "Ekadashi", "Navaratri", "Mahashivaratri", "Diwali", "Janmashtami", "Rama Navami", "Holi", "Guru Purnima"]
+  },
+  "source_hierarchy": {
+    "PRIORITY_1": "Primary/classical texts and authoritative editions",
+    "PRIORITY_2": "Credible scholarly translations/commentaries",
+    "PRIORITY_3": "Established traditional practitioners and serious reference works",
+    "PRIORITY_4": "Secondary reference material",
+    "PRIORITY_5": "Modern websites/blogs/forums"
+  }
+}

@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrology AI — Your Cosmic Guide</title>
+    <meta name="description" content="Personalized Vedic astrology powered by ancient wisdom and modern precision.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}?v=5">
+</head>
+<body>
+
+<!-- Animated Background Orbs -->
+<div class="orb-container" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BIRTH DETAILS ONBOARDING — LIQUID GLASS MODAL
+     ══════════════════════════════════════════ -->
+<div id="onboardingModal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+
+    <div class="modal-card">
+
+        <!-- Icon -->
+        <div class="modal-icon" aria-hidden="true">✦</div>
+
+        <!-- Heading -->
+        <h1 class="modal-title" id="modal-heading">Your Cosmic Blueprint</h1>
+        <p class="modal-desc">Enter your birth details so the stars can speak to you personally.</p>
+
+        <!-- Step Dots -->
+        <div class="step-indicator" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" id="stepIndicator">
+            <div class="step-dot active" id="dot-1"></div>
+            <div class="step-dot" id="dot-2"></div>
+            <div class="step-dot" id="dot-3"></div>
+        </div>
+
+        <!-- Steps Container -->
+        <div class="steps-container">
+
+            <!-- STEP 1 — Basic Info -->
+            <div class="step-panel active" id="step-1">
+                <div class="input-group" style="margin-bottom: 24px;">
+                    <label class="input-label" for="fullName">Full Name (For Numerology)</label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        class="input-field"
+                        placeholder="e.g. John Doe"
+                        required
+                        autocomplete="name"
+                    >
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="birthDate">Date of Birth</label>
+                    <input
+                        type="date"
+                        id="birthDate"
+                        class="input-field"
+                        required
+                        max="2025-12-31"
+                        autocomplete="bday"
+                    >
+                </div>
+                <button class="btn-cta" id="step1Next" onclick="goToStep(2)">
+                    Continue
+                </button>
+            </div>
+
+            <!-- STEP 2 — Time of Birth -->
+            <div class="step-panel" id="step-2">
+                <div class="input-group">
+                    <label class="input-label" for="birthTime">Exact Time of Birth</label>
+                    <input
+                        type="time"
+                        id="birthTime"
+                        class="input-field"
+                        required
+                        autocomplete="off"
+                    >
+                </div>
+                <p class="form-note" style="margin-top:-8px; margin-bottom: 20px;">
+                    The exact minute matters for an accurate Lagna (Ascendant). Check your birth certificate.
+                </p>
+                <button class="btn-cta" onclick="goToStep(3)">
+                    Continue
+                </button>
+                <button class="btn-back" onclick="goToStep(1)">← Back</button>
+            </div>
+
+            <!-- STEP 3 — Place of Birth -->
+            <div class="step-panel" id="step-3">
+                <div class="input-group" style="position:relative;">
+                    <label class="input-label" for="birthCity">Place of Birth</label>
+                    <input
+                        type="text"
+                        id="birthCity"
+                        class="input-field"
+                        placeholder="Start typing a city…"
+                        required
+                        autocomplete="off"
+                        oninput="onCityInput()"
+                        onkeydown="onCityKeyDown(event)"
+                        onblur="hidePlacesDropdown()"
+                        onfocus="if(this.value.length>1) onCityInput()"
+                        aria-autocomplete="list"
+                        aria-controls="places-dropdown"
+                        aria-haspopup="listbox"
+                        role="combobox"
+                        aria-expanded="false"
+                    >
+                    <!-- Autocomplete Dropdown -->
+                    <ul
+                        id="places-dropdown"
+                        class="places-dropdown"
+                        role="listbox"
+                        aria-label="Place suggestions"
+                    ></ul>
+                </div>
+                <p class="form-note" style="margin-top:-8px; margin-bottom: 20px;">
+                    City and country for accurate timezone and coordinates.
+                </p>
+                <button class="btn-cta" id="generateBtn" onclick="submitBirthDetails()">
+                    Generate My Kundli ✦
+                </button>
+                <button class="btn-back" onclick="goToStep(2)">← Back</button>
+                <p class="form-note" style="margin-top: 16px;">
+                    Your data is never shared and stays on your device.
+                </p>
+            </div>
+
+        </div><!-- /steps-container -->
+
+    </div><!-- /modal-card -->
+</div><!-- /overlay -->
+
+
+<!-- ══════════════════════════════════════════
+     TOAST NOTIFICATIONS
+     ══════════════════════════════════════════ -->
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<!-- ══════════════════════════════════════════
+     APP HEADER
+     ══════════════════════════════════════════ -->
+<header class="app-header">
+    <div class="app-logo">Astrology AI</div>
+    <div class="app-header-controls">
+        <span id="user-greeting" style="font-size: 13px; color: var(--text-secondary); letter-spacing: -0.01em;"></span>
+        <button class="btn btn-ghost" id="debugToggle" onclick="toggleDebugMode()" style="font-size:13px;">Debug</button>
+        <button class="btn btn-outline" onclick="logout()" style="font-size:13px;">Sign Out</button>
+    </div>
+</header>
+
+
+<!-- ══════════════════════════════════════════
+     MAIN LAYOUT
+     ══════════════════════════════════════════ -->
+<div class="app-layout">
+
+    <!-- Chat -->
+    <main class="main-content">
+
+        <div class="chat-scroll-area" id="chatBox"></div>
+
+        <!-- Input -->
+        <!-- Input -->
+        <div class="chat-input-wrapper">
+            <div class="chat-input-container">
+                <textarea
+                    id="userInput"
+                    class="chat-input"
+                    placeholder="Ask about your career, marriage, or destiny…"
+                    rows="1"
+                    oninput="autoResize(this); toggleSendButton();"
+                    onkeydown="handleKeyPress(event)"
+                    aria-label="Ask the astrologer"
+                ></textarea>
+                
+                <div class="chat-input-toolbar">
+                    <!-- Apple-Style Custom Model Selector -->
+                    <div class="custom-dropdown-container" id="modelDropdown">
+                        <div class="custom-dropdown-trigger" onclick="toggleDropdown(event)">
+                            <span style="margin-right:6px; opacity:0.8; font-size:14px; line-height:1;">+</span>
+                            <span id="selectedModelLabel">Auto (Fallback)</span>
+                            <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </div>
+                        <div class="custom-dropdown-menu" id="modelDropdownMenu">
+                            <div class="dropdown-header">Model</div>
+                            <!-- Populated dynamically by fetchModels() -->
+                            <div class="custom-dropdown-option selected" data-value="auto" onclick="selectModel('auto', 'Auto (Fallback)')">
+                                <span>Auto (Fallback)</span>
+                                <span class="model-badge">Smart</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button id="sendBtn" class="btn-send" onclick="sendMessage()" aria-label="Send message">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 12L19 12M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Debug Panel -->
+    <aside class="debug-panel" id="debugContainer" aria-label="Engine trace">
+        <div class="debug-panel-header">Engine Trace</div>
+        <div class="debug-panel-content" id="debugContent">Waiting for engine trace…</div>
+    </aside>
+
+</div>
+
+
+<script>
+    /* ── Minimal inline Markdown → HTML ── */
+    function mdToHtml(md) {
+        if (!md) return '';
+        
+        // Parse tables first
+        let html = md.replace(/\n((?:\|.*?)+\|)[ \t]*\n((?:\|[-:| ]+)+\|)[ \t]*\n((?:\|.*?)+\|[\s\S]*?(?=\n[^|]|$))/g, function(match, header, separator, body) {
+            let thead = '<thead><tr>' + header.split('|').filter(c => c.trim()).map(c => `<th>${c.trim()}</th>`).join('') + '</tr></thead>';
+            let tbody = '<tbody>' + body.trim().split('\n').map(row => {
+                return '<tr>' + row.split('|').filter(c => c.trim() || c==='').map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+            }).join('') + '</tbody>';
+            return `<div class="table-container"><table class="glass-table">${thead}${tbody}</table></div>`;
+        });
+
+        html = html
+            // Code blocks
+            .replace(/```[\s\S]*?```/g, m => `<pre><code>${m.slice(3, -3).replace(/^[^\n]*\n/, '')}</code></pre>`)
+            // Bold
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            // Italic
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            // Inline code
+            .replace(/`([^`]+)`/g, '<code>$1</code>')
+            // Headers
+            .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+            .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+            .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+            // Horizontal rule
+            .replace(/^[-*]{3,}$/gm, '<hr>')
+            // Unordered lists
+            .replace(/^\s*[-*+] (.+)$/gm, '<li>$1</li>')
+            // Ordered lists
+            .replace(/^\s*\d+\. (.+)$/gm, '<li>$1</li>')
+            // Wrap consecutive <li> in <ul>
+            .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+            // Paragraphs (blank-line separated)
+            .replace(/\n\n+/g, '\n\n')
+            .split('\n\n')
+            .map(block => {
+                block = block.trim();
+                if (!block) return '';
+                if (/^<(h[1-6]|ul|ol|pre|hr|blockquote|div class="table-container")/.test(block)) return block;
+                return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+            })
+            .join('\n');
+        return html;
+    }
+
+    let debugMode = false;
+    let currentStep = 1;
+
+    /* ── Auth ── */
+    const astroToken = localStorage.getItem('astro_token');
+    if (!astroToken) window.location.href = '/login';
+
+    const astroUser = JSON.parse(localStorage.getItem('astro_user') || '{}');
+    if (astroUser.full_name) {
+        document.getElementById('user-greeting').textContent =
+            'Namaste, ' + astroUser.full_name.split(' ')[0];
+    }
+
+    /* ── Onboarding / Chart Rehydration ── */
+    const storedDetails = localStorage.getItem('astro_birth_details');
+    if (!storedDetails) {
+        // No birth details at all — show onboarding
+        document.getElementById('onboardingModal').classList.add('is-active');
+    } else {
+        // Birth details exist — check if chart is still live on the server
+        const details = JSON.parse(storedDetails);
+        renderWelcomeMessage();
+        rehydrateChart(details);
+    }
+
+    async function rehydrateChart(details) {
+        // Check if the server still has the chart for this session
+        const session_id = localStorage.getItem('astro_session');
+        if (!session_id) {
+            // No session at all — recalculate silently
+            triggerChartCalculation(details);
+            return;
+        }
+        // Send a lightweight ping to the server to check
+        try {
+            const res = await fetch('/api/chart/status?session_id=' + encodeURIComponent(session_id), {
+                headers: { 'Authorization': `Bearer ${astroToken}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (!data.has_chart) {
+                    triggerChartCalculation(details);
+                }
+            } else {
+                // Endpoint doesn't exist or error — recalculate to be safe
+                triggerChartCalculation(details);
+            }
+        } catch(e) {
+            // Network error or endpoint missing — recalculate
+            triggerChartCalculation(details);
+        }
+    }
+
+    function triggerChartCalculation(details) {
+        const { date, time, city, lat, lon } = details;
+        const coordHint = (lat && lon) ? ` (coordinates: ${lat.toFixed ? lat.toFixed(4) : lat}, ${lon.toFixed ? lon.toFixed(4) : lon})` : '';
+        const prompt = `I was born on ${date} at ${time} in ${city}${coordHint}. Please calculate my Kundli and give me a complete overview.`;
+        sendHiddenMessage(prompt);
+    }
+
+    /* ── Detect if AI is asking for birth details ── */
+    function isBirthDataRequest(text) {
+        if (!text) return false;
+        const t = text.toLowerCase();
+        const triggers = [
+            'date of birth',
+            'time of birth',
+            'place of birth',
+            'birth details',
+            'birth information',
+            'could you please share',
+            'i\'ll need your birth',
+            'i need your birth',
+            'share your birth',
+            'provide your birth',
+            'birth chart details',
+            'to calculate your',
+            'to generate your',
+            'born on',
+            'when were you born',
+            'where were you born',
+        ];
+        // Only trigger if 2+ signals present (avoid false positives)
+        const matches = triggers.filter(t2 => t.includes(t2));
+        return matches.length >= 2;
+    }
+
+    /* ══════════════════════════════════════════
+       MULTI-STEP FORM
+       ══════════════════════════════════════════ */
+    function goToStep(n) {
+        // Validate current step before advancing
+        if (n > currentStep) {
+            if (currentStep === 1 && !document.getElementById('birthDate').value) {
+                shakeField('birthDate'); return;
+            }
+            if (currentStep === 2 && !document.getElementById('birthTime').value) {
+                shakeField('birthTime'); return;
+            }
+        }
+
+        // Hide current, show next
+        document.getElementById('step-' + currentStep).classList.remove('active');
+        document.getElementById('dot-' + currentStep).classList.remove('active');
+        document.getElementById('dot-' + currentStep).classList.add('done');
+
+        currentStep = n;
+
+        document.getElementById('step-' + currentStep).classList.add('active');
+
+        // Update dots
+        for (let i = 1; i <= 3; i++) {
+            const dot = document.getElementById('dot-' + i);
+            dot.classList.remove('active', 'done');
+            if (i < currentStep) dot.classList.add('done');
+            if (i === currentStep) dot.classList.add('active');
+        }
+    }
+
+    function shakeField(id) {
+        const el = document.getElementById(id);
+        el.style.borderColor = 'rgba(255, 94, 94, 0.7)';
+        el.style.boxShadow = '0 0 0 3px rgba(255, 94, 94, 0.15)';
+        el.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-6px)' },
+            { transform: 'translateX(6px)' },
+            { transform: 'translateX(-4px)' },
+            { transform: 'translateX(4px)' },
+            { transform: 'translateX(0)' }
+        ], { duration: 300, easing: 'ease-out' });
+        setTimeout(() => {
+            el.style.borderColor = '';
+            el.style.boxShadow = '';
+        }, 800);
+    }
+
+    async function submitBirthDetails() {
+        const fullName = document.getElementById('fullName').value.trim();
+        const date = document.getElementById('birthDate').value;
+        const time = document.getElementById('birthTime').value;
+        const city = document.getElementById('birthCity').value.trim();
+
+        if (!fullName || !date || !time || !city) { shakeField('birthCity'); return; }
+
+        const btn = document.getElementById('generateBtn');
+        btn.disabled = true;
+        btn.textContent = 'Reading the stars…';
+
+        // Use pre-resolved coordinates from autocomplete if available
+        let lat = null, lon = null;
+        if (_selectedPlace && _selectedPlace.lat) {
+            lat = _selectedPlace.lat;
+            lon = _selectedPlace.lon;
+        }
+
+        const details = { fullName, date, time, city, lat, lon };
+        localStorage.setItem('astro_birth_details', JSON.stringify(details));
+        document.getElementById('onboardingModal').classList.remove('is-active');
+
+        const coordHint = (lat && lon) ? ` (coordinates: ${lat.toFixed(4)}, ${lon.toFixed(4)})` : '';
+        const prompt = `My name is ${fullName} and I was born on ${date} at ${time} in ${city}${coordHint}. Please calculate my Kundli, Numerology, and Western chart and give me a complete overview.`;
+        sendHiddenMessage(prompt);
+
+        btn.disabled = false;
+        btn.textContent = 'Generate My Kundli ✦';
+    }
+
+    /* ══════════════════════════════════════════
+       UI HELPERS
+       ══════════════════════════════════════════ */
+    function autoResize(el) {
+        el.style.height = '';
+        el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+    }
+
+    function toggleSendButton() {
+        const val = document.getElementById('userInput').value.trim();
+        document.getElementById('sendBtn').classList.toggle('is-active', val.length > 0);
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    }
+
+    function logout() {
+        ['astro_token', 'astro_user', 'astro_birth_details', 'astro_session'].forEach(k => localStorage.removeItem(k));
+        window.location.href = '/login';
+    }
+
+    function toggleDebugMode() {
+        debugMode = !debugMode;
+        const btn = document.getElementById('debugToggle');
+        const panel = document.getElementById('debugContainer');
+        btn.classList.toggle('btn-outline', debugMode);
+        btn.classList.toggle('btn-ghost', !debugMode);
+        panel.classList.toggle('is-open', debugMode);
+    }
+
+    /* ══════════════════════════════════════════
+       CHAT RENDERING
+       ══════════════════════════════════════════ */
+    function renderWelcomeMessage() {
+        const chatBox = document.getElementById('chatBox');
+        const row = document.createElement('div');
+        row.className = "message-row ai-row";
+        row.innerHTML = `
+            <div class="message-content">
+                <div class="ai-avatar">✦</div>
+                <div class="ai-text">
+                    <p>Welcome back. Your birth chart is ready. What would you like to explore today?</p>
+                    <div class="suggestion-chips">
+                        <div class="chip" onclick="quickAsk('How is my career looking?')">Career &amp; Purpose</div>
+                        <div class="chip" onclick="quickAsk('When will I find love?')">Love &amp; Marriage</div>
+                        <div class="chip" onclick="quickAsk('What does the next year hold for me?')">Next 12 Months</div>
+                        <div class="chip" onclick="quickAsk('What are my financial prospects?')">Wealth &amp; Finance</div>
+                        <div class="chip" onclick="quickAsk('What is my spiritual path?')">Spirituality</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        chatBox.appendChild(row);
+        
+        // Also attempt to load and display the visual Kundli
+        fetchAndRenderKundli();
+    }
+
+    let _hasRenderedChart = false;
+
+    async function fetchAndRenderKundli() {
+        if (_hasRenderedChart) return;
+        const session_id = localStorage.getItem('astro_session');
+        if (!session_id) return;
+        
+        try {
+            const res = await fetch('/api/chart-data?session_id=' + encodeURIComponent(session_id), {
+                headers: { 'Authorization': `Bearer ${astroToken}` }
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            
+                if (data.Basic_Chart) {
+                    _hasRenderedChart = true;
+                    renderVisualKundli(data.Basic_Chart);
+                    if (data.Yogas_Found && data.Yogas_Found.length > 0) {
+                        renderYogas(data.Yogas_Found);
+                    }
+                    if (data.Numerology && data.Numerology.Chaldean && !data.Numerology.error) {
+                        renderNumerology(data.Numerology);
+                    }
+                    if (data.Western_Chart) {
+                        renderWestern(data.Western_Chart);
+                    }
+                }
+        } catch(e) {
+            console.error("Could not fetch chart data for visualization:", e);
+        }
+    }
+
+    function renderNumerology(numData) {
+        let html = '<div class="yogas-container" style="margin-top: 16px;">';
+        html += '<h3 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 12px; font-weight: 500; font-size: 16px;">Numerology (Chaldean)</h3>';
+        html += '<div class="yogas-grid">';
+        
+        const nums = [
+            {name: "Life Path", val: numData.Life_Path, desc: "Your overarching life purpose and natural path."},
+            {name: "Destiny", val: numData.Chaldean.Destiny, desc: "Your outward expression and goals."},
+            {name: "Soul Urge", val: numData.Chaldean.Soul_Urge, desc: "Your inner desires and hidden motivations."},
+            {name: "Personality", val: numData.Chaldean.Personality, desc: "How others perceive you initially."}
+        ];
+        
+        nums.forEach(n => {
+            html += `
+                <div class="yoga-card" style="text-align: center;">
+                    <div class="yoga-name">${n.name} Number</div>
+                    <div class="yoga-significance strong" style="font-size: 24px; margin: 8px 0;">${n.val}</div>
+                    <div class="yoga-reason" style="font-size: 12px;">${n.desc}</div>
+                </div>
+            `;
+        });
+        html += '</div></div>';
+        appendMessage('ai', html);
+    }
+
+    function renderWestern(westData) {
+        let html = '<div class="yogas-container" style="margin-top: 16px;">';
+        html += '<h3 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 12px; font-weight: 500; font-size: 16px;">Western Tropical Highlights</h3>';
+        html += '<div class="yogas-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">';
+        
+        const keyPlanets = ["Sun", "Moon", "Ascendant"];
+        keyPlanets.forEach(p => {
+            const data = p === "Ascendant" ? westData.Ascendant : westData.Planets[p];
+            html += `
+                <div class="yoga-card" style="text-align: center;">
+                    <div class="yoga-name">${p}</div>
+                    <div class="yoga-significance moderate" style="margin: 8px 0;">${data.sign}</div>
+                    <div class="yoga-reason" style="font-size: 12px;">${data.degree}°</div>
+                </div>
+            `;
+        });
+        html += '</div></div>';
+        appendMessage('ai', html);
+    }
+
+    function renderYogas(yogas) {
+        let html = '<div class="yogas-container">';
+        html += '<h3 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 12px; font-weight: 500; font-size: 16px;">Detected Yogas</h3>';
+        html += '<div class="yogas-grid">';
+        yogas.forEach(y => {
+            html += `
+                <div class="yoga-card">
+                    <div class="yoga-name">${y.name} Yoga</div>
+                    <div class="yoga-significance ${(y.confidence || 'unknown').toLowerCase()}">${y.confidence || 'UNKNOWN'}</div>
+                    <div class="yoga-reason">${y.reason}</div>
+                    ${y.modifiers && y.modifiers.length > 0 ? `<div class="yoga-modifiers">${y.modifiers.map(m => `<span>✦ ${m}</span>`).join('')}</div>` : ''}
+                </div>
+            `;
+        });
+        html += '</div></div>';
+        appendMessage('ai', html);
+    }
+
+    function renderVisualKundli(chartData) {
+        // South Indian Grid Mapping (4x4 grid cells 1 to 16)
+        const gridMap = {
+            'Pisces': 1, 'Aries': 2, 'Taurus': 3, 'Gemini': 4,
+            'Aquarius': 5, /* 6 empty, 7 empty */ 'Cancer': 8,
+            'Capricorn': 9, /* 10 empty, 11 empty */ 'Leo': 12,
+            'Sagittarius': 13, 'Scorpio': 14, 'Libra': 15, 'Virgo': 16
+        };
+        
+        // Initialize 16 cells
+        let cells = Array.from({length: 16}, (_, i) => ({
+            id: i + 1,
+            sign: Object.keys(gridMap).find(k => gridMap[k] === i + 1) || '',
+            planets: [],
+            isAscendant: false
+        }));
+        
+        // Populate ascendant
+        if (chartData.Ascendant && chartData.Ascendant.sign) {
+            const ascIdx = gridMap[chartData.Ascendant.sign] - 1;
+            if (ascIdx >= 0) cells[ascIdx].isAscendant = true;
+        }
+        
+        // Populate planets
+        for (const [pName, pData] of Object.entries(chartData)) {
+            if (pName === 'Ascendant' || !pData.sign) continue;
+            const idx = gridMap[pData.sign] - 1;
+            if (idx >= 0) {
+                cells[idx].planets.push({
+                    name: pName === 'TRUE_NODE' ? 'Rahu' : pName.substring(0,2).toUpperCase(),
+                    retro: pData.retrograde
+                });
+            }
+        }
+        
+        // Generate HTML
+        let gridHtml = '<div class="kundli-wrapper"><div class="kundli-grid">';
+        for (let i = 0; i < 16; i++) {
+            if (i === 5) {
+                // The center 2x2 area
+                gridHtml += `<div class="kundli-cell empty-center">Rasi Chart</div>`;
+                continue;
+            }
+            if (i === 6 || i === 9 || i === 10) continue; // skip rest of center
+            
+            const cell = cells[i];
+            let pList = cell.planets.map(p => 
+                `<span class="planet-item ${p.retro ? 'retrograde' : ''}">${p.name}</span>`
+            ).join('');
+            
+            gridHtml += `
+                <div class="kundli-cell">
+                    ${cell.isAscendant ? '<span class="ascendant-marker">Asc</span>' : ''}
+                    <div class="zodiac-sign">${cell.sign.substring(0,3)}</div>
+                    <div class="planet-list">${pList}</div>
+                </div>
+            `;
+        }
+        gridHtml += '</div></div>';
+        
+        appendMessage('ai', gridHtml);
+    }
+
+    function quickAsk(text) {
+        document.getElementById('userInput').value = text;
+        toggleSendButton();
+        sendMessage();
+    }
+
+    function appendMessage(sender, htmlContent) {
+        const chatBox = document.getElementById('chatBox');
+        const row = document.createElement('div');
+        row.className = `message-row ${sender}-row`;
+
+        if (sender === 'user') {
+            row.innerHTML = `<div class="message-content" style="justify-content:flex-end">
+                <div class="user-bubble">${escapeHTML(htmlContent)}</div>
+            </div>`;
+        } else {
+            row.innerHTML = `<div class="message-content">
+                <div class="ai-avatar">✦</div>
+                <div class="ai-text">${htmlContent}</div>
+            </div>`;
+        }
+
+        chatBox.appendChild(row);
+        setTimeout(() => chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' }), 60);
+    }
+
+    function appendLoader() {
+        const chatBox = document.getElementById('chatBox');
+        const row = document.createElement('div');
+        row.className = 'message-row ai-row';
+        row.id = 'loadingMessage';
+        row.innerHTML = `
+            <div class="message-content">
+                <div class="ai-avatar">✦</div>
+                <div class="ai-text loader-dots">
+                    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+                </div>
+            </div>`;
+        chatBox.appendChild(row);
+        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+    }
+
+    function removeLoader() {
+        const el = document.getElementById('loadingMessage');
+        if (el) el.remove();
+    }
+
+    function escapeHTML(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* ══════════════════════════════════════════
+       MESSAGING
+       ══════════════════════════════════════════ */
+    async function sendMessage() {
+        const inputField = document.getElementById('userInput');
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        appendMessage('user', text);
+        inputField.value = '';
+        inputField.style.height = '';
+        toggleSendButton();
+        appendLoader();
+        await fetchChatAPI(text);
+    }
+
+    async function sendHiddenMessage(text) {
+        appendLoader();
+        await fetchChatAPI(text);
+    }
+
+    /* ══════════════════════════════════════════
+       CUSTOM MODEL DROPDOWN & NOTIFICATIONS
+       ══════════════════════════════════════════ */
+    let selectedModelValue = 'auto';
+
+    // Fetch models from API on load — no auth needed, public endpoint
+    async function fetchModels(retryCount = 0) {
+        try {
+            const res = await fetch('/api/models');
+            if (res.ok) {
+                const data = await res.json();
+                const menu = document.getElementById('modelDropdownMenu');
+                
+                // Clear and rebuild
+                menu.innerHTML = '<div class="dropdown-header">Model</div>';
+                
+                data.models.forEach(m => {
+                    const el = document.createElement('div');
+                    el.className = 'custom-dropdown-option';
+                    if (m.id === selectedModelValue) el.classList.add('selected');
+                    el.dataset.value = m.id;
+                    el.onclick = () => selectModel(m.id, m.name);
+                    el.innerHTML = `<span>${m.name}</span><span class="model-badge">${m.badge}</span>`;
+                    menu.appendChild(el);
+                });
+            } else if (retryCount < 3) {
+                setTimeout(() => fetchModels(retryCount + 1), 800);
+            }
+        } catch (e) {
+            console.error('Error fetching models', e);
+            if (retryCount < 2) setTimeout(() => fetchModels(retryCount + 1), 1500);
+        }
+    }
+    
+    // Kick off model loading immediately
+    fetchModels();
+
+    function toggleDropdown(e) {
+        e.stopPropagation();
+        document.getElementById('modelDropdown').classList.toggle('is-open');
+    }
+
+    function selectModel(value, label) {
+        selectedModelValue = value;
+        document.getElementById('selectedModelLabel').textContent = label;
+        
+        // Update checkmarks
+        document.querySelectorAll('.custom-dropdown-option').forEach(el => {
+            el.classList.remove('selected');
+            if (el.dataset.value === value) {
+                el.classList.add('selected');
+            }
+        });
+        
+        document.getElementById('modelDropdown').classList.remove('is-open');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('modelDropdown');
+        if (dropdown && dropdown.classList.contains('is-open') && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('is-open');
+        }
+    });
+
+    function showToast(message) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'toast show';
+        toast.textContent = message;
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    async function fetchChatAPI(text) {
+        const session_id = localStorage.getItem('astro_session') || generateUUID();
+        localStorage.setItem('astro_session', session_id);
+        
+        const provider = selectedModelValue;
+        
+        // Add Apple Intelligence Glow
+        const inputContainer = document.querySelector('.chat-input-container');
+        inputContainer.classList.add('is-generating');
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${astroToken}`
+                },
+                body: JSON.stringify({ message: text, session_id, debug_mode: debugMode, provider: provider })
+            });
+
+            removeLoader();
+            inputContainer.classList.remove('is-generating');
+
+            if (res.status === 401) { logout(); return; }
+
+            const data = await res.json();
+            const replyText = data.reply || data.response || '';
+            
+            // Show toast if we fell back from Groq to OpenRouter or similar in trace
+            if (data.trace && data.trace.includes('GroqCloud API error') || (provider === 'auto' && replyText.includes('rate limit'))) {
+                showToast("Fell back to another provider due to limits.");
+            }
+            
+            const html = mdToHtml(replyText);
+            appendMessage('ai', html || '<p style="color:var(--text-secondary)">The astrologer has no reading yet.</p>');
+
+            // Attempt to render Kundli if it hasn't been rendered yet in this session
+            fetchAndRenderKundli();
+
+            // If the AI is asking for birth details, open the entry modal automatically
+            if (isBirthDataRequest(replyText)) {
+                setTimeout(() => {
+                    // Reset steps to start
+                    currentStep = 1;
+                    goToStep(1);
+                    document.getElementById('onboardingModal').classList.add('is-active');
+                }, 800);
+            }
+
+            if (data.trace) {
+                document.getElementById('debugContent').textContent =
+                    typeof data.trace === 'string' ? data.trace : JSON.stringify(data.trace, null, 2);
+            }
+
+        } catch (err) {
+            removeLoader();
+            appendMessage('ai', `<p style="color:#ff8080">The cosmos was momentarily veiled. Please try again.</p>`);
+            console.error('Chat error:', err);
+        }
+    }
+
+    function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+            const r = Math.random() * 16 | 0;
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
+    /* ══════════════════════════════════════════
+       PLACE AUTOCOMPLETE (OpenStreetMap Nominatim)
+       No API key required — free & accurate
+       ══════════════════════════════════════════ */
+    let _placeDebounce = null;
+    let _placeResults = [];
+    let _selectedPlaceIdx = -1;
+    let _selectedPlace = null; // stores { display_name, lat, lon }
+
+    function onCityInput() {
+        clearTimeout(_placeDebounce);
+        const q = document.getElementById('birthCity').value.trim();
+        if (q.length < 2) { hidePlacesDropdown(); return; }
+        _selectedPlace = null; // reset selection on new input
+        _placeDebounce = setTimeout(() => fetchPlaces(q), 280);
+    }
+
+    async function fetchPlaces(query) {
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=6&featuretype=city`;
+        try {
+            const res = await fetch(url, {
+                headers: { 'Accept-Language': 'en', 'User-Agent': 'AstrologyAI/1.0' }
+            });
+            const results = await res.json();
+            _placeResults = results;
+            _selectedPlaceIdx = -1;
+            renderDropdown(results);
+        } catch (e) {
+            hidePlacesDropdown();
+        }
+    }
+
+    function renderDropdown(results) {
+        const dropdown = document.getElementById('places-dropdown');
+        const input = document.getElementById('birthCity');
+
+        if (!results.length) { hidePlacesDropdown(); return; }
+
+        dropdown.innerHTML = results.map((r, i) => {
+            const city = r.address?.city || r.address?.town || r.address?.village || r.address?.county || r.name;
+            const country = r.address?.country || '';
+            const state = r.address?.state || '';
+            const secondary = [state, country].filter(Boolean).join(', ');
+            return `<li
+                class="places-option"
+                role="option"
+                id="place-opt-${i}"
+                aria-selected="false"
+                onmousedown="selectPlace(${i})"
+                onmouseover="highlightOption(${i})"
+            >
+                <span class="place-icon">📍</span>
+                <span class="place-text">
+                    <span class="place-primary">${escapeHTML(city)}</span>
+                    <span class="place-secondary">${escapeHTML(secondary)}</span>
+                </span>
+            </li>`;
+        }).join('');
+
+        dropdown.classList.add('is-open');
+        input.setAttribute('aria-expanded', 'true');
+    }
+
+    function highlightOption(idx) {
+        _selectedPlaceIdx = idx;
+        document.querySelectorAll('.places-option').forEach((el, i) => {
+            el.classList.toggle('is-highlighted', i === idx);
+            el.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+        });
+    }
+
+    function selectPlace(idx) {
+        const place = _placeResults[idx];
+        if (!place) return;
+        const city = place.address?.city || place.address?.town || place.address?.village || place.address?.county || place.name;
+        const country = place.address?.country || '';
+        const state = place.address?.state || '';
+        const displayName = [city, state, country].filter(Boolean).join(', ');
+        _selectedPlace = { display_name: displayName, lat: parseFloat(place.lat), lon: parseFloat(place.lon) };
+        document.getElementById('birthCity').value = displayName;
+        hidePlacesDropdown();
+    }
+
+    function hidePlacesDropdown() {
+        setTimeout(() => {
+            const d = document.getElementById('places-dropdown');
+            if (d) { d.classList.remove('is-open'); d.innerHTML = ''; }
+            const input = document.getElementById('birthCity');
+            if (input) input.setAttribute('aria-expanded', 'false');
+        }, 120);
+    }
+
+    function onCityKeyDown(e) {
+        const opts = document.querySelectorAll('.places-option');
+        if (!opts.length) return;
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            highlightOption(Math.min(_selectedPlaceIdx + 1, opts.length - 1));
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            highlightOption(Math.max(_selectedPlaceIdx - 1, 0));
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (_selectedPlaceIdx >= 0) selectPlace(_selectedPlaceIdx);
+        } else if (e.key === 'Escape') {
+            hidePlacesDropdown();
+        }
+    }
+
+</script>
+
+</body>
+</html>

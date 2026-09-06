@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+langchain
+langchain-community
+langchain-groq
+langchain-pinecone
+pinecone-client
+sentence-transformers
+pytesseract
+pdf2image
+pillow
+
+telethon
+python-docx
