@@ -84,6 +84,9 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
+class GoogleLoginRequest(BaseModel):
+    credential: str
+
 class LocationResolution(BaseModel):
     display_name: str
     latitude: float
@@ -264,6 +267,52 @@ async def login(req: LoginRequest):
         secure=runtime_config.IS_PRODUCTION,
     )
     return response
+
+@app.post("/api/auth/google")
+async def google_login(req: GoogleLoginRequest):
+    if not runtime_config.GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=503, detail="Google Login is not configured")
+    
+    from google.oauth2 import id_token
+    from google.auth.transport import requests
+    import secrets
+
+    try:
+        # Verify the Google JWT token
+        idinfo = id_token.verify_oauth2_token(
+            req.credential, 
+            requests.Request(), 
+            runtime_config.GOOGLE_CLIENT_ID
+        )
+
+        email = idinfo.get("email")
+        if not email:
+            raise ValueError("No email in Google token")
+        
+        full_name = idinfo.get("name", email.split('@')[0])
+        
+        # Check if user exists. If not, auto-create a strong random password since they use Google.
+        user = get_user_by_email(email)
+        if not user:
+            random_pw = secrets.token_urlsafe(32)
+            user = create_user(email, full_name, random_pw)
+
+        token = create_access_token({"sub": user["email"]})
+        from fastapi.responses import JSONResponse
+        response = JSONResponse({
+            "token": token, 
+            "user": {"email": user["email"], "full_name": user["full_name"], "plan": user["plan"]}
+        })
+        response.set_cookie(
+            key="astro_token", value=token,
+            httponly=True, samesite="lax", max_age=60*60*24*7,
+            secure=runtime_config.IS_PRODUCTION,
+        )
+        return response
+
+    except ValueError as e:
+        logger.warning(f"Google login token verification failed: {e}")
+        raise HTTPException(status_code=401, detail="Invalid Google token")
 
 @app.post("/api/auth/logout")
 async def logout():

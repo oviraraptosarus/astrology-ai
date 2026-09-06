@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astrology AI — Sign In</title>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta name="description" content="Sign in to your personal Vedic astrology guide.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,6 +107,29 @@
         <button type="submit" class="btn-cta" id="signup-btn">Create Account</button>
     </form>
 
+    <div style="display: flex; align-items: center; text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin: 24px 0;">
+        <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.06);"></div>
+        <span style="margin: 0 12px;">or continue with</span>
+        <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.06);"></div>
+    </div>
+
+    <!-- Google Login Button placeholder (renders automatically via Google API) -->
+    <div id="g_id_onload"
+         data-client_id="84241641979-3h9e2k1q2o2k5i5f7f9l0h8k7q9i0l2a.apps.googleusercontent.com"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="handleGoogleLogin"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-shape="rectangular"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="center">
+    </div>
+
     <p class="form-note" style="margin-top: 20px;">
         By continuing you agree to our Terms &amp; Privacy Policy.
     </p>
@@ -113,6 +138,34 @@
 </div><!-- /auth-wrap -->
 
 <script>
+    // Handle Google sign-in response (JWT token)
+    async function handleGoogleLogin(response) {
+        if (!response.credential) {
+            showAlert('Google login failed', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ credential: response.credential })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                localStorage.setItem('astro_token', data.token);
+                localStorage.setItem('astro_user', JSON.stringify(data.user));
+                window.location.href = '/';
+            } else {
+                showAlert(data.detail || 'Google Login failed. Provider might not be configured.', 'error');
+            }
+        } catch (err) {
+            showAlert('Network error signing in with Google.', 'error');
+            console.error(err);
+        }
+    }
+
     function switchTab(tab) {
         document.querySelectorAll('.auth-tab').forEach(t => {
             t.classList.remove('active');

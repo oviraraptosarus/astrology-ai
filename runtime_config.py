@@ -54,6 +54,9 @@ def _fail_fast(name: str, why: str):
     )
 
 
+# ── Auth & OAuth ────────────────────────────────────────────────────────────
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+
 def validate_production() -> list:
     """Raise if any production-critical setting is missing. Returns list of
     soft warnings for optional integrations."""
