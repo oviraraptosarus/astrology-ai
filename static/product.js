@@ -155,20 +155,84 @@ function badge(status, tone) {
 function renderMarkdown(text) {
   if (!text) return '';
   let s = esc(text);
-  // Bold **text**
+
+  // Headers (### Header -> <h3>Header</h3>)
+  s = s.replace(/^###[ \t]+(.*$)/gim, '<h3>$1</h3>');
+  s = s.replace(/^##[ \t]+(.*$)/gim, '<h2>$1</h2>');
+  s = s.replace(/^#[ \t]+(.*$)/gim, '<h1>$1</h1>');
+
+  // Horizontal rules (--- or *** or ___)
+  s = s.replace(/^(?:---|\*\*\*|___)\s*$/gim, '<hr class="astro-hr">');
+
+  // Blockquotes (> Quote)
+  s = s.replace(/^>[ \t]+(.*$)/gim, '<blockquote class="astro-quote">$1</blockquote>');
+
+  // Bold **text** and __text__
   s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  // Italic *text*
-  s = s.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  // Bullet lists
+  s = s.replace(/__(.*?)__/g, '<strong>$1</strong>');
+
+  // Italic *text* and _text_
+  s = s.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
+  s = s.replace(/_([^_]+)_/g, '<em>$1</em>');
+
+  // Markdown Tables (| Header | Header | \n |---|---| \n | Cell | Cell |)
+  s = s.replace(/((?:(?:^[ \t]*\|.+?\|[ \t]*)(?:\r?\n|$))+)/gm, (match) => {
+    const lines = match.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (lines.length < 2) return match;
+
+    // Verify header and delimiter row
+    let headerLine = lines[0];
+    if (!lines[1].includes('|') || !lines[1].includes('-')) return match;
+
+    const parseCells = (rowStr) => {
+      let r = rowStr;
+      if (r.startsWith('|')) r = r.slice(1);
+      if (r.endsWith('|')) r = r.slice(0, -1);
+      return r.split('|').map(c => c.trim());
+    };
+
+    const formatCell = (val) => {
+      if (!val) return '';
+      let c = val;
+      c = c.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      c = c.replace(/__(.*?)__/g, '<strong>$1</strong>');
+      c = c.replace(/\*([^\*]+)\*/g, '<em>$1</em>');
+      c = c.replace(/_([^_]+)_/g, '<em>$1</em>');
+      return c;
+    };
+
+    const headers = parseCells(headerLine);
+    let html = '<div class="table-wrap"><table class="astro-table"><thead><tr>';
+    for (const h of headers) {
+      html += `<th>${formatCell(h)}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    for (let i = 2; i < lines.length; i++) {
+      const cells = parseCells(lines[i]);
+      html += '<tr>';
+      for (let j = 0; j < headers.length; j++) {
+        html += `<td>${formatCell(cells[j] != null ? cells[j] : '')}</td>`;
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+    return html;
+  });
+
+  // Bullet lists (unordered)
   s = s.replace(/(?:^|\n)[ \t]*[-*•][ \t]+(.+)/g, '\n<li>$1</li>');
   s = s.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
   s = s.replace(/<\/ul>\s*<ul>/g, '');
-  // Line breaks to paragraphs
+
+  // Paragraphs & Line breaks
   const paras = s.split(/\n\n+/);
   return paras.map(p => {
     p = p.trim();
     if (!p) return '';
-    if (p.startsWith('<ul>') || p.startsWith('<li>')) return p;
+    if (p.startsWith('<div class="table-wrap">') || p.startsWith('<h1') || p.startsWith('<h2') || p.startsWith('<h3') || p.startsWith('<ul') || p.startsWith('<li') || p.startsWith('<hr') || p.startsWith('<blockquote')) {
+      return p;
+    }
     return `<p>${p.replace(/\n/g, '<br>')}</p>`;
   }).join('');
 }
@@ -731,6 +795,7 @@ Screens.chat = async (host) => {
 
   const msgsBox = $('#chat-msgs', el);
   const thoughtBox = $('#chat-thought', el);
+  const promptBox = $('#chat-prompts', el);
   const form = $('#chat-form', el);
   const input = $('#chat-in', el);
   const sendBtn = $('#chat-send', el);
@@ -742,6 +807,7 @@ Screens.chat = async (host) => {
 
   const renderMessages = () => {
     if (!State.chatMessages || !State.chatMessages.length) {
+      if (promptBox) promptBox.classList.remove('hide');
       msgsBox.innerHTML = `
         <div class="chat-empty">
           <div class="glyph-ai">${svg('spark')}</div>
@@ -750,6 +816,7 @@ Screens.chat = async (host) => {
         </div>`;
       return;
     }
+    if (promptBox) promptBox.classList.add('hide');
     msgsBox.innerHTML = State.chatMessages.map(m => `
       <div class="msg ${m.role}">
         <div class="msg-bubble">${m.role === 'assistant' ? renderMarkdown(m.content) : esc(m.content)}</div>
@@ -1195,4 +1262,7 @@ function registerSW() {
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
 
 /* ---- go ----------------------------------------------------------------- */
+window.AstroState = State;
+window.AstroScreens = Screens;
+window.renderMarkdown = renderMarkdown;
 boot();
