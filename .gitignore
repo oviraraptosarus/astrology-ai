@@ -32,6 +32,8 @@ books/
 
 # Backups & editor
 *.bak
+*.tar.gz
+CODEBASE_AUDIT_*.md
 .vscode/
 .playwright-mcp/
 node_modules/

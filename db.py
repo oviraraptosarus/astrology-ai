@@ -128,6 +128,34 @@ def init_schema():
                 created_at {ts_default}
             )
         """,
+        "relationship_profiles": """
+            CREATE TABLE IF NOT EXISTS relationship_profiles (
+                id {pk_int},
+                owner_id BIGINT NOT NULL,
+                label TEXT NOT NULL,
+                relation TEXT DEFAULT 'partner',
+                full_name TEXT NOT NULL,
+                birth_date TEXT NOT NULL,
+                birth_time TEXT NOT NULL,
+                city TEXT NOT NULL,
+                latitude REAL NOT NULL,
+                longitude REAL NOT NULL,
+                timezone TEXT NOT NULL,
+                created_at {ts_default}
+            )
+        """,
+        "notification_prefs": """
+            CREATE TABLE IF NOT EXISTS notification_prefs (
+                user_id BIGINT PRIMARY KEY,
+                daily_insight INTEGER DEFAULT 1,
+                transit_alert INTEGER DEFAULT 1,
+                timing_period INTEGER DEFAULT 1,
+                relationship_event INTEGER DEFAULT 0,
+                product_updates INTEGER DEFAULT 0,
+                appearance TEXT DEFAULT 'system',
+                updated_at {ts_default}
+            )
+        """,
     }
     for sql in statements.values():
         conn, db_type = get_connection()

@@ -30,21 +30,39 @@ SIGN_LORDS = {
     "Sagittarius": "Jupiter", "Capricorn": "Saturn", "Aquarius": "Saturn", "Pisces": "Jupiter"
 }
 
-DOMAIN_HOUSE_MAP = {
-    # CAREER: 10th house is the ONLY primary indicator of explicit career rise. 2nd/11th are wealth. 
-    # Broadening it to 5 houses made every day a "career breakthrough".
-    "CAREER": {"houses": [10], "karakas": ["Saturn", "Sun", "Mercury"], "event_label": "Career Breakthrough / Status Elevation"},
-    "BUSINESS": {"houses": [7, 10], "karakas": ["Mercury"], "event_label": "Major Business Deal / Commercial Expansion"},
-    "WEALTH": {"houses": [2, 11], "karakas": ["Jupiter", "Venus"], "event_label": "Significant Financial Windfall / Asset Gain"},
-    "PROPERTY": {"houses": [4], "karakas": ["Mars"], "event_label": "Real Estate Acquisition / Property Move"},
-    "MARRIAGE": {"houses": [7], "karakas": ["Venus"], "event_label": "Marriage / Major Partnership Formation"},
-    "CHILDREN": {"houses": [5], "karakas": ["Jupiter"], "event_label": "Childbirth / Progeny Milestone"},
-    # ACUTE TRAUMA requires 8th (death/trauma) or Maraka (2/7).
-    "HEALTH_ACCIDENT": {"houses": [8], "karakas": ["Mars", "Saturn", "Ketu"], "event_label": "Acute Physical Vulnerability / Surgery / Trauma"},
-    "LITIGATION": {"houses": [6], "karakas": ["Mars", "Saturn", "Rahu"], "event_label": "Legal Dispute / Conflict Resolution"},
-    "RELOCATION": {"houses": [9, 12], "karakas": ["Rahu"], "event_label": "Foreign Relocation / Long-Distance Move"},
-    "SPIRITUALITY": {"houses": [12, 9], "karakas": ["Ketu", "Jupiter"], "event_label": "Spiritual Awakening / Major Dharma Shift"}
+from seventy_node_ontology import SEVENTY_LIFE_NODES, SeventyNodeOntology
+
+# Standard Domain House Map built directly from the 70-Node Unified Taxonomy:
+DOMAIN_HOUSE_MAP = {}
+for k, v in SEVENTY_LIFE_NODES.items():
+    DOMAIN_HOUSE_MAP[k] = {
+        "houses": v["houses"],
+        "karakas": v["karakas"],
+        "event_label": v["label"]
+    }
+
+# Backward compatibility aliases for standard consultation names:
+ALIASES = {
+    "CAREER": "CAREER_BREAKTHROUGH",
+    "BUSINESS": "CAREER_FOUNDING_ENTERPRISE",
+    "WEALTH": "WEALTH_LIQUID_WINDFALL",
+    "PROPERTY": "PROPERTY_LAND_ACQUISITION",
+    "MARRIAGE": "MARRIAGE_SACRED_UNION",
+    "CHILDREN": "PROGENY_FIRST_CHILDBIRTH",
+    "HEALTH_ACCIDENT": "HEALTH_ACUTE_SURGICAL_INTERVENTION",
+    "LITIGATION": "CAREER_EMPLOYMENT_DISPUTE",
+    "RELOCATION": "RELOCATION_PERMANENT_EMIGRATION",
+    "SPIRITUALITY": "SPIRITUAL_MANTRA_SIDDHI_INITIATION",
+    "FATHER_ACCIDENT": "FATHER_ACUTE_ACCIDENT_TRAUMA",
+    "FATHER_HEALTH": "FATHER_NATURAL_LIFESPAN_PASSING",
+    "MOTHER_HEALTH": "MOTHER_HEALTH_CRISIS",
+    "SPOUSE_HEALTH": "MARRIAGE_DIVORCE_FINALIZED",
+    "EDUCATION": "EDUCATION_UNIVERSITY_GRADUATION",
+    "FAME": "CAREER_PUBLIC_GOVERNANCE_ELECTION"
 }
+for alias_key, target_node in ALIASES.items():
+    if target_node in DOMAIN_HOUSE_MAP:
+        DOMAIN_HOUSE_MAP[alias_key] = DOMAIN_HOUSE_MAP[target_node]
 
 class ForwardTimingScanner:
     def __init__(self, chart: Chart):
@@ -75,7 +93,12 @@ class ForwardTimingScanner:
             lord = SIGN_LORDS[ZODIAC_SIGNS[sign_idx]]
             target_lords.append(lord)
 
-        target_significators = set(target_lords + target_karakas)
+        target_occupants = [
+            p_name for p_name, p_obj in self.chart.planets.items()
+            if hasattr(p_obj, "house") and p_obj.house in target_houses
+        ]
+
+        target_significators = set(target_lords + target_karakas + target_occupants)
 
         # Generate Dasha timeline
         birth_utc = getattr(self.chart, "birth_time", datetime(2000, 1, 1, tzinfo=pytz.utc))
@@ -152,22 +175,47 @@ class ForwardTimingScanner:
                 continue
 
             window_mid = d_start + (d_end - d_start) / 2
-            dt_result = self._check_transits_at_date(window_mid, target_houses, target_lords)
+            
+            # Sample transits across the window (start, mid, and end) to catch planetary sign ingresses
+            sample_dates = [d_start, window_mid, max(d_start, d_end - timedelta(days=2))]
+            best_dt_result = None
+            for s_date in sample_dates:
+                res = self._check_transits_at_date(s_date, target_houses, target_lords)
+                if not best_dt_result:
+                    best_dt_result = res
+                elif res["double_transit_active"] and not best_dt_result["double_transit_active"]:
+                    best_dt_result = res
+                elif len(res["activated_houses"]) > len(best_dt_result["activated_houses"]) and not best_dt_result["double_transit_active"]:
+                    best_dt_result = res
 
-            if dt_result["double_transit_active"]:
-                
-                # Check for specific Micro-Triggers (Mars/Rahu Catalysts)
-                micro_trigger = self._find_micro_trigger(d_start, d_end, domain_upper)
-                
+            dt_result = best_dt_result or self._check_transits_at_date(window_mid, target_houses, target_lords)
+            
+            # Check for acute sub-degree Micro-Triggers (Mars/Saturn/Rahu exact degree collisions)
+            micro_trigger = self._find_micro_trigger(d_start, d_end, domain_upper)
+
+            # Qualification Rule:
+            # 1. Full Double Transit (Exact target house hit or domain double active)
+            # 2. Acute Crisis / Health / Accident / Litigation (Micro-trigger sub-degree collision qualifies)
+            # 3. Major Life Domain Primary Activation (Jupiter or Saturn activating primary house while D-A-P lord is aligned)
+            is_crisis_domain = domain_upper in ["HEALTH_ACCIDENT", "FATHER_ACCIDENT", "FATHER_HEALTH", "MOTHER_HEALTH", "LITIGATION"]
+            single_primary_hit = (len(dt_result["activated_houses"]) > 0 and (md in target_significators or ad in target_significators or pd in target_significators))
+            
+            qualifies = dt_result["double_transit_active"] or (is_crisis_domain and micro_trigger.get("found")) or single_primary_hit
+
+            if qualifies:
                 # Modulators
                 sav_support = dt_result["kakshya_favorable"]
                 
                 # Hierarchical Confidence Assessment (Convergence)
-                # To get HIGH confidence, we need Dasha + Double Transit + SAV + MicroTrigger.
-                # If we are missing modulators or micro-triggers, confidence degrades appropriately.
-                if micro_trigger.get("found") and sav_support:
+                if micro_trigger.get("found") and dt_result["double_transit_active"]:
+                    confidence = "CRITICAL_HIGH (FULL_CONVERGENCE)"
+                    state = "PROMISED_AND_TRIGGERED"
+                elif dt_result["double_transit_active"] and sav_support:
                     confidence = "HIGH (FULL_CONVERGENCE)"
                     state = "PROMISED_AND_TRIGGERED"
+                elif micro_trigger.get("found"):
+                    confidence = "HIGH (ACUTE_MICRO_COLLISION)"
+                    state = "ACUTE_EVENT_TRIGGERED"
                 elif sav_support:
                     confidence = "MODERATE (PARTIAL_CONVERGENCE_NO_MICROTRIGGER)"
                     state = "PROMISED_BUT_DIFFUSE"
@@ -193,7 +241,9 @@ class ForwardTimingScanner:
                     "event_label": event_label,
                     "macro_window_start": max(d_start, start_date).strftime("%Y-%m-%d"),
                     "macro_window_end": min(d_end, end_date).strftime("%Y-%m-%d"),
+                    "exact_peak_date": micro_trigger.get("exact_peak_date", window_mid.strftime("%Y-%m-%d")),
                     "peak_trigger_dates": micro_trigger.get("peak_dates", f"{window_mid.strftime('%Y-%m-%d')} (Diffuse window bound)"),
+                    "peak_probability_pct": micro_trigger.get("probability_pct", 80.0 if "HIGH" in confidence else 55.0),
                     "prediction_state": state,
                     "confidence": confidence,
                     "dasha_hierarchy": dasha_hierarchy_str,
@@ -233,8 +283,8 @@ class ForwardTimingScanner:
         jup_house = ((jup_sign_idx - self.lagna_sign_idx) % 12) + 1
         sat_house = ((sat_sign_idx - self.lagna_sign_idx) % 12) + 1
 
-        jup_aspected_houses = [(jup_house + offset - 1) % 12 + 1 for offset in [1, 5, 7, 9]]
-        sat_aspected_houses = [(sat_house + offset - 1) % 12 + 1 for offset in [1, 3, 7, 10]]
+        jup_aspected_houses = [((jup_house - 1 + offset - 1) % 12) + 1 for offset in [1, 5, 7, 9]]
+        sat_aspected_houses = [((sat_house - 1 + offset - 1) % 12) + 1 for offset in [1, 3, 7, 10]]
 
         # Classical K.N. Rao Double Transit Evaluation
         # 1. Exact Single-House Convergence (both aspecting the exact same target house)
@@ -268,39 +318,171 @@ class ForwardTimingScanner:
         }
 
     def _find_micro_trigger(self, start_dt: datetime, end_dt: datetime, domain: str) -> Dict[str, Any]:
-        """Finds acute Mars / Fast-Transit triggers inside the macro window."""
+        """
+        Finds acute Mars, Saturn, and Fast-Transit micro triggers inside the macro window.
+        Scans for exact sub-degree aspects (<= 1.2° orb) against natal sensitive points,
+        planets, and acute house ingresses.
+        """
         window_days = (end_dt - start_dt).days
         if window_days <= 0:
             return {"found": False}
 
-        # Sample across window in 5-day increments
-        step_days = max(3, window_days // 10)
+        # Step day-by-day across the window for precision
+        step_days = max(1, window_days // 45)
         curr = start_dt
+        
+        # Precompute natal absolute longitudes
+        natal_lons = {}
+        for p_name, p_obj in self.chart.planets.items():
+            if hasattr(p_obj, "sign") and p_obj.sign in ZODIAC_SIGNS:
+                s_idx = ZODIAC_SIGNS.index(p_obj.sign)
+                natal_lons[p_name] = (s_idx * 30.0) + p_obj.degree
+
+        best_hit = None
+        min_orb = 999.0
+
+        domain_upper = domain.upper()
+        is_father_domain = ("FATHER" in domain_upper)
+        is_health_accident = any(k in domain_upper for k in ["HEALTH", "ACCIDENT", "SURGERY", "CRASH", "TRAUMA", "LITIGATION", "CRISIS", "PASSING", "DEATH"])
+        is_career_wealth = any(k in domain_upper for k in ["CAREER", "BUSINESS", "WEALTH", "CAPITAL", "EDUCATION", "FAME", "SOVEREIGN", "TECH", "LIQUID", "EXIT"])
+        is_progeny = any(k in domain_upper for k in ["CHILD", "PROGENY", "BIRTH", "SON", "DAUGHTER", "TWIN"])
+        is_marriage = any(k in domain_upper for k in ["MARRIAGE", "UNION", "WEDDING", "RELATIONSHIP", "PARTNERSHIP"])
+        is_property = any(k in domain_upper for k in ["PROPERTY", "REAL_ESTATE", "LAND", "HOUSE_BUILD"])
+
         while curr <= end_dt:
             hour_dec = curr.hour + (curr.minute / 60.0)
             jd = swe.julday(curr.year, curr.month, curr.day, hour_dec)
+            
+            # Calculate live Mars, Saturn, and Jupiter
             mars_res, _ = swe.calc_ut(jd, swe.MARS, swe.FLG_SIDEREAL)
             mars_lon = mars_res[0] % 360.0
             mars_sign_idx = int(mars_lon / 30)
             mars_house = ((mars_sign_idx - self.lagna_sign_idx) % 12) + 1
 
-            if domain in ["HEALTH_ACCIDENT", "LITIGATION"] and mars_house in [6, 8, 1, 12]:
-                peak_start = curr.strftime("%Y-%m-%d")
-                peak_end = (curr + timedelta(days=6)).strftime("%Y-%m-%d")
-                return {
-                    "found": True,
-                    "peak_dates": f"{peak_start} to {peak_end}",
-                    "details": f"Transiting Mars enters Dusthana House {mars_house} ({ZODIAC_SIGNS[mars_sign_idx]}), acting as acute physical catalyst"
-                }
-            elif domain in ["CAREER", "BUSINESS", "WEALTH"] and mars_house in [10, 11, 2, 1]:
-                peak_start = curr.strftime("%Y-%m-%d")
-                peak_end = (curr + timedelta(days=6)).strftime("%Y-%m-%d")
-                return {
-                    "found": True,
-                    "peak_dates": f"{peak_start} to {peak_end}",
-                    "details": f"Transiting Mars energizes Upachaya/Kendra House {mars_house}, catalyzing executive action and breakthrough"
-                }
+            saturn_res, _ = swe.calc_ut(jd, swe.SATURN, swe.FLG_SIDEREAL)
+            saturn_lon = saturn_res[0] % 360.0
+            saturn_sign_idx = int(saturn_lon / 30)
+            saturn_house = ((saturn_sign_idx - self.lagna_sign_idx) % 12) + 1
+
+            jup_res, _ = swe.calc_ut(jd, swe.JUPITER, swe.FLG_SIDEREAL)
+            jup_lon = jup_res[0] % 360.0
+            jup_sign_idx = int(jup_lon / 30)
+            jup_house = ((jup_sign_idx - self.lagna_sign_idx) % 12) + 1
+
+            # Check Lagna degree aspect from Mars
+            lagna_lon = (self.lagna_sign_idx * 30.0) + (self.chart.ascendant_degree if hasattr(self.chart, "ascendant_degree") else 15.0)
+            l_diff = min(abs((mars_lon - lagna_lon) % 360.0), 360.0 - abs((mars_lon - lagna_lon) % 360.0))
+            l_aspect = min([abs(l_diff - asp) for asp in [0.0, 60.0, 90.0, 120.0, 180.0]])
+
+            # 1. Check Father Accident / Trauma Specific Micro-Triggers (House 4 / Father 8th & Sun)
+            if is_father_domain:
+                if "Mars" in natal_lons:
+                    diff = min(abs((mars_lon - natal_lons["Mars"]) % 360.0), 360.0 - abs((mars_lon - natal_lons["Mars"]) % 360.0))
+                    if diff <= 1.5 and diff < min_orb:
+                        min_orb = diff
+                        prob = round(max(70.0, min(96.0, 98.0 - (diff * 18.0))), 1)
+                        best_hit = {
+                            "found": True,
+                            "exact_peak_date": curr.strftime("%Y-%m-%d"),
+                            "peak_dates": f"{(curr - timedelta(days=2)).strftime('%Y-%m-%d')} to {(curr + timedelta(days=2)).strftime('%Y-%m-%d')}",
+                            "probability_pct": prob,
+                            "min_orb_arcmin": round(diff * 60.0, 1),
+                            "details": f"Transiting Mars (at {mars_lon%30:.2f}° {ZODIAC_SIGNS[mars_sign_idx]}) forms exact {diff*60:.1f}' conjunction over Natal Mars (Automotive/Machine Trauma Axis) [Peak Probability: {prob}% on {curr.strftime('%Y-%m-%d')}]"
+                        }
+                if "Sun" in natal_lons:
+                    s_diff = min(abs((saturn_lon - natal_lons["Sun"]) % 360.0), 360.0 - abs((saturn_lon - natal_lons["Sun"]) % 360.0))
+                    if s_diff <= 1.5 and s_diff < min_orb:
+                        min_orb = s_diff
+                        prob = round(max(65.0, min(94.0, 95.0 - (s_diff * 18.0))), 1)
+                        best_hit = {
+                            "found": True,
+                            "exact_peak_date": curr.strftime("%Y-%m-%d"),
+                            "peak_dates": f"{(curr - timedelta(days=3)).strftime('%Y-%m-%d')} to {(curr + timedelta(days=3)).strftime('%Y-%m-%d')}",
+                            "probability_pct": prob,
+                            "min_orb_arcmin": round(s_diff * 60.0, 1),
+                            "details": f"Transiting Saturn forms tight aspect ({s_diff*60:.1f}' orb) over Natal Sun (Father Karaka Eclipse) [Peak Probability: {prob}% on {curr.strftime('%Y-%m-%d')}]"
+                        }
+
+            # 2. General Health / Acute Accident / Surgery / Physical Trauma
+            elif is_health_accident:
+                # Check Saturn transit through 8th House crushing 8th house planets
+                if saturn_house == 8:
+                    for p_target in ["Sun", "Mars", "Moon", "Mercury"]:
+                        if p_target in natal_lons:
+                            s_diff = min(abs((saturn_lon - natal_lons[p_target]) % 360.0), 360.0 - abs((saturn_lon - natal_lons[p_target]) % 360.0))
+                            if s_diff <= 2.0 and s_diff < min_orb:
+                                min_orb = s_diff
+                                best_hit = {
+                                    "found": True,
+                                    "peak_dates": f"{(curr - timedelta(days=3)).strftime('%Y-%m-%d')} to {(curr + timedelta(days=3)).strftime('%Y-%m-%d')}",
+                                    "details": f"Transiting Saturn in 8th House at {saturn_lon%30:.2f}° {ZODIAC_SIGNS[saturn_sign_idx]} exactly impacts Natal {p_target} ({s_diff*60:.1f}' orb) - Severe Physical Crisis"
+                                }
+                # Check Mars crossing Natal Mars or Natal 8th Lord
+                if "Mars" in natal_lons:
+                    diff = min(abs((mars_lon - natal_lons["Mars"]) % 360.0), 360.0 - abs((mars_lon - natal_lons["Mars"]) % 360.0))
+                    if diff <= 1.5 and diff < min_orb:
+                        min_orb = diff
+                        best_hit = {
+                            "found": True,
+                            "peak_dates": f"{(curr - timedelta(days=2)).strftime('%Y-%m-%d')} to {(curr + timedelta(days=2)).strftime('%Y-%m-%d')}",
+                            "details": f"Transiting Mars forms acute conjunction ({diff*60:.1f}' orb) over Natal Mars (Physical Trauma / Surgery Trigger)"
+                        }
+                # Check Mars exact aspect to Lagna
+                if l_aspect <= 1.0 and l_aspect < min_orb:
+                    min_orb = l_aspect
+                    best_hit = {
+                        "found": True,
+                        "peak_dates": f"{(curr - timedelta(days=2)).strftime('%Y-%m-%d')} to {(curr + timedelta(days=2)).strftime('%Y-%m-%d')}",
+                        "details": f"Transiting Mars at {mars_lon%30:.2f}° {ZODIAC_SIGNS[mars_sign_idx]} casts exact {l_aspect*60:.1f}' aspect to Ascendant (Bodily Impact)"
+                    }
+                elif (mars_house in [6, 8, 1, 12] or saturn_house in [6, 8, 12]) and not best_hit:
+                    best_hit = {
+                        "found": True,
+                        "peak_dates": f"{curr.strftime('%Y-%m-%d')} to {(curr + timedelta(days=5)).strftime('%Y-%m-%d')}",
+                        "details": f"Transiting Mars/Saturn occupies Dusthana House {mars_house}/{saturn_house}, acting as physical stress catalyst"
+                    }
+
+            # 3. Career / Business / Wealth / Technical Field
+            elif is_career_wealth:
+                if (mars_house in [10, 11, 2, 1] or saturn_house in [10, 11, 3]) and not best_hit:
+                    best_hit = {
+                        "found": True,
+                        "peak_dates": f"{curr.strftime('%Y-%m-%d')} to {(curr + timedelta(days=5)).strftime('%Y-%m-%d')}",
+                        "details": f"Transiting Mars/Saturn energizes Upachaya/Kendra House {mars_house}/{saturn_house}, catalyzing executive action, technical deployment, and status breakthrough"
+                    }
+
+            # 4. Progeny & Children (Childbirth / Conception)
+            elif is_progeny:
+                if "Jupiter" in natal_lons:
+                    j_diff = min(abs((mars_lon - natal_lons["Jupiter"]) % 360.0), 360.0 - abs((mars_lon - natal_lons["Jupiter"]) % 360.0))
+                    if (mars_house in [5, 11, 2, 1] or jup_house in [5, 11, 2, 1]) and not best_hit:
+                        best_hit = {
+                            "found": True,
+                            "peak_dates": f"{curr.strftime('%Y-%m-%d')} to {(curr + timedelta(days=5)).strftime('%Y-%m-%d')}",
+                            "details": f"Transiting Jupiter/Mars energizes Progeny House 5/11, triggering childbirth/progeny milestone"
+                        }
+
+            # 5. Marriage & Partnership Formation
+            elif is_marriage:
+                if (jup_house in [7, 11, 1, 5] or mars_house in [7, 11, 1]) and not best_hit:
+                    best_hit = {
+                        "found": True,
+                        "peak_dates": f"{curr.strftime('%Y-%m-%d')} to {(curr + timedelta(days=5)).strftime('%Y-%m-%d')}",
+                        "details": f"Transiting Jupiter/Venus energizes 7th/11th House of Marriage and Sacred Union"
+                    }
+
+            # 6. Real Estate & Property
+            elif is_property:
+                if (mars_house in [4, 11, 1] or saturn_house in [4, 11, 1]) and not best_hit:
+                    best_hit = {
+                        "found": True,
+                        "peak_dates": f"{curr.strftime('%Y-%m-%d')} to {(curr + timedelta(days=5)).strftime('%Y-%m-%d')}",
+                        "details": f"Transiting Mars (Bhumi Karaka) energizes 4th House of Real Estate, Land, and Permanent Assets"
+                    }
 
             curr += timedelta(days=step_days)
+
+        if best_hit:
+            return best_hit
 
         return {"found": False}

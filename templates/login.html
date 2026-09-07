@@ -1,258 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astrology AI — Sign In</title>
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <meta name="description" content="Sign in to your personal Vedic astrology guide.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Astrology AI — Sign in</title>
+  <meta name="description" content="Sign in to your personal Vedic astrology guide.">
+  <meta name="theme-color" content="#0b0b0f">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+  <link rel="icon" href="/static/icons/favicon-64.png">
+  <link rel="stylesheet" href="{{ url_for('static', path='product.css') }}">
 </head>
-<body class="login-page">
+<body>
+  <div class="auth-wrap">
+    <div class="auth-card stack">
+      <div class="center" style="margin-bottom:8px;">
+        <img src="/static/icons/icon-192.png" alt="" width="60" height="60" style="border-radius:16px;">
+        <h1 style="margin-top:16px;">Astrology&nbsp;AI</h1>
+        <p class="muted" style="margin-top:4px;">Ancient wisdom, modern precision</p>
+      </div>
 
-<!-- Animated Background Orbs -->
-<div class="orb-container" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-</div>
+      <div class="segmented" role="tablist" aria-label="Sign in or create account">
+        <button class="on" id="tab-login" role="tab" aria-selected="true" onclick="switchTab('login')">Sign in</button>
+        <button id="tab-signup" role="tab" aria-selected="false" onclick="switchTab('signup')">Create account</button>
+      </div>
 
-<!-- Auth Card -->
-<div class="auth-wrap">
-<div class="auth-card" style="position:relative;">
+      <div id="alert" class="badge tone-tender hide" role="alert" aria-live="polite" style="width:100%;justify-content:center;padding:10px;"></div>
 
-    <!-- Top shimmer line handled via ::before -->
-    
-    <!-- Logo mark -->
-    <div class="auth-logo-mark">✦</div>
-    <h1 class="auth-logo-title">Astrology AI</h1>
-    <p class="auth-logo-sub">Ancient Wisdom, Modern Precision</p>
+      <form class="stack" id="form-login" onsubmit="handleLogin(event)" novalidate>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input class="input" type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input class="input" type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="login-btn">Sign in</button>
+      </form>
 
-    <!-- Tab switcher — pill style -->
-    <div class="auth-tabs" role="tablist">
-        <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" onclick="switchTab('login')">Sign In</button>
-        <button class="auth-tab" id="tab-signup" role="tab" aria-selected="false" onclick="switchTab('signup')">Create Account</button>
+      <form class="stack hide" id="form-signup" onsubmit="handleSignup(event)" novalidate>
+        <div class="field">
+          <label for="signup-name">Full name</label>
+          <input class="input" type="text" id="signup-name" placeholder="Arjun Sharma" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="signup-email">Email</label>
+          <input class="input" type="email" id="signup-email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="signup-password">Password</label>
+          <input class="input" type="password" id="signup-password" placeholder="At least 6 characters" autocomplete="new-password" required minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="signup-btn">Create account</button>
+      </form>
+
+      <div class="row" style="color:var(--faint);font-size:var(--t-cap);">
+        <div class="grow" style="height:1px;background:var(--border);"></div>
+        <span>or</span>
+        <div class="grow" style="height:1px;background:var(--border);"></div>
+      </div>
+
+      <div id="g_id_onload"
+           data-client_id="1074117408479-85ralktijlkae9v0assa5kqa9s3kpop2.apps.googleusercontent.com"
+           data-context="signin" data-ux_mode="popup"
+           data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
+      <div class="g_id_signin center" data-type="standard" data-shape="pill" data-theme="filled_black"
+           data-text="continue_with" data-size="large" data-logo_alignment="center"></div>
+
+      <p class="muted center" style="font-size:var(--t-cap);">By continuing you agree to our Terms &amp; Privacy Policy.</p>
     </div>
+  </div>
 
-    <!-- Alert -->
-    <div id="alert" class="alert" role="alert" aria-live="polite"></div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    if (params.get('mode') === 'signup') switchTab('signup');
 
-    <!-- Sign In Form -->
-    <form class="auth-form active" id="form-login" onsubmit="handleLogin(event)" novalidate>
-        <div class="input-group">
-            <label class="input-label" for="login-email">Email</label>
-            <input
-                type="email"
-                id="login-email"
-                class="input-field"
-                placeholder="you@example.com"
-                autocomplete="email"
-                required
-            >
-        </div>
-        <div class="input-group" style="margin-bottom: 24px;">
-            <label class="input-label" for="login-password">Password</label>
-            <input
-                type="password"
-                id="login-password"
-                class="input-field"
-                placeholder="••••••••"
-                autocomplete="current-password"
-                required
-            >
-        </div>
-        <button type="submit" class="btn-cta" id="login-btn">Sign In</button>
-    </form>
-
-    <!-- Create Account Form -->
-    <form class="auth-form" id="form-signup" onsubmit="handleSignup(event)" novalidate>
-        <div class="input-group">
-            <label class="input-label" for="signup-name">Full Name</label>
-            <input
-                type="text"
-                id="signup-name"
-                class="input-field"
-                placeholder="Arjun Sharma"
-                autocomplete="name"
-                required
-            >
-        </div>
-        <div class="input-group">
-            <label class="input-label" for="signup-email">Email</label>
-            <input
-                type="email"
-                id="signup-email"
-                class="input-field"
-                placeholder="you@example.com"
-                autocomplete="email"
-                required
-            >
-        </div>
-        <div class="input-group" style="margin-bottom: 24px;">
-            <label class="input-label" for="signup-password">Password</label>
-            <input
-                type="password"
-                id="signup-password"
-                class="input-field"
-                placeholder="At least 6 characters"
-                autocomplete="new-password"
-                required
-                minlength="6"
-            >
-        </div>
-        <button type="submit" class="btn-cta" id="signup-btn">Create Account</button>
-    </form>
-
-    <div style="display: flex; align-items: center; text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; margin: 24px 0;">
-        <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.06);"></div>
-        <span style="margin: 0 12px;">or continue with</span>
-        <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.06);"></div>
-    </div>
-
-    <!-- Google Login Button placeholder (renders automatically via Google API) -->
-    <div id="g_id_onload"
-         data-client_id="1074117408479-85ralktijlkae9v0assa5kqa9s3kpop2.apps.googleusercontent.com"
-         data-context="signin"
-         data-ux_mode="popup"
-         data-callback="handleGoogleLogin"
-         data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-         data-type="standard"
-         data-shape="rectangular"
-         data-theme="outline"
-         data-text="signin_with"
-         data-size="large"
-         data-logo_alignment="center">
-    </div>
-
-    <p class="form-note" style="margin-top: 20px;">
-        By continuing you agree to our Terms &amp; Privacy Policy.
-    </p>
-
-</div><!-- /auth-card -->
-</div><!-- /auth-wrap -->
-
-<script>
-    // Handle Google sign-in response (JWT token)
     async function handleGoogleLogin(response) {
-        if (!response.credential) {
-            showAlert('Google login failed', 'error');
-            return;
-        }
-
-        try {
-            const res = await fetch('/api/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ credential: response.credential })
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                localStorage.setItem('astro_token', data.token);
-                localStorage.setItem('astro_user', JSON.stringify(data.user));
-                window.location.href = '/';
-            } else {
-                showAlert(data.detail || 'Google Login failed. Provider might not be configured.', 'error');
-            }
-        } catch (err) {
-            showAlert('Network error signing in with Google.', 'error');
-            console.error(err);
-        }
+      if (!response.credential) return showAlert('Google sign-in failed');
+      try {
+        const res = await fetch('/api/auth/google', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ credential: response.credential })
+        });
+        const data = await res.json();
+        if (res.ok) { localStorage.setItem('astro_user', JSON.stringify(data.user)); window.location.href = '/app'; }
+        else showAlert(data.detail || 'Google sign-in is not available.');
+      } catch { showAlert('Network error signing in with Google.'); }
     }
 
     function switchTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach(t => {
-            t.classList.remove('active');
-            t.setAttribute('aria-selected', 'false');
-        });
-        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-        document.getElementById('alert').classList.remove('show');
-
-        document.getElementById(`tab-${tab}`).classList.add('active');
-        document.getElementById(`tab-${tab}`).setAttribute('aria-selected', 'true');
-        document.getElementById(`form-${tab}`).classList.add('active');
+      document.getElementById('tab-login').classList.toggle('on', tab === 'login');
+      document.getElementById('tab-signup').classList.toggle('on', tab === 'signup');
+      document.getElementById('tab-login').setAttribute('aria-selected', tab === 'login');
+      document.getElementById('tab-signup').setAttribute('aria-selected', tab === 'signup');
+      document.getElementById('form-login').classList.toggle('hide', tab !== 'login');
+      document.getElementById('form-signup').classList.toggle('hide', tab !== 'signup');
+      hideAlert();
     }
 
-    function showAlert(message, type) {
-        const alert = document.getElementById('alert');
-        alert.textContent = message;
-        alert.className = `alert ${type} show`;
-    }
+    function showAlert(msg) { const a = document.getElementById('alert'); a.textContent = msg; a.classList.remove('hide'); }
+    function hideAlert() { document.getElementById('alert').classList.add('hide'); }
 
     async function handleLogin(e) {
-        e.preventDefault();
-        const btn = document.getElementById('login-btn');
-        btn.disabled = true;
-        btn.textContent = 'Signing in…';
-
-        const email = document.getElementById('login-email').value.trim();
-        const password = document.getElementById('login-password').value;
-
-        try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                localStorage.setItem('astro_token', data.token);
-                localStorage.setItem('astro_user', JSON.stringify(data.user));
-                window.location.href = '/';
-            } else {
-                showAlert(data.detail || data.error || 'Login failed. Please try again.', 'error');
-            }
-        } catch (err) {
-            showAlert('Connection error. Is the server running?', 'error');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = 'Sign In';
-        }
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true; btn.textContent = 'Signing in…';
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+          body: JSON.stringify({
+            email: document.getElementById('login-email').value.trim(),
+            password: document.getElementById('login-password').value
+          })
+        });
+        const data = await res.json();
+        if (res.ok) { localStorage.setItem('astro_user', JSON.stringify(data.user)); window.location.href = '/app'; }
+        else showAlert(data.detail || 'Login failed. Please try again.');
+      } catch { showAlert('Connection error. Is the server running?'); }
+      finally { btn.disabled = false; btn.textContent = 'Sign in'; }
     }
 
     async function handleSignup(e) {
-        e.preventDefault();
-        const btn = document.getElementById('signup-btn');
-        btn.disabled = true;
-        btn.textContent = 'Creating account…';
-
-        const full_name = document.getElementById('signup-name').value.trim();
-        const email = document.getElementById('signup-email').value.trim();
-        const password = document.getElementById('signup-password').value;
-
-        try {
-            const res = await fetch('/api/auth/signup', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ full_name, email, password })
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                showAlert('Account created! Signing you in…', 'success');
-                setTimeout(() => {
-                    localStorage.setItem('astro_token', data.token);
-                    localStorage.setItem('astro_user', JSON.stringify(data.user));
-                    window.location.href = '/';
-                }, 1200);
-            } else {
-                showAlert(data.detail || data.error || 'Signup failed. Please try again.', 'error');
-            }
-        } catch (err) {
-            showAlert('Connection error. Is the server running?', 'error');
-        } finally {
-            btn.disabled = false;
-            btn.textContent = 'Create Account';
-        }
+      e.preventDefault();
+      const btn = document.getElementById('signup-btn');
+      btn.disabled = true; btn.textContent = 'Creating account…';
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+          body: JSON.stringify({
+            full_name: document.getElementById('signup-name').value.trim(),
+            email: document.getElementById('signup-email').value.trim(),
+            password: document.getElementById('signup-password').value
+          })
+        });
+        const data = await res.json();
+        if (res.ok) { localStorage.setItem('astro_user', JSON.stringify(data.user)); window.location.href = '/app'; }
+        else showAlert(data.detail || 'Signup failed. Please try again.');
+      } catch { showAlert('Connection error. Is the server running?'); }
+      finally { btn.disabled = false; btn.textContent = 'Create account'; }
     }
-</script>
-
+  </script>
 </body>
 </html>

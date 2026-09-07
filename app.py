@@ -16,7 +16,12 @@ from ai_agent import (
     run_astrologer_stream,
     save_chart,
 )
-from auth import init_db, get_user_by_email, create_user, verify_password, create_access_token, decode_access_token, get_user_profile, save_user_profile, set_user_plan
+from auth import (
+    init_db, get_user_by_email, create_user, verify_password,
+    create_access_token, decode_access_token, get_user_profile, save_user_profile, set_user_plan,
+    list_relationships, get_relationship, create_relationship, delete_relationship,
+    get_notification_prefs, save_notification_prefs,
+)
 import logging
 import os
 import hashlib
@@ -113,6 +118,25 @@ class ProfileRequest(BaseModel):
     lon: float
     timezone: str
 
+class RelationshipRequest(BaseModel):
+    label: str
+    relation: str = "partner"
+    full_name: str
+    birth_date: str          # YYYY-MM-DD
+    birth_time: str          # HH:MM
+    city: str
+    latitude: float
+    longitude: float
+    timezone: str
+
+class NotificationPrefRequest(BaseModel):
+    daily_insight: bool = True
+    transit_alert: bool = True
+    timing_period: bool = True
+    relationship_event: bool = False
+    product_updates: bool = False
+    appearance: str = "system"   # system | light | dark
+
 # ─── Auth Helper ─────────────────────────────────────────────────
 def get_current_user(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Accept auth from EITHER HttpOnly cookie OR Authorization: Bearer header."""
@@ -139,6 +163,46 @@ def chart_session_key(user: dict, session_id: str) -> str:
         raise HTTPException(status_code=422, detail="Invalid chart session")
     digest = hashlib.sha256(f"{user['id']}:{normalized}".encode("utf-8")).hexdigest()
     return f"chart-{digest}"
+
+
+def _parse_birth(date_str: str, time_str: str):
+    """Parse 'YYYY-MM-DD' + 'HH:MM' into (y, mo, d, h, mi). Raises ValueError."""
+    from datetime import datetime as _dt
+    d = _dt.strptime(date_str.strip(), "%Y-%m-%d")
+    t = _dt.strptime(time_str.strip(), "%H:%M")
+    return d.year, d.month, d.day, t.hour, t.minute
+
+
+def build_user_chart(user: dict):
+    """Load-or-compute the signed-in user's authoritative chart from their saved
+    birth profile. Cached per-user under a key that changes when birth data
+    changes, so a corrected profile recomputes automatically. Returns the full
+    engine chart dict, or None if the user has no birth profile yet."""
+    profile = get_user_profile(user["id"])
+    if not profile:
+        return None
+    # Cache key includes the birth fingerprint so edits invalidate the cache.
+    fp = f"{profile['birth_date']}|{profile['birth_time']}|{profile['latitude']}|{profile['longitude']}|{profile['timezone']}|{profile['full_name']}"
+    key = chart_session_key(user, "primary:" + hashlib.sha256(fp.encode()).hexdigest()[:16])
+    cached = load_chart(key)
+    if cached is not None:
+        return cached
+    from astrology_engine import calculate_full_chart
+    y, mo, d, h, mi = _parse_birth(profile["birth_date"], profile["birth_time"])
+    chart = calculate_full_chart(
+        y, mo, d, h, mi,
+        float(profile["latitude"]), float(profile["longitude"]),
+        profile["timezone"], profile["full_name"],
+    )
+    save_chart(key, chart)
+    return chart
+
+
+def _require_chart(user: dict):
+    chart = build_user_chart(user)
+    if chart is None:
+        raise HTTPException(status_code=404, detail="No birth profile yet")
+    return chart
 
 # ─── Stripe Payments ───────────────────────────────────────────────
 
@@ -220,12 +284,82 @@ def get_user_status(user: dict = Depends(get_current_user)):
 
 # ─── Pages ───────────────────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
-async def get_ui(request: Request):
+async def get_landing(request: Request):
+    """Public landing / welcome page."""
+    response = templates.TemplateResponse(request=request, name="landing.html")
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/app", response_class=HTMLResponse)
+async def get_app_shell(request: Request):
+    """The installable product shell (SPA). Auth is enforced per-API-call."""
+    response = templates.TemplateResponse(request=request, name="app.html")
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/app/{path:path}", response_class=HTMLResponse)
+async def get_app_deep_link(path: str, request: Request):
+    """Deep links (e.g. /app/chart) resolve to the same SPA shell; the client
+    router renders the right screen."""
+    response = templates.TemplateResponse(request=request, name="app.html")
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+
+
+@app.get("/chat", response_class=HTMLResponse)
+async def get_chat_ui(request: Request):
+    """Legacy conversational UI, preserved."""
     response = templates.TemplateResponse(request=request, name="index.html")
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
     return response
+
+
+@app.get("/manifest.webmanifest")
+async def web_manifest():
+    """PWA manifest served at root scope so the whole app is installable."""
+    from fastapi.responses import JSONResponse as _JSON
+    manifest = {
+        "name": "Astrology AI — Cosmic Guide",
+        "short_name": "Astrology AI",
+        "description": "Your personal Vedic astrology, read simply.",
+        "id": "/app",
+        "start_url": "/app",
+        "scope": "/",
+        "display": "standalone",
+        "display_override": ["standalone", "minimal-ui"],
+        "orientation": "portrait",
+        "background_color": "#0b0b0f",
+        "theme_color": "#0b0b0f",
+        "categories": ["lifestyle", "health"],
+        "icons": [
+            {"src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": "/static/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+            {"src": "/static/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+            {"src": "/static/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+        ],
+        "shortcuts": [
+            {"name": "My Chart", "url": "/app/chart"},
+            {"name": "Forecast", "url": "/app/forecast"},
+        ],
+    }
+    resp = _JSON(manifest, media_type="application/manifest+json")
+    resp.headers["Cache-Control"] = "public, max-age=3600"
+    return resp
+
+
+@app.get("/sw.js")
+async def service_worker():
+    """Service worker MUST be served at root scope to control /app and /static."""
+    from fastapi.responses import FileResponse
+    resp = FileResponse(os.path.join("static", "sw.js"), media_type="application/javascript")
+    resp.headers["Cache-Control"] = "no-cache"
+    resp.headers["Service-Worker-Allowed"] = "/"
+    return resp
+
 
 @app.get("/login", response_class=HTMLResponse)
 async def get_login(request: Request):
@@ -413,6 +547,165 @@ async def get_chart_data(session_id: str, current_user: dict = Depends(get_curre
     if chart_data is None:
         raise HTTPException(status_code=404, detail="Chart not yet calculated")
     return chart_data
+
+# ─── Product API (consumer product layer over the engine) ────────────────────
+import product_api as product
+
+
+@app.get("/api/product/summary")
+async def product_summary(current_user: dict = Depends(get_current_user)):
+    """Lightweight bootstrap: whether the user has a profile + basic identity.
+    Used by the app shell to decide onboarding vs. home."""
+    profile = get_user_profile(current_user["id"])
+    prefs = get_notification_prefs(current_user["id"])
+    result = {
+        "user": {"email": current_user["email"], "full_name": current_user["full_name"], "plan": current_user["plan"]},
+        "has_profile": profile is not None,
+        "appearance": prefs.get("appearance", "system"),
+    }
+    if profile:
+        result["profile"] = {
+            "full_name": profile["full_name"], "birth_date": profile["birth_date"],
+            "birth_time": profile["birth_time"], "city": profile["city"],
+            "timezone": profile["timezone"],
+        }
+    return result
+
+
+@app.get("/api/product/home")
+async def product_home(current_user: dict = Depends(get_current_user)):
+    chart = _require_chart(current_user)
+    return product.home_overview(chart, current_user["full_name"])
+
+
+@app.get("/api/product/chart")
+async def product_chart(current_user: dict = Depends(get_current_user)):
+    chart = _require_chart(current_user)
+    return product.chart_summary(chart)
+
+
+@app.get("/api/product/planet/{name}")
+async def product_planet(name: str, current_user: dict = Depends(get_current_user)):
+    chart = _require_chart(current_user)
+    p = chart.get("Basic_Chart", {}).get(name.capitalize())
+    if not p:
+        raise HTTPException(status_code=404, detail="Unknown planet")
+    return product.planet_card(name.capitalize(), p, deep=True)
+
+
+@app.get("/api/product/forecast")
+async def product_forecast(current_user: dict = Depends(get_current_user)):
+    from astrology_engine import get_semantic_view
+    chart = _require_chart(current_user)
+    return product.forecast_overview(get_semantic_view, chart)
+
+
+@app.get("/api/product/forecast/{domain}")
+async def product_forecast_domain(domain: str, current_user: dict = Depends(get_current_user)):
+    from astrology_engine import get_semantic_view
+    valid = {"career", "marriage", "wealth", "health"}
+    if domain not in valid:
+        raise HTTPException(status_code=404, detail="Unknown forecast area")
+    chart = _require_chart(current_user)
+    return product.domain_forecast(get_semantic_view, chart, domain)
+
+
+@app.get("/api/product/calendar")
+async def product_calendar(current_user: dict = Depends(get_current_user)):
+    chart = _require_chart(current_user)
+    return product.calendar_view(chart)
+
+
+# ─── Relationships ────────────────────────────────────────────────────────────
+@app.get("/api/product/relationships")
+async def product_relationships(current_user: dict = Depends(get_current_user)):
+    rels = list_relationships(current_user["id"])
+    # Never leak precise coordinates back to the client; the label/relation are enough.
+    return {"relationships": [
+        {"id": r["id"], "label": r["label"], "relation": r["relation"],
+         "full_name": r["full_name"], "birth_date": r["birth_date"], "city": r["city"]}
+        for r in rels
+    ]}
+
+
+@app.post("/api/product/relationships")
+async def product_add_relationship(req: RelationshipRequest, current_user: dict = Depends(get_current_user)):
+    try:
+        _parse_birth(req.birth_date, req.birth_time)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Birth date/time must be YYYY-MM-DD and HH:MM")
+    if not (-90 <= req.latitude <= 90 and -180 <= req.longitude <= 180):
+        raise HTTPException(status_code=422, detail="Coordinates out of range")
+    rel = create_relationship(current_user["id"], req.model_dump())
+    return {"id": rel.get("id"), "label": rel.get("label"), "relation": rel.get("relation"),
+            "full_name": rel.get("full_name"), "birth_date": rel.get("birth_date"), "city": rel.get("city")}
+
+
+@app.delete("/api/product/relationships/{rel_id}")
+async def product_delete_relationship(rel_id: int, current_user: dict = Depends(get_current_user)):
+    ok = delete_relationship(current_user["id"], rel_id)
+    if not ok:
+        raise HTTPException(status_code=404, detail="Relationship not found")
+    return {"status": "deleted"}
+
+
+@app.get("/api/product/relationships/{rel_id}/compatibility")
+async def product_compatibility(rel_id: int, current_user: dict = Depends(get_current_user)):
+    """Compute Ashtakoota compatibility between the user and a saved person.
+    Authorization: the relationship MUST belong to the requesting user — a user
+    can never read another user's saved person by guessing an id."""
+    import swisseph as swe
+    from config import Config
+    from datetime import datetime as _dt
+    from astrology_engine import calculate_compatibility, ZODIAC_SIGNS
+
+    rel = get_relationship(current_user["id"], rel_id)
+    if not rel:
+        raise HTTPException(status_code=404, detail="Relationship not found")
+
+    chart = _require_chart(current_user)
+    p1_sign = chart["Basic_Chart"]["Moon"]["sign"]
+    p1_deg = chart["Basic_Chart"]["Moon"]["degree"]
+    m1_lon = (ZODIAC_SIGNS.index(p1_sign) * 30) + p1_deg
+
+    try:
+        y, mo, d, h, mi = _parse_birth(rel["birth_date"], rel["birth_time"])
+        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
+        jd2 = swe.julday(y, mo, d, h + mi / 60.0)
+        res_moon2, _ = swe.calc_ut(jd2, swe.MOON, flags)
+        m2_lon = res_moon2[0]
+        compat = calculate_compatibility(m1_lon, m2_lon)
+    except Exception:
+        logger.exception("Compatibility calculation failed")
+        raise HTTPException(status_code=500, detail="Could not compute compatibility")
+
+    return product.compatibility_summary(compat, rel["label"], rel["relation"])
+
+
+# ─── Notification / appearance preferences ────────────────────────────────────
+@app.get("/api/product/preferences")
+async def product_get_prefs(current_user: dict = Depends(get_current_user)):
+    prefs = get_notification_prefs(current_user["id"])
+    prefs.pop("user_id", None)
+    prefs.pop("updated_at", None)
+    # Normalise integer flags to booleans for the client.
+    for k in ("daily_insight", "transit_alert", "timing_period", "relationship_event", "product_updates"):
+        prefs[k] = bool(prefs.get(k))
+    return prefs
+
+
+@app.post("/api/product/preferences")
+async def product_save_prefs(req: NotificationPrefRequest, current_user: dict = Depends(get_current_user)):
+    if req.appearance not in ("system", "light", "dark"):
+        raise HTTPException(status_code=422, detail="Invalid appearance")
+    saved = save_notification_prefs(current_user["id"], req.model_dump())
+    saved.pop("user_id", None)
+    saved.pop("updated_at", None)
+    for k in ("daily_insight", "transit_alert", "timing_period", "relationship_event", "product_updates"):
+        saved[k] = bool(saved.get(k))
+    return saved
+
 
 @app.get("/api/models")
 async def get_models():
