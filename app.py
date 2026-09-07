@@ -319,6 +319,7 @@ async def get_chat_ui(request: Request):
 
 
 @app.get("/manifest.webmanifest")
+@app.get("/manifest.json")
 async def web_manifest():
     """PWA manifest served at root scope so the whole app is installable."""
     from fastapi.responses import JSONResponse as _JSON

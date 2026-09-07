@@ -64,6 +64,7 @@ const ICON = {
   trash: '<path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/>',
   location: '<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   crown: '<path d="M3 8l4 4 5-7 5 7 4-4v10H3z"/>',
+  download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
   send: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
   chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
 };
@@ -317,7 +318,10 @@ function setTopbar(title, { back = false, actions = '' } = {}) {
   const backBtn = $('#tb-back');
   backBtn.style.display = back ? '' : 'none';
   backBtn.onclick = () => history.length > 1 ? history.back() : navigate('home');
-  const host = $('#tb-actions'); host.innerHTML = actions;
+  const installBtnHtml = !isStandalone() ? `<button class="btn btn-secondary install-topbar-btn" id="tb-install-btn" style="height:32px;min-height:32px;padding:0 12px;font-size:12px;border-radius:999px;gap:5px;font-weight:600;">${svg('download', 'ic')} Install</button>` : '';
+  const host = $('#tb-actions'); host.innerHTML = `${installBtnHtml}${actions}`;
+  const instBtn = $('#tb-install-btn', host);
+  if (instBtn) instBtn.onclick = showInstall;
   return host;
 }
 
@@ -356,6 +360,18 @@ Screens.home = async (host) => {
   const transits = (data.right_now && data.right_now.transits) || [];
 
   const el = h(`<div class="screen">
+    ${!isStandalone() ? `
+    <section class="card-hero row-between install-banner full card-tap" id="home-install-banner" style="margin-bottom:14px;padding:12px 16px;">
+      <div class="row" style="gap:12px;">
+        <img src="/static/icons/icon-192.png" width="38" height="38" style="border-radius:10px;flex-shrink:0;">
+        <div>
+          <div style="font-weight:650;font-size:0.9375rem;">Install Astrology AI</div>
+          <div class="muted" style="font-size:0.75rem;">Add to Home Screen for the full native experience</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-home-install" style="height:32px;min-height:32px;padding:0 14px;font-size:0.75rem;">Install</button>
+    </section>` : ''}
+
     <section class="greeting-hero">
       <div class="g-date">${esc(data.date_label)}</div>
       <div class="g-hi">${esc(data.greeting)}${data.name ? ',&nbsp;' + esc(data.name) : ''}.</div>
@@ -408,6 +424,8 @@ Screens.home = async (host) => {
 
   host.innerHTML = ''; host.appendChild(el);
   el.querySelectorAll('[data-nav]').forEach(b => b.onclick = () => navigate(b.dataset.nav));
+  const homeInstall = $('#home-install-banner', el);
+  if (homeInstall) homeInstall.onclick = showInstall;
   $('#a-profile').onclick = () => navigate('profile');
   $('#c-today').onclick = () => openSheet('Today', `
     <p class="today-plain">${esc(data.today?.plain || '')}</p>
@@ -1251,24 +1269,68 @@ window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); defe
 function isStandalone() { return matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; }
 function isIOS() { return /iphone|ipad|ipod/i.test(navigator.userAgent); }
 function showInstall() {
-  if (isStandalone()) return openSheet('Already installed', '<p class="text-2">You’re running the installed app. Enjoy the sky. ✦</p>');
+  if (isStandalone()) {
+    return openSheet('Already Installed', `
+      <div class="center stack" style="padding:16px 0;">
+        <div class="glyph" style="width:56px;height:56px;border-radius:50%;background:var(--good-soft);color:var(--good);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto;">✓</div>
+        <h3>You’re running Astrology AI</h3>
+        <p class="muted">The app is already installed on your device.</p>
+      </div>`);
+  }
+
   if (deferredInstall) {
     deferredInstall.prompt();
-    deferredInstall.userChoice.finally(() => { deferredInstall = null; closeSheet(); });
+    deferredInstall.userChoice.then((choiceResult) => {
+      if (choiceResult && choiceResult.outcome === 'accepted') {
+        toast('Installing Astrology AI...');
+      }
+      deferredInstall = null;
+      closeSheet();
+    }).catch(() => {
+      deferredInstall = null;
+    });
     return;
   }
+
   if (isIOS()) {
-    openSheet('Add to Home Screen', `
-      <p class="text-2" style="line-height:1.6;">To install on iPhone or iPad:</p>
-      <ol class="text-2" style="line-height:1.9;padding-left:20px;margin-top:10px;">
-        <li>Tap the <b>Share</b> button ${svg('share', 'ic')} in Safari’s toolbar.</li>
-        <li>Scroll and choose <b>Add to Home Screen</b>.</li>
-        <li>Tap <b>Add</b> — Astrology AI appears like a native app.</li>
-      </ol>
-      <p class="muted" style="margin-top:12px;">iOS installs differently from Android — this is Apple’s built-in flow.</p>`);
-  } else {
-    openSheet('Install app', `<p class="text-2" style="line-height:1.6;">Open your browser menu and choose <b>Install app</b> or <b>Add to Home screen</b>. If you don’t see it yet, keep using the app for a moment and try again.</p>`);
+    openSheet('Install on iPhone / iPad', `
+      <div class="stack" style="font-size:var(--t-sub);line-height:1.6;">
+        <p>Install <b>Astrology AI</b> directly to your Home Screen with Safari:</p>
+        <div class="list" style="margin-top:8px;">
+          <div class="list-row" style="cursor:default;">
+            <div class="tg" style="width:36px;height:36px;border-radius:50%;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;">1</div>
+            <div class="grow"><div class="lr-title">Tap the Share button</div><div class="lr-sub">Located at the bottom of Safari's toolbar ${svg('share', 'ic')}</div></div>
+          </div>
+          <div class="list-row" style="cursor:default;">
+            <div class="tg" style="width:36px;height:36px;border-radius:50%;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;">2</div>
+            <div class="grow"><div class="lr-title">Select "Add to Home Screen"</div><div class="lr-sub">Scroll down the share sheet and tap <b>+ Add to Home Screen</b></div></div>
+          </div>
+          <div class="list-row" style="cursor:default;">
+            <div class="tg" style="width:36px;height:36px;border-radius:50%;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;">3</div>
+            <div class="grow"><div class="lr-title">Tap "Add" in the top right</div><div class="lr-sub">Astrology AI will appear on your Home Screen as a native app</div></div>
+          </div>
+        </div>
+      </div>`);
+    return;
   }
+
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const isChrome = /chrome|chromium|crios/i.test(navigator.userAgent);
+
+  openSheet('Install Astrology AI', `
+    <div class="stack" style="font-size:var(--t-sub);line-height:1.6;">
+      <p>Add <b>Astrology AI</b> to your device for instant offline access and full-screen experience:</p>
+      <div class="list" style="margin-top:8px;">
+        <div class="list-row" style="cursor:default;">
+          <div class="tg" style="width:36px;height:36px;border-radius:50%;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;">1</div>
+          <div class="grow"><div class="lr-title">${isAndroid ? 'Tap browser menu (⋮)' : isChrome ? 'Click Install in the address bar' : 'Open browser settings'}</div><div class="lr-sub">Look for the install icon (⊕ or ⤓) in your address bar or browser menu</div></div>
+        </div>
+        <div class="list-row" style="cursor:default;">
+          <div class="tg" style="width:36px;height:36px;border-radius:50%;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;">2</div>
+          <div class="grow"><div class="lr-title">Choose "Install App" or "Add to Home Screen"</div><div class="lr-sub">Confirm the installation prompt to add to your device</div></div>
+        </div>
+      </div>
+    </div>`);
 }
 function registerSW() {
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
