@@ -10,14 +10,55 @@
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
   <link rel="icon" href="/static/icons/favicon-64.png">
   <link rel="stylesheet" href="/static/product.css">
+  <style>
+    .terms-box {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      margin: 14px 0 6px;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .terms-box:hover {
+      border-color: var(--border-strong);
+    }
+    .terms-box.alert-border {
+      border-color: var(--bad) !important;
+      background: var(--bad-soft) !important;
+    }
+    .terms-box input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .terms-box span {
+      font-size: var(--t-cap);
+      color: var(--text-2);
+      line-height: 1.45;
+    }
+    .terms-box a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-weight: 550;
+    }
+  </style>
 </head>
 <body>
   <div class="auth-wrap">
     <div class="auth-card stack">
       <div class="center" style="margin-bottom:8px;">
-        <img src="/static/icons/icon-192.png" alt="" width="60" height="60" style="border-radius:16px;">
-        <h1 style="margin-top:16px;">Astrology&nbsp;AI</h1>
-        <p class="muted" style="margin-top:4px;">Ancient wisdom, modern precision</p>
+        <img src="/static/icons/icon-192.png" alt="" width="56" height="56" style="border-radius:14px;">
+        <h1 style="margin-top:14px;font-size:1.6rem;letter-spacing:-0.03em;">Astrology&nbsp;AI</h1>
+        <p class="muted" style="margin-top:3px;font-size:var(--t-sub);">Ancient wisdom, modern precision</p>
       </div>
 
       <div class="segmented" role="tablist" aria-label="Sign in or create account">
@@ -25,8 +66,9 @@
         <button id="tab-signup" role="tab" aria-selected="false" onclick="switchTab('signup')">Create account</button>
       </div>
 
-      <div id="alert" class="badge tone-tender hide" role="alert" aria-live="polite" style="width:100%;justify-content:center;padding:10px;"></div>
+      <div id="alert" class="badge tone-tender hide" role="alert" aria-live="polite" style="width:100%;justify-content:center;padding:10px;font-size:var(--t-cap);border-radius:12px;"></div>
 
+      <!-- Sign In Form -->
       <form class="stack" id="form-login" onsubmit="handleLogin(event)" novalidate>
         <div class="field">
           <label for="login-email">Email</label>
@@ -39,6 +81,7 @@
         <button type="submit" class="btn btn-primary btn-block" id="login-btn">Sign in</button>
       </form>
 
+      <!-- Create Account Form -->
       <form class="stack hide" id="form-signup" onsubmit="handleSignup(event)" novalidate>
         <div class="field">
           <label for="signup-name">Full name</label>
@@ -55,26 +98,88 @@
         <button type="submit" class="btn btn-primary btn-block" id="signup-btn">Create account</button>
       </form>
 
-      <div class="row" style="color:var(--faint);font-size:var(--t-cap);">
+      <div class="row" style="color:var(--faint);font-size:var(--t-cap);margin:6px 0;">
         <div class="grow" style="height:1px;background:var(--border);"></div>
         <span>or</span>
         <div class="grow" style="height:1px;background:var(--border);"></div>
       </div>
 
-      <div id="g_id_onload"
-           data-client_id="1074117408479-85ralktijlkae9v0assa5kqa9s3kpop2.apps.googleusercontent.com"
-           data-context="signin" data-ux_mode="popup"
-           data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-      <div class="g_id_signin center" data-type="standard" data-shape="pill" data-theme="filled_black"
-           data-text="continue_with" data-size="large" data-logo_alignment="center"></div>
+      <!-- Terms & Conditions Checkbox -->
+      <label class="terms-box" id="terms-box">
+        <input type="checkbox" id="terms-checkbox">
+        <span>I agree to the <a href="javascript:void(0)" onclick="openModal('terms', event)">Terms of Service</a> and <a href="javascript:void(0)" onclick="openModal('privacy', event)">Privacy Policy</a>.</span>
+      </label>
 
-      <p class="muted center" style="font-size:var(--t-cap);">By continuing you agree to our Terms &amp; Privacy Policy.</p>
+      <!-- Google Sign In Custom Button -->
+      <button type="button" class="btn btn-secondary btn-block" id="btn-google-auth" style="position:relative;gap:10px;font-weight:600;min-height:48px;border-radius:var(--radius-pill);margin-top:6px;">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <!-- Hidden Google Render Container for Fallback Flow -->
+      <div id="g_id_hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0.01;pointer-events:none;"></div>
     </div>
+  </div>
+
+  <!-- In-page Sheet / Modal for Terms & Privacy -->
+  <div id="sheet-scrim" class="scrim" onclick="closeModal()"></div>
+  <div id="sheet" class="sheet" role="dialog" aria-modal="true">
+    <div class="grabber"></div>
+    <div class="row-between" style="margin-bottom:12px;">
+      <h2 id="modal-title" style="font-size:1.25rem;">Terms &amp; Conditions</h2>
+      <button class="icon-btn ghost" onclick="closeModal()" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div id="modal-body" class="stack" style="font-size:var(--t-sub);line-height:1.6;color:var(--text-2);"></div>
   </div>
 
   <script>
     const params = new URLSearchParams(location.search);
     if (params.get('mode') === 'signup') switchTab('signup');
+
+    // Initialize Google Identity Services
+    window.addEventListener('load', () => {
+      if (window.google && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: "1074117408479-85ralktijlkae9v0assa5kqa9s3kpop2.apps.googleusercontent.com",
+          callback: handleGoogleLogin,
+          ux_mode: "popup",
+          auto_prompt: false
+        });
+        const hiddenDiv = document.getElementById('g_id_hidden');
+        google.accounts.id.renderButton(hiddenDiv, { type: 'standard', size: 'large' });
+      }
+    });
+
+    // Custom Continue with Google Button Click Handler
+    document.getElementById('btn-google-auth').onclick = function () {
+      const checkbox = document.getElementById('terms-checkbox');
+      if (!checkbox.checked) {
+        showAlert('Please check the box agreeing to the Terms & Privacy Policy to continue with Google.');
+        const box = document.getElementById('terms-box');
+        box.classList.add('alert-border');
+        setTimeout(() => box.classList.remove('alert-border'), 2400);
+        return;
+      }
+      hideAlert();
+
+      if (window.google && google.accounts && google.accounts.id) {
+        // Trigger Google Login
+        const hiddenBtn = document.querySelector('#g_id_hidden div[role=button]');
+        if (hiddenBtn) {
+          hiddenBtn.click();
+        } else {
+          google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              showAlert('Google Sign-In popup was blocked or skipped. Please allow popups for this site.');
+            }
+          });
+        }
+      } else {
+        showAlert('Google Sign-In is loading. Please check your network and try again.');
+      }
+    };
 
     async function handleGoogleLogin(response) {
       if (!response.credential) return showAlert('Google sign-in failed');
@@ -85,9 +190,15 @@
           body: JSON.stringify({ credential: response.credential })
         });
         const data = await res.json();
-        if (res.ok) { localStorage.setItem('astro_user', JSON.stringify(data.user)); window.location.href = '/app'; }
-        else showAlert(data.detail || 'Google sign-in is not available.');
-      } catch { showAlert('Network error signing in with Google.'); }
+        if (res.ok) {
+          localStorage.setItem('astro_user', JSON.stringify(data.user));
+          window.location.href = '/app';
+        } else {
+          showAlert(data.detail || 'Google sign-in is not available.');
+        }
+      } catch {
+        showAlert('Network error signing in with Google.');
+      }
     }
 
     function switchTab(tab) {
@@ -100,11 +211,32 @@
       hideAlert();
     }
 
-    function showAlert(msg) { const a = document.getElementById('alert'); a.textContent = msg; a.classList.remove('hide'); }
-    function hideAlert() { document.getElementById('alert').classList.add('hide'); }
+    function showAlert(msg) {
+      const a = document.getElementById('alert');
+      a.textContent = msg;
+      a.classList.remove('hide');
+    }
+    function hideAlert() {
+      document.getElementById('alert').classList.add('hide');
+    }
+
+    function checkTerms() {
+      const checkbox = document.getElementById('terms-checkbox');
+      if (!checkbox.checked) {
+        showAlert('Please check the box agreeing to the Terms & Privacy Policy to continue.');
+        const box = document.getElementById('terms-box');
+        box.classList.add('alert-border');
+        setTimeout(() => box.classList.remove('alert-border'), 2400);
+        return false;
+      }
+      return true;
+    }
 
     async function handleLogin(e) {
       e.preventDefault();
+      if (!checkTerms()) return;
+      hideAlert();
+
       const btn = document.getElementById('login-btn');
       btn.disabled = true; btn.textContent = 'Signing in…';
       try {
@@ -116,14 +248,24 @@
           })
         });
         const data = await res.json();
-        if (res.ok) { localStorage.setItem('astro_user', JSON.stringify(data.user)); window.location.href = '/app'; }
-        else showAlert(data.detail || 'Login failed. Please try again.');
-      } catch { showAlert('Connection error. Is the server running?'); }
-      finally { btn.disabled = false; btn.textContent = 'Sign in'; }
+        if (res.ok) {
+          localStorage.setItem('astro_user', JSON.stringify(data.user));
+          window.location.href = '/app';
+        } else {
+          showAlert(data.detail || 'Login failed. Please verify your credentials.');
+        }
+      } catch {
+        showAlert('Connection error. Is the server running?');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Sign in';
+      }
     }
 
     async function handleSignup(e) {
       e.preventDefault();
+      if (!checkTerms()) return;
+      hideAlert();
+
       const btn = document.getElementById('signup-btn');
       btn.disabled = true; btn.textContent = 'Creating account…';
       try {
@@ -136,10 +278,47 @@
           })
         });
         const data = await res.json();
-        if (res.ok) { localStorage.setItem('astro_user', JSON.stringify(data.user)); window.location.href = '/app'; }
-        else showAlert(data.detail || 'Signup failed. Please try again.');
-      } catch { showAlert('Connection error. Is the server running?'); }
-      finally { btn.disabled = false; btn.textContent = 'Create account'; }
+        if (res.ok) {
+          localStorage.setItem('astro_user', JSON.stringify(data.user));
+          window.location.href = '/app';
+        } else {
+          showAlert(data.detail || 'Signup failed. Please try again.');
+        }
+      } catch {
+        showAlert('Connection error. Is the server running?');
+      } finally {
+        btn.disabled = false; btn.textContent = 'Create account';
+      }
+    }
+
+    function openModal(type, event) {
+      if (event) event.stopPropagation();
+      const title = document.getElementById('modal-title');
+      const body = document.getElementById('modal-body');
+      if (type === 'terms') {
+        title.textContent = 'Terms of Service';
+        body.innerHTML = `
+          <p><strong>1. Scope of Consultation</strong><br>Astrology AI is a platform designed strictly for philosophical reflection, self-inquiry, and personal spiritual contemplation. Astrological interpretations are inherently symbolic and speculative.</p>
+          <p><strong>2. No Professional Advice</strong><br>This service does NOT provide medical, psychiatric, legal, financial, or investment advice. No decisions regarding health, medical treatments, investments, or legal disputes should be made based on these readings.</p>
+          <p><strong>3. Sovereign Human Action</strong><br>Classical Jyotisha tradition teaches that conscious human effort (<em>Purushartha / Kriyamana Karma</em>) is supreme over astrological indications. Users assume full responsibility for their personal choices and actions.</p>
+        `;
+      } else {
+        title.textContent = 'Privacy Policy';
+        body.innerHTML = `
+          <p><strong>1. Birth Details &amp; Personal Data</strong><br>Your exact birth date, time, and city are treated as strictly sensitive personal data. They are used exclusively to calculate your planetary chart and are never sold, rented, or exposed publicly.</p>
+          <p><strong>2. Account Isolation</strong><br>All saved charts, relationship profiles, and conversations are cryptographically isolated per user account. Other users can never access or read your data.</p>
+          <p><strong>3. Encryption &amp; Security</strong><br>All communication is transmitted securely over TLS/HTTPS with HttpOnly session cookies and salted password hashing.</p>
+        `;
+      }
+      document.getElementById('sheet-scrim').classList.add('open');
+      document.getElementById('sheet').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('sheet').classList.remove('open');
+      document.getElementById('sheet-scrim').classList.remove('open');
+      document.body.style.overflow = '';
     }
   </script>
 </body>
