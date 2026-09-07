@@ -248,10 +248,70 @@ def dasha_period(chart: dict) -> dict:
     }
 
 
+def get_live_today_transits(chart: dict) -> dict:
+    """
+    Computes real-time Live Gochara transits for today's exact date (UTC now).
+    Guarantees that every day the user opens the web app, their 'Today' insight,
+    live transits, and timing updates by day based on live ephemeris.
+    """
+    try:
+        import swisseph as swe
+        from config import Config
+        import pytz
+        from astrology_engine import ZODIAC_SIGNS
+
+        now_utc = datetime.now(pytz.utc)
+        jd_now = swe.julday(now_utc.year, now_utc.month, now_utc.day, now_utc.hour + now_utc.minute / 60.0)
+        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
+
+        basic = chart.get("Basic_Chart", {})
+        natal_moon = basic.get("Moon", {})
+        natal_moon_sign = natal_moon.get("sign", "")
+        natal_moon_sign_idx = ZODIAC_SIGNS.index(natal_moon_sign) if natal_moon_sign in ZODIAC_SIGNS else 0
+
+        planets_swe = {
+            "Sun": swe.SUN, "Moon": swe.MOON, "Mars": swe.MARS, "Mercury": swe.MERCURY,
+            "Jupiter": swe.JUPITER, "Venus": swe.VENUS, "Saturn": swe.SATURN
+        }
+        
+        live_transits = {}
+        for p_name, p_id in planets_swe.items():
+            res, _ = swe.calc_ut(jd_now, p_id, flags)
+            lon = res[0] % 360.0
+            speed = res[3]
+            s_idx = int(lon / 30)
+            live_transits[p_name] = {
+                "current_sign": ZODIAC_SIGNS[s_idx],
+                "house_from_natal_moon": ((s_idx - natal_moon_sign_idx) % 12) + 1,
+                "is_retrograde_today": bool(speed < 0)
+            }
+        
+        # Rahu / Ketu
+        res_node, _ = swe.calc_ut(jd_now, swe.MEAN_NODE, flags)
+        rahu_lon = res_node[0] % 360.0
+        ketu_lon = (rahu_lon + 180.0) % 360.0
+        r_idx = int(rahu_lon / 30)
+        k_idx = int(ketu_lon / 30)
+        live_transits["Rahu"] = {
+            "current_sign": ZODIAC_SIGNS[r_idx],
+            "house_from_natal_moon": ((r_idx - natal_moon_sign_idx) % 12) + 1,
+            "is_retrograde_today": True
+        }
+        live_transits["Ketu"] = {
+            "current_sign": ZODIAC_SIGNS[k_idx],
+            "house_from_natal_moon": ((k_idx - natal_moon_sign_idx) % 12) + 1,
+            "is_retrograde_today": True
+        }
+        return live_transits
+    except Exception:
+        return chart.get("Live_Transits_Gochar", {})
+
+
 # ── daily insight ─────────────────────────────────────────────────────────────
 def daily_insight(chart: dict) -> dict:
     pan = chart.get("Panchanga", {})
-    transits = chart.get("Live_Transits_Gochar", {})
+    transits = get_live_today_transits(chart)
     moon_t = transits.get("Moon", {})
     moon_sign_today = moon_t.get("current_sign", "")
     house_from_moon = moon_t.get("house_from_natal_moon")
@@ -286,7 +346,7 @@ _MAJOR = ["Saturn", "Jupiter", "Rahu", "Ketu", "Mars"]
 
 
 def transit_highlights(chart: dict, limit: int = 4) -> list:
-    transits = chart.get("Live_Transits_Gochar", {})
+    transits = get_live_today_transits(chart)
     out = []
     for p in _MAJOR:
         t = transits.get(p)

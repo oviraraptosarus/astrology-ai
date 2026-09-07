@@ -518,13 +518,17 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; }
 /* ============================================================================
    Home specifics
    ========================================================================== */
-.greeting-hero { padding: var(--s2) 0 var(--s5); }
-.greeting-hero .g-date { font-size: var(--t-cap); color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
-.greeting-hero .g-hi { font-size: var(--t-hero); font-weight: 680; margin-top: var(--s1); letter-spacing: -0.03em; }
-.identity-line { display: flex; gap: var(--s5); flex-wrap: wrap; margin-top: var(--s4); }
-.id-chip { display: flex; flex-direction: column; gap: 2px; }
-.id-chip .k { font-size: var(--t-micro); color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
-.id-chip .v { font-size: var(--t-h3); font-weight: 600; display: flex; align-items: center; gap: 5px; }
+.greeting-hero { padding: 4px 0 16px; }
+.greeting-hero .g-date { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.greeting-hero .g-hi { font-size: clamp(1.75rem, 5.5vw, 2.35rem); font-weight: 700; margin-top: 2px; letter-spacing: -0.03em; line-height: 1.15; }
+.identity-line { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.id-chip {
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 10px 12px; box-shadow: var(--shadow-sm); min-width: 0;
+}
+.id-chip .k { font-size: 0.6875rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 650; }
+.id-chip .v { font-size: 0.9375rem; font-weight: 650; color: var(--text); display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .today-plain { font-size: 1.0625rem; line-height: 1.5; color: var(--text); }
 .transit-row { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) 0; border-bottom: 1px solid var(--border); }
