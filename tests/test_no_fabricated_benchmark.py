@@ -43,11 +43,17 @@ class TestNoFabricatedBenchmark(unittest.TestCase):
         from uncertainty_engine import UncertaintyEngine
         UncertaintyEngine._BENCHMARK_CACHE = None  # force reload
         msg = UncertaintyEngine._lookup_benchmark("CAREER")
-        # Must be either a measured "H/T (P%)" string or an explicit UNMEASURED note.
-        ok = ("precision-hit rate" in msg) or msg.startswith("UNMEASURED")
+        # Must be either a measured string (with an explicit hit fraction) or an
+        # explicit UNMEASURED note.
+        ok = ("precision hits" in msg) or msg.startswith("UNMEASURED")
         self.assertTrue(ok, f"Unexpected benchmark string: {msg!r}")
         # It must never claim the old fabricated number.
         self.assertNotIn("78%", msg)
+        # Post-2026-09-07 audit: every measured claim must also carry its
+        # base-rate context and the uncalibrated-score disclaimer.
+        if not msg.startswith("UNMEASURED"):
+            self.assertIn("base rate", msg)
+            self.assertIn("UNCALIBRATED", msg)
 
     def test_measured_file_carries_negative_control(self):
         """

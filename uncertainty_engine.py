@@ -147,9 +147,11 @@ class UncertaintyEngine:
     @staticmethod
     def _lookup_benchmark(domain: str) -> str:
         """
-        Return the ACTUAL measured blind-benchmark precision for this domain,
-        read from benchmark_results.json (produced by dual_track_benchmarks.py).
-        Never fabricates a number: if no measurement exists, says so.
+        Return the ACTUAL measured benchmark performance for this domain, read
+        from benchmark_results.json. Never fabricates a number; if no measurement
+        exists, says so. Reports BOTH layers explicitly:
+        - Window containment (vs its 82.5% random-date base rate — near-uninformative)
+        - Acute exact-day sub-degree peaks (only layer with demonstrated selectivity)
         """
         import os
         import json
@@ -162,21 +164,42 @@ class UncertaintyEngine:
             except Exception:
                 UncertaintyEngine._BENCHMARK_CACHE = {}
         table = UncertaintyEngine._BENCHMARK_CACHE or {}
-        # Base-rate context: a hit rate is only meaningful relative to how often
-        # the same test fires on random dates (negative control).
-        base = table.get("negative_control", {}).get("base_rate")
-        base_str = f"; negative-control base rate {base*100:.0f}%" if base is not None else ""
+
+        parts = []
+
+        # Layer 1: precision (double-transit + dasha at event date)
         by_domain = table.get("by_domain", {})
         d = by_domain.get((domain or "").upper())
-        if not d or not d.get("total"):
-            overall = table.get("overall")
-            if overall and overall.get("total"):
-                return (f"{overall['precision_hits']}/{overall['total']} "
-                        f"({100.0*overall['precision_hits']/overall['total']:.0f}%) "
-                        f"blind precision-hit rate across all domains "
-                        f"(domain '{domain}' not separately measured){base_str}")
+        overall = table.get("overall", {})
+        nc = table.get("negative_control", {})
+        base = nc.get("base_rate")
+        if d and d.get("total"):
+            parts.append(f"{d['precision_hits']}/{d['total']} "
+                         f"({100.0*d['precision_hits']/d['total']:.0f}%) precision hits on documented '{domain}' events")
+        elif overall and overall.get("total"):
+            parts.append(f"{overall['precision_hits']}/{overall['total']} "
+                         f"({100.0*overall['precision_hits']/overall['total']:.0f}%) precision hits across all domains "
+                         f"(domain '{domain}' not separately measured)")
+        if base is not None:
+            parts.append(f"negative-control base rate {base*100:.0f}% (only the margin above this is skill)")
+
+        # Layer 2: window containment (explicitly labelled near-uninformative)
+        wc = table.get("window_containment", {})
+        wnc = wc.get("negative_control", {})
+        if wnc.get("base_rate") is not None:
+            parts.append(f"macro-window containment base rate {wnc['base_rate']*100:.0f}% on random dates — containment alone is NOT predictive")
+
+        # Layer 3: acute exact-day evidence
+        acute = table.get("acute_exact_layer", {})
+        if acute:
+            n_cases = len(acute.get("verified_cases", []))
+            parts.append(f"acute exact-day sub-degree peak: {n_cases} verified case(s) total (no established rate)")
+
+        sig = table.get("significance_tests", {})
+        if sig.get("verdict"):
+            parts.append(f"significance testing verdict: {sig['verdict']} for macro timing")
+
+        if not parts:
             return "UNMEASURED (no blind-benchmark data for this domain)"
-        return (f"{d['precision_hits']}/{d['total']} "
-                f"({100.0*d['precision_hits']/d['total']:.0f}%) "
-                f"blind precision-hit rate on documented '{domain}' events{base_str}")
+        return "; ".join(parts) + ". model_score is an UNCALIBRATED strength score, not a probability."
 

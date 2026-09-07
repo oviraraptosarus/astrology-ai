@@ -537,6 +537,93 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; }
 
 /* Auth / landing shared */
 .auth-wrap { min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--s6) var(--s5); }
+
+/* ============================================================================
+   Chatbot / Ask Astrologer UI
+   ========================================================================== */
+.chat-screen {
+  display: flex; flex-direction: column;
+  height: calc(100dvh - var(--nav-h) - var(--safe-top) - var(--safe-bottom) - 70px);
+  max-width: var(--content-max); margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .chat-screen { height: calc(100dvh - var(--safe-top) - var(--s8) - 90px); }
+}
+.chat-messages {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  display: flex; flex-direction: column; gap: var(--s3);
+  padding: var(--s3) 0 var(--s4);
+}
+.chat-empty {
+  margin: auto 0; text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--s3);
+  padding: var(--s7) var(--s4); color: var(--muted);
+}
+.chat-empty .glyph-ai {
+  width: 56px; height: 56px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: var(--s2);
+}
+.msg { display: flex; flex-direction: column; max-width: 86%; word-break: break-word; line-height: 1.55; }
+.msg.user { align-self: flex-end; }
+.msg.assistant { align-self: flex-start; }
+.msg-bubble {
+  padding: var(--s3) var(--s5); border-radius: 18px; font-size: var(--t-sub);
+}
+.msg.user .msg-bubble {
+  background: var(--accent); color: #ffffff; border-bottom-right-radius: 4px;
+}
+.msg.assistant .msg-bubble {
+  background: var(--card); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px;
+  box-shadow: var(--shadow-sm);
+}
+.msg.assistant .msg-bubble p + p { margin-top: 10px; }
+.msg.assistant .msg-bubble ul, .msg.assistant .msg-bubble ol { margin: 8px 0; padding-left: 20px; }
+.msg.assistant .msg-bubble li + li { margin-top: 4px; }
+.msg.assistant .msg-bubble strong { font-weight: 650; color: var(--text); }
+.msg-thought {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  font-size: var(--t-cap); color: var(--accent); background: var(--accent-soft);
+  margin-bottom: 6px; align-self: flex-start; animation: pulse-soft 1.8s infinite;
+}
+@keyframes pulse-soft { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; transform: scale(1.01); } }
+
+.chat-prompts {
+  display: flex; gap: var(--s2); overflow-x: auto; padding: var(--s2) 0;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.chat-prompts::-webkit-scrollbar { display: none; }
+.prompt-chip {
+  white-space: nowrap; padding: var(--s2) var(--s4); border-radius: var(--radius-pill);
+  background: var(--card); border: 1px solid var(--border); color: var(--text-2);
+  font-size: var(--t-cap); font-weight: 550; cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+.prompt-chip:hover { background: var(--card-2); border-color: var(--border-strong); }
+.prompt-chip:active { transform: scale(0.97); }
+
+.chat-input-bar {
+  display: flex; align-items: center; gap: var(--s2);
+  padding: var(--s2) 0; position: sticky; bottom: 0; background: var(--bg);
+}
+.chat-input-wrap {
+  flex: 1; display: flex; align-items: center; background: var(--card);
+  border: 1px solid var(--border-strong); border-radius: 24px; padding: 4px 6px 4px 16px;
+  box-shadow: var(--shadow-sm); transition: border-color 0.2s var(--ease);
+}
+.chat-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.chat-input {
+  flex: 1; border: none; background: transparent; color: var(--text);
+  font-family: inherit; font-size: var(--t-body); outline: none; padding: 8px 0;
+}
+.chat-input::placeholder { color: var(--faint); }
+.chat-send-btn {
+  width: 38px; height: 38px; border-radius: 50%; border: none;
+  background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: transform 0.12s var(--ease), opacity 0.2s var(--ease); flex-shrink: 0;
+}
+.chat-send-btn:active { transform: scale(0.92); }
+.chat-send-btn:disabled { opacity: 0.4; cursor: default; }
+
 .auth-card { width: 100%; max-width: 400px; }
 
 /* Onboarding progress */

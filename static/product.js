@@ -64,6 +64,8 @@ const ICON = {
   trash: '<path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/>',
   location: '<path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   crown: '<path d="M3 8l4 4 5-7 5 7 4-4v10H3z"/>',
+  send: '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+  chat: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
 };
 const svg = (name, cls = 'ic') =>
   `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[name] || ''}</svg>`;
@@ -73,12 +75,15 @@ const State = {
   user: null,
   summary: null,
   cache: {},           // screen data cache
+  chatMessages: [],    // in-app AI astrologer conversation
+  chatPending: false,
 };
 
 const TABS = [
   { id: 'home', label: 'Home', icon: 'home' },
   { id: 'chart', label: 'Chart', icon: 'chart' },
   { id: 'forecast', label: 'Forecast', icon: 'forecast' },
+  { id: 'chat', label: 'Ask AI', icon: 'spark' },
   { id: 'relationships', label: 'People', icon: 'people' },
   { id: 'calendar', label: 'Calendar', icon: 'calendar' },
 ];
@@ -145,6 +150,27 @@ function errorState(msg, retryFn) {
 function badge(status, tone) {
   if (!status) return '';
   return `<span class="badge ${toneClass(tone)}"><span class="dot"></span>${esc(status)}</span>`;
+}
+
+function renderMarkdown(text) {
+  if (!text) return '';
+  let s = esc(text);
+  // Bold **text**
+  s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  // Italic *text*
+  s = s.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  // Bullet lists
+  s = s.replace(/(?:^|\n)[ \t]*[-*•][ \t]+(.+)/g, '\n<li>$1</li>');
+  s = s.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+  s = s.replace(/<\/ul>\s*<ul>/g, '');
+  // Line breaks to paragraphs
+  const paras = s.split(/\n\n+/);
+  return paras.map(p => {
+    p = p.trim();
+    if (!p) return '';
+    if (p.startsWith('<ul>') || p.startsWith('<li>')) return p;
+    return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+  }).join('');
 }
 
 /* ============================================================================
@@ -304,6 +330,8 @@ Screens.home = async (host) => {
 
     <div class="section-label">Explore</div>
     <div class="list">
+      <button class="list-row" data-nav="chat"><div class="tg" style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;">${svg('spark', 'ic')}</div>
+        <div class="grow"><div class="lr-title">Ask Astrologer</div><div class="lr-sub">Chat directly with the AI Jyotisha agent</div></div>${svg('chevron', 'chev')}</button>
       <button class="list-row" data-nav="chart"><div class="tg" style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;">${svg('chart', 'ic')}</div>
         <div class="grow"><div class="lr-title">Your chart</div><div class="lr-sub">Planets, houses & patterns</div></div>${svg('chevron', 'chev')}</button>
       <button class="list-row" data-nav="forecast"><div class="tg" style="width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;">${svg('forecast', 'ic')}</div>
@@ -670,6 +698,155 @@ async function openCompatibility(relId) {
     $('#sheet .loading-full').outerHTML = `<p class="muted center">${esc(e.message)}</p>`;
   }
 }
+
+/* ============================================================================
+   SCREEN: ASK AI (ASTROLOGER CHATBOT)
+   ========================================================================== */
+Screens.chat = async (host) => {
+  setTopbar('Ask Astrologer', { back: false, actions: `<button class="icon-btn ghost" id="chat-clear" title="Clear chat">${svg('trash')}</button>` });
+
+  const prompts = [
+    "What does my current Dasha indicate?",
+    "When is my next major career breakthrough?",
+    "Analyze my 7th house and marriage potential",
+    "What are my strongest planetary placements?",
+    "Which gemstones and remedies are safe for me?"
+  ];
+
+  const el = h(`<div class="chat-screen">
+    <div class="chat-messages" id="chat-msgs"></div>
+    <div id="chat-thought" class="msg-thought hide"></div>
+    <div class="chat-prompts" id="chat-prompts">
+      ${prompts.map(p => `<button class="prompt-chip" data-prompt="${esc(p)}">${esc(p)}</button>`).join('')}
+    </div>
+    <form class="chat-input-bar" id="chat-form">
+      <div class="chat-input-wrap">
+        <input class="chat-input" id="chat-in" placeholder="Ask anything about your chart..." autocomplete="off">
+      </div>
+      <button type="submit" class="chat-send-btn" id="chat-send" aria-label="Send message">${svg('send')}</button>
+    </form>
+  </div>`);
+
+  host.innerHTML = ''; host.appendChild(el);
+
+  const msgsBox = $('#chat-msgs', el);
+  const thoughtBox = $('#chat-thought', el);
+  const form = $('#chat-form', el);
+  const input = $('#chat-in', el);
+  const sendBtn = $('#chat-send', el);
+  const clearBtn = $('#chat-clear');
+
+  const scrollToBottom = () => {
+    msgsBox.scrollTop = msgsBox.scrollHeight;
+  };
+
+  const renderMessages = () => {
+    if (!State.chatMessages || !State.chatMessages.length) {
+      msgsBox.innerHTML = `
+        <div class="chat-empty">
+          <div class="glyph-ai">${svg('spark')}</div>
+          <h3>Ask Your Personal Astrologer</h3>
+          <p>Consult with the ancient Jyotisha engine on your chart, planetary periods, career, and relationships.</p>
+        </div>`;
+      return;
+    }
+    msgsBox.innerHTML = State.chatMessages.map(m => `
+      <div class="msg ${m.role}">
+        <div class="msg-bubble">${m.role === 'assistant' ? renderMarkdown(m.content) : esc(m.content)}</div>
+      </div>`).join('');
+    scrollToBottom();
+  };
+
+  if (clearBtn) clearBtn.onclick = () => {
+    State.chatMessages = [];
+    renderMessages();
+  };
+
+  el.querySelectorAll('[data-prompt]').forEach(b => {
+    b.onclick = () => {
+      input.value = b.dataset.prompt;
+      form.dispatchEvent(new Event('submit'));
+    };
+  });
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text || State.chatPending) return;
+
+    input.value = '';
+    State.chatMessages = State.chatMessages || [];
+    State.chatMessages.push({ role: 'user', content: text });
+    State.chatPending = true;
+    sendBtn.disabled = true;
+    renderMessages();
+
+    thoughtBox.textContent = "✦ Consulting celestial ephemeris...";
+    thoughtBox.classList.remove('hide');
+
+    let assistantMsg = { role: 'assistant', content: '' };
+    State.chatMessages.push(assistantMsg);
+
+    try {
+      const params = new URLSearchParams({ message: text, session_id: 'primary', provider: 'auto' });
+      const res = await fetch(`/api/chat/stream?${params}`, {
+        credentials: 'include',
+        headers: { 'Accept': 'text/event-stream' }
+      });
+
+      if (!res.ok) throw new Error(`Server returned ${res.status}`);
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const jsonStr = line.slice(6).trim();
+            if (!jsonStr) continue;
+            try {
+              const ev = JSON.parse(jsonStr);
+              if (ev.type === 'thinking') {
+                thoughtBox.textContent = `✦ ${ev.content}`;
+                thoughtBox.classList.remove('hide');
+              } else if (ev.type === 'final') {
+                assistantMsg.content = ev.content;
+                renderMessages();
+              } else if (ev.type === 'error') {
+                assistantMsg.content = `Error: ${ev.content}`;
+                renderMessages();
+              }
+            } catch (err) {}
+          }
+        }
+      }
+    } catch (err) {
+      try {
+        const fallback = await API.post('/api/chat', { message: text, session_id: 'primary' });
+        assistantMsg.content = fallback.reply || "Unable to consult the chart right now.";
+        renderMessages();
+      } catch (fErr) {
+        assistantMsg.content = "Connection to astrologer failed. Please try again.";
+        renderMessages();
+      }
+    } finally {
+      thoughtBox.classList.add('hide');
+      State.chatPending = false;
+      sendBtn.disabled = false;
+      renderMessages();
+      input.focus();
+    }
+  };
+
+  renderMessages();
+};
 
 /* ============================================================================
    SCREEN: CALENDAR / SKY

@@ -806,11 +806,16 @@ class AstrologyCLI:
             return
         domain = domain_arg.strip().upper() if domain_arg.strip() else "CAREER"
         p = self.active_profile
-        from forward_timing_scanner import ForwardTimingScanner
+        from forward_timing_scanner import ForwardTimingScanner, NodeDispatchError
         import pytz
         scanner = ForwardTimingScanner(self.chart_obj)
         now = datetime.now(pytz.utc)
-        windows = scanner.scan_domain_windows(domain, start_date=now, months_ahead=36)
+        try:
+            windows = scanner.scan_domain_windows(domain, start_date=now, months_ahead=36)
+        except NodeDispatchError as e:
+            print(f"{C.RED}Unknown domain '{domain}'.{C.RESET} Use a 70-node key or one of: "
+                  f"CAREER, WEALTH, MARRIAGE, CHILDREN, HEALTH_ACCIDENT, PROPERTY, RELOCATION, EDUCATION, FAME.")
+            return
 
         print(f"\n{C.BOLD}{C.CYAN}=== FORWARD TIMING SCANNER: {domain} 36-MONTH ({p['name']}) ==={C.RESET}")
         if not windows:
@@ -818,11 +823,13 @@ class AstrologyCLI:
             return
         for i, w in enumerate(windows, 1):
             cc = C.GREEN if "HIGH" in w["confidence"] else C.YELLOW
-            print(f"\n Window #{i}: {w['start_date']} to {w['end_date']}  [{cc}{w['confidence']}{C.RESET} | Score: {w['score']}]")
-            print(f"   Dasha: {C.MAGENTA}{w['dasha_trigger']}{C.RESET}")
-            for dr in w.get("dasha_reasons", []):
+            print(f"\n Window #{i}: {w['macro_window_start']} to {w['macro_window_end']}  [{cc}{w['confidence']}{C.RESET} | model_score: {w['model_score']} (uncalibrated)]")
+            print(f"   Dasha: {C.MAGENTA}{w['dasha_hierarchy']}{C.RESET}")
+            if w.get("exact_peak_date"):
+                print(f"   Exact peak (min separation): {C.CYAN}{w['exact_peak_date']}{C.RESET}  (± window: {w['peak_trigger_dates']})")
+            for dr in w.get("dasha_evidence", []):
                 print(f"   + {dr}")
-            for tr in w.get("transit_reasons", []):
+            for tr in w.get("transit_evidence", []):
                 print(f"   + {tr}")
         print()
 

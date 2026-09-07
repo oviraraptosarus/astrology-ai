@@ -206,7 +206,9 @@ def run_multi_domain_benchmarks():
             print(f"⚠️ [MISS] {domain_tag:14s} {name:18s} | {ev['label']} ({ev['date']})\n")
 
     print("==========================================================================================")
-    print(f"📊 FINAL 10-NODE BENCHMARK SCORE: {hits} / {total} Events Captured ({hits/total*100:.1f}%)")
+    print(f"📊 FINAL 10-NODE WINDOW-CONTAINMENT: {hits} / {total} events covered ({hits/total*100:.1f}%)")
+    print("   NOTE: containment-only; random-date base rate is ~82% (see negative")
+    print("   control in playground_70_node_benchmark.py). Containment is NOT accuracy.")
     print("==========================================================================================")
 
 if __name__ == "__main__":

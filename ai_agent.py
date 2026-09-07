@@ -241,7 +241,7 @@ def get_daily_panchang(city_name: str, config: RunnableConfig) -> str:
 @tool
 def scan_forward_event_timing(domain: str, config: RunnableConfig) -> str:
     """Forward predictive timeline scanner. Uses Vimshottari Dasha + Double Transit (Jupiter/Saturn) + Ashtakavarga to calculate exact multi-month calendar delivery windows. Valid domains: 'career', 'marriage', 'wealth', 'health', 'relocation', 'litigation', 'spirituality'."""
-    from forward_timing_scanner import ForwardTimingScanner
+    from forward_timing_scanner import ForwardTimingScanner, NodeDispatchError
     from vedic_models import Chart
     from datetime import datetime
     import pytz
@@ -255,7 +255,9 @@ def scan_forward_event_timing(domain: str, config: RunnableConfig) -> str:
         scanner = ForwardTimingScanner(chart_obj)
         now = datetime.now(pytz.utc)
         windows = scanner.scan_domain_windows(domain.upper(), start_date=now, months_ahead=36)
-        return json.dumps({"domain": domain, "qualifying_windows": windows}, indent=2)
+        return json.dumps({"domain": domain.upper(), "qualifying_windows": windows}, indent=2)
+    except NodeDispatchError as e:
+        return json.dumps({"error": f"Unknown timing domain: {str(e)}"})
     except Exception as e:
         return json.dumps({"error": f"Forward scan failed: {str(e)}"})
 
@@ -494,13 +496,43 @@ def run_astrologer(user_input: str, session_id: str, provider: str = "auto") -> 
         
         specialist_tools = get_specialist_tools(intent, ALL_TOOLS)
         system_prompt = get_specialist_system_prompt(intent)
+        user_message_to_send = user_input
+        if has_chart:
+            chart_data = load_chart(session_id)
+            if chart_data:
+                basic = chart_data.get("Basic_Chart", {})
+                asc = basic.get("Ascendant", {})
+                moon = basic.get("Moon", {})
+                sun = basic.get("Sun", {})
+                dasha = chart_data.get("Current_Dasha", {})
+                planets_brief = []
+                for p in ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"]:
+                    if p in basic:
+                        p_obj = basic[p]
+                        deg = p_obj.get("degree", 0.0)
+                        deg_str = f"{deg:.1f}°" if isinstance(deg, (int, float)) else str(deg)
+                        planets_brief.append(f"{p} in {p_obj.get('sign')} (H{p_obj.get('house')}, {deg_str})")
+                
+                chart_tag = f"[Verified Natal Chart Loaded: {asc.get('sign')} Lagna, {moon.get('sign')} Moon ({moon.get('nakshatra')}), Active Dasha: {dasha.get('Mahadasha')}-{dasha.get('Antardasha')}-{dasha.get('Pratyantardasha')}]"
+                user_message_to_send = f"{chart_tag} {user_input}"
+                
+                system_prompt += f"""
+
+CRITICAL: The user's birth chart is ALREADY CALCULATED and ACTIVE in this session:
+- Ascendant (Lagna): {asc.get('sign')} ({asc.get('nakshatra', '')})
+- Moon: {moon.get('sign')} (Nakshatra: {moon.get('nakshatra', '')})
+- Sun: {sun.get('sign')}
+- Current Operating Dasha: {dasha.get('Mahadasha', '')} MD -> {dasha.get('Antardasha', '')} AD -> {dasha.get('Pratyantardasha', '')} PD ({dasha.get('Mahadasha_Start', '')} to {dasha.get('Mahadasha_End', '')})
+- Planetary Placements: {'; '.join(planets_brief)}
+
+DO NOT ask the user for their birth date, time, or location. Their chart is right above. Answer their question directly based on their placements, dasha, and transits, or call retrieve_astrological_insights / scan_forward_event_timing for deep technical synthesis."""
         
         llm = LLMProvider.get_llm(provider)
         agent_executor = create_react_agent(llm, specialist_tools, checkpointer=memory)
         
         messages = [
             SystemMessage(content=system_prompt, id="system-prompt-astrologer"),
-            HumanMessage(content=user_input)
+            HumanMessage(content=user_message_to_send)
         ]
         result = agent_executor.invoke(
             {"messages": messages}, 
@@ -541,6 +573,36 @@ def run_astrologer_stream(user_input: str, session_id: str, provider: str = "aut
         
         specialist_tools = get_specialist_tools(intent, ALL_TOOLS)
         system_prompt = get_specialist_system_prompt(intent)
+        user_message_to_send = user_input
+        if has_chart:
+            chart_data = load_chart(session_id)
+            if chart_data:
+                basic = chart_data.get("Basic_Chart", {})
+                asc = basic.get("Ascendant", {})
+                moon = basic.get("Moon", {})
+                sun = basic.get("Sun", {})
+                dasha = chart_data.get("Current_Dasha", {})
+                planets_brief = []
+                for p in ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"]:
+                    if p in basic:
+                        p_obj = basic[p]
+                        deg = p_obj.get("degree", 0.0)
+                        deg_str = f"{deg:.1f}°" if isinstance(deg, (int, float)) else str(deg)
+                        planets_brief.append(f"{p} in {p_obj.get('sign')} (H{p_obj.get('house')}, {deg_str})")
+                
+                chart_tag = f"[Verified Natal Chart Loaded: {asc.get('sign')} Lagna, {moon.get('sign')} Moon ({moon.get('nakshatra')}), Active Dasha: {dasha.get('Mahadasha')}-{dasha.get('Antardasha')}-{dasha.get('Pratyantardasha')}]"
+                user_message_to_send = f"{chart_tag} {user_input}"
+                
+                system_prompt += f"""
+
+CRITICAL: The user's birth chart is ALREADY CALCULATED and ACTIVE in this session:
+- Ascendant (Lagna): {asc.get('sign')} ({asc.get('nakshatra', '')})
+- Moon: {moon.get('sign')} (Nakshatra: {moon.get('nakshatra', '')})
+- Sun: {sun.get('sign')}
+- Current Operating Dasha: {dasha.get('Mahadasha', '')} MD -> {dasha.get('Antardasha', '')} AD -> {dasha.get('Pratyantardasha', '')} PD ({dasha.get('Mahadasha_Start', '')} to {dasha.get('Mahadasha_End', '')})
+- Planetary Placements: {'; '.join(planets_brief)}
+
+DO NOT ask the user for their birth date, time, or location. Their chart is right above. Answer their question directly based on their placements, dasha, and transits, or call retrieve_astrological_insights / scan_forward_event_timing for deep technical synthesis."""
         
         yield json.dumps({"type": "status", "content": f"⚡ Activating {len(specialist_tools)} specialist tools..."})
         
@@ -549,7 +611,7 @@ def run_astrologer_stream(user_input: str, session_id: str, provider: str = "aut
         
         messages = [
             SystemMessage(content=system_prompt, id="system-prompt-astrologer"),
-            HumanMessage(content=user_input)
+            HumanMessage(content=user_message_to_send)
         ]
         
         final_content = None

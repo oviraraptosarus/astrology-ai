@@ -512,7 +512,7 @@ def get_semantic_view(chart_dict, topic):
     # 3. Activation Engine (Timing)
     activation_engine = ActivationEngine(chart)
     activation_profile = activation_engine.assess_activation(
-        domain_analysis.domain, 
+        domain_analysis.event_id, 
         domain_analysis.relevant_planets, 
         domain_analysis.relevant_houses
     )

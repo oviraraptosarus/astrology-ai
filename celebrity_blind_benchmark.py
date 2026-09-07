@@ -101,7 +101,9 @@ def run_celebrity_benchmarks():
 
         print("------------------------------------------------------------------------------------------")
 
-    print(f"\n📊 FINAL BENCHMARK HIT RATE: {hits} / {total} Events Captured ({hits/total*100:.1f}%)")
+    print(f"\n📊 FINAL WINDOW-CONTAINMENT RATE: {hits} / {total} events covered by some macro window ({hits/total*100:.1f}%)")
+    print("   NOTE: containment-only. The negative control (playground_70_node_benchmark.py)")
+    print("   shows random dates are covered ~82% of the time — containment is NOT accuracy.")
 
 if __name__ == "__main__":
     run_celebrity_benchmarks()

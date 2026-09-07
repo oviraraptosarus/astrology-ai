@@ -102,35 +102,52 @@ class ActivationEngine:
             scanner = ForwardTimingScanner(self.chart)
             now = datetime.datetime.now(datetime.timezone.utc)
             scanned_windows = scanner.scan_domain_windows(event_id, start_date=now, months_ahead=24)
-            
+
             for sw in scanned_windows:
                 reasons = []
-                if sw.get("dasha_reasons"):
-                    reasons.extend(sw["dasha_reasons"])
-                if sw.get("transit_reasons"):
-                    reasons.extend(sw["transit_reasons"])
-                    
+                if sw.get("dasha_evidence"):
+                    reasons.extend(sw["dasha_evidence"])
+                if sw.get("transit_evidence"):
+                    reasons.extend(sw["transit_evidence"])
+
+                # Sanity guard: never emit a window that starts before the scan
+                # start (dasha periods can begin earlier than 'now').
+                w_start = sw["macro_window_start"]
+                w_end = sw["macro_window_end"]
+                try:
+                    if datetime.datetime.strptime(w_end, "%Y-%m-%d") < now.replace(tzinfo=None):
+                        continue
+                except ValueError:
+                    continue
+
                 windows.append(TimingWindow(
-                    start_date=sw["start_date"],
-                    end_date=sw["end_date"],
+                    start_date=w_start,
+                    end_date=w_end,
                     confidence=sw["confidence"],
-                    trigger_dasha=sw["dasha_trigger"],
-                    trigger_transit=", ".join(sw.get("transit_reasons", ["Transit alignment"])),
+                    trigger_dasha=sw["dasha_hierarchy"],
+                    trigger_transit=", ".join(sw.get("transit_evidence", ["Transit alignment"])),
                     reason="; ".join(reasons)
                 ))
         except Exception as e:
-            # Safe fallback if ephemeris or chart is incomplete
+            # Honest fallback: if the scanner could not run, say so instead of
+            # fabricating a plausible-looking 90-day window. The only exception
+            # is a genuinely incomplete chart (no dasha context at all), where
+            # we emit a single clearly-labeled LOW-confidence placeholder.
             current_dasha = getattr(self.chart, "current_dasha", {})
-            md_lord = current_dasha.get("mahadasha", "Unknown")
-            ad_lord = current_dasha.get("antardasha", "Unknown")
+            md_lord = current_dasha.get("mahadasha") or current_dasha.get("Mahadasha")
+            ad_lord = current_dasha.get("antardasha") or current_dasha.get("Antardasha")
+            if md_lord and ad_lord:
+                # Dasha context exists; the failure is real — report no windows
+                # rather than inventing one.
+                return []
             now = datetime.datetime.now()
             windows.append(TimingWindow(
                 start_date=now.strftime("%Y-%m-%d"),
                 end_date=(now + datetime.timedelta(days=90)).strftime("%Y-%m-%d"),
-                confidence="MODERATE",
-                trigger_dasha=f"{md_lord}/{ad_lord}",
+                confidence="LOW (SCANNER_UNAVAILABLE_PLACEHOLDER)",
+                trigger_dasha=f"{md_lord or 'Unknown'}/{ad_lord or 'Unknown'}",
                 trigger_transit="Transits of Jupiter/Saturn",
-                reason=f"Active period of {md_lord}/{ad_lord} correlates with domain potential."
+                reason=f"Scanner unavailable ({type(e).__name__}); placeholder window, not a computed prediction."
             ))
             
         return windows

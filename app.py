@@ -807,6 +807,10 @@ def chat(req: ChatRequest, current_user: dict = Depends(get_current_user)):
     """Non-streaming chat endpoint (backward compatible)."""
     try:
         scoped_session = chart_session_key(current_user, req.session_id)
+        if not chart_exists_in_db(scoped_session):
+            chart = build_user_chart(current_user)
+            if chart:
+                save_chart(scoped_session, chart)
         had_chart_before = chart_exists_in_db(scoped_session)
         reply = run_astrologer(req.message, scoped_session, req.provider)
         chart_generated = chart_exists_in_db(scoped_session) and not had_chart_before
@@ -825,18 +829,15 @@ async def chat_stream(message: str, session_id: str = "default", provider: str =
     Streams agent thought steps as Server-Sent Events so the frontend can show
     live progress (e.g., 'Calculating chart...', 'Consulting ancient texts...')
     instead of a blank 60-90s loading screen.
-    
-    Frontend usage:
-        const source = new EventSource(`/api/chat/stream?message=...&session_id=...`);
-        source.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            if (data.type === 'final') { ... }
-            if (data.type === 'thinking') { showThought(data.content); }
-        };
     """
+    scoped_session = chart_session_key(current_user, session_id)
+    if not chart_exists_in_db(scoped_session):
+        chart = build_user_chart(current_user)
+        if chart:
+            save_chart(scoped_session, chart)
+
     def event_generator():
         try:
-            scoped_session = chart_session_key(current_user, session_id)
             for chunk in run_astrologer_stream(message, scoped_session, provider):
                 yield f"data: {chunk}\n\n"
         except Exception as e:
