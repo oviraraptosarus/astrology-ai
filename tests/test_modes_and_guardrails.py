@@ -27,6 +27,7 @@ from modes import (
     is_unconstrained,
     check_query_safety,
     apply_output_guardrails,
+    get_client_disclaimer,
     ADVISORY_DISCLAIMER
 )
 from agent_router import get_specialist_system_prompt, get_specialist_tools
@@ -186,22 +187,21 @@ class TestModesAndGuardrails(unittest.TestCase):
             self.assertTrue(decision.allowed, f"Legitimate query improperly blocked: {q}")
 
     def test_output_guardrails_legal_disclaimer(self):
-        """Legal disclaimers must be attached in client_safe mode and omitted in unconstrained mode."""
+        """Legal disclaimers are accessible via get_client_disclaimer and output is clean."""
         base_text = "Your 10th lord is exalted in 5th house, promising high status."
 
-        # Client-safe mode attaches disclaimer
-        safe_output = apply_output_guardrails(base_text, mode="client_safe")
-        self.assertIn("Legal & Astrological Advisory Notice", safe_output)
-        self.assertIn("strictly for entertainment", safe_output)
-        self.assertIn("Kriyamana Karma", safe_output)
+        # Client disclaimer is available for UI anchoring
+        disclaimer = get_client_disclaimer()
+        self.assertIn("Legal & Astrological Advisory Notice", disclaimer)
+        self.assertIn("strictly for entertainment", disclaimer)
+        self.assertIn("Kriyamana Karma", disclaimer)
 
-        # Idempotency (does not duplicate disclaimer)
-        double_safe = apply_output_guardrails(safe_output, mode="client_safe")
-        self.assertEqual(double_safe.count("Legal & Astrological Advisory Notice"), 1)
+        # Output text remains clean and strips redundant repetitive disclaimers
+        safe_output = apply_output_guardrails(base_text + disclaimer, mode="client_safe")
+        self.assertEqual(safe_output, base_text)
 
-        # Unconstrained mode does not attach disclaimer
+        # Unconstrained mode returns raw text
         raw_output = apply_output_guardrails(base_text, mode="unconstrained")
-        self.assertNotIn("Legal & Astrological Advisory Notice", raw_output)
         self.assertEqual(raw_output, base_text)
 
     def test_router_system_prompt_mode_injection(self):

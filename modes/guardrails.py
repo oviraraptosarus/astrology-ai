@@ -239,18 +239,21 @@ def check_query_safety(query: str, mode: str = "client_safe") -> SafetyDecision:
 
 def apply_output_guardrails(response_text: str, mode: str = "client_safe") -> str:
     """
-    Applies mode-specific output formatting and legal disclaimers.
-    In client_safe mode: Appends standard ironclad legal disclaimer if not already present.
-    In unconstrained mode: Returns raw text without disclaimer padding.
+    Applies mode-specific output formatting.
+    Disclaimers are anchored statically in the AI chat UI footer (like ChatGPT & Gemini)
+    rather than being redundantly repeated inside every single assistant turn.
     """
     if not response_text:
         return ""
-        
-    if mode == "client_safe":
-        if "Legal & Astrological Advisory Notice" not in response_text and "Advisory Notice:" not in response_text:
-            return response_text.rstrip() + ADVISORY_DISCLAIMER
-            
-    return response_text
+    # Strip any trailing disclaimers that the model might have self-generated
+    cleaned = response_text
+    if "### ⚖️ Legal & Astrological Advisory Notice" in cleaned:
+        cleaned = cleaned.split("### ⚖️ Legal & Astrological Advisory Notice")[0].rstrip()
+    elif "⚖️ Legal & Astrological Advisory Notice" in cleaned:
+        cleaned = cleaned.split("⚖️ Legal & Astrological Advisory Notice")[0].rstrip()
+    if cleaned.endswith("---"):
+        cleaned = cleaned[:-3].rstrip()
+    return cleaned
 
 
 def get_client_disclaimer() -> str:

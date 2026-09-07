@@ -789,6 +789,10 @@ Screens.chat = async (host) => {
       </div>
       <button type="submit" class="chat-send-btn" id="chat-send" aria-label="Send message">${svg('send')}</button>
     </form>
+    <div class="chat-legal-disclaimer">
+      Astrology AI provides philosophical &amp; spiritual self-inquiry. Not medical, financial, or legal advice.
+      <button class="chat-legal-link" id="chat-legal-btn" type="button">Notice</button>
+    </div>
   </div>`);
 
   host.innerHTML = ''; host.appendChild(el);
@@ -800,6 +804,18 @@ Screens.chat = async (host) => {
   const input = $('#chat-in', el);
   const sendBtn = $('#chat-send', el);
   const clearBtn = $('#chat-clear');
+  const legalBtn = $('#chat-legal-btn', el);
+
+  if (legalBtn) {
+    legalBtn.onclick = () => {
+      openSheet('Legal & Astrological Advisory Notice', `
+        <div class="stack" style="font-size:var(--t-sub);line-height:1.6;color:var(--text-2);">
+          <p>This consultation is strictly for entertainment, philosophical reflection, and personal spiritual self-inquiry. Astrological interpretations are inherently speculative and reflect symbolic planetary archetypes.</p>
+          <p>This service does NOT provide medical, psychiatric, legal, financial, or investment advice. No decisions regarding health, medical treatments, investments, legal disputes, or personal relationships should be made based on this reading.</p>
+          <p>Jyotisha tradition teaches that conscious human effort (<em>Kriyamana Karma / Purushartha</em>) is supreme over astrological indications. The creators and operators of this platform assume zero legal or karmic liability for personal choices or interpretations.</p>
+        </div>`);
+    };
+  }
 
   const scrollToBottom = () => {
     msgsBox.scrollTop = msgsBox.scrollHeight;
