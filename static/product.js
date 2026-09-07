@@ -336,6 +336,10 @@ async function render() {
   setActiveNav(route.name);
 
   const host = $('#screen-host');
+  // Add an explicit class so chat can disable global screen scroll paddings
+  if (route.name === 'chat') host.classList.add('is-chat');
+  else host.classList.remove('is-chat');
+
   host.innerHTML = skeletonScreen();
 
   const fn = Screens[route.name] || Screens.home;
@@ -1064,9 +1068,12 @@ Screens.profile = async (host) => {
   const gp = $('#go-premium', el); if (gp) gp.onclick = startCheckout;
   $('#install-app', el).onclick = showInstall;
   $('#about', el).onclick = () => openSheet('About & privacy', `
-    <p style="line-height:1.6;">Astrology AI turns a deep, deterministic Vedic engine into a calm, simple experience.</p>
-    <p style="line-height:1.6;margin-top:12px;"><b>Your privacy.</b> Your birth details are private to your account. They are never shown publicly and never shared. Only you can see your chart and the people you save.</p>
-    <p class="muted" style="margin-top:12px;">Ancient wisdom, modern precision.</p>`);
+    <p style="line-height:1.6;">Astrology AI turns a deep, deterministic Vedic engine into a calm, simple experience. Ancient wisdom, modern precision.</p>
+    <div class="list" style="margin-top:14px;">
+      <a class="list-row" href="/legal?doc=terms" style="text-decoration:none;"><div class="grow"><div class="lr-title">Terms of Service</div><div class="lr-sub">How the service works & disclaimers</div></div>${svg('chevron', 'chev')}</a>
+      <a class="list-row" href="/legal?doc=privacy" style="text-decoration:none;"><div class="grow"><div class="lr-title">Privacy Policy</div><div class="lr-sub">How your data is protected</div></div>${svg('chevron', 'chev')}</a>
+    </div>
+    <p class="muted" style="margin-top:12px;">Your birth details are private to your account. They are never shown publicly and never shared. Only you can see your chart and the people you save.</p>`);
 };
 
 const toggleRow = (key, title, sub, on) => `

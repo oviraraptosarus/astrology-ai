@@ -370,6 +370,14 @@ async def get_login(request: Request):
     response.headers["Expires"] = "0"
     return response
 
+
+@app.get("/legal", response_class=HTMLResponse)
+async def get_legal(request: Request):
+    """Standalone public Terms of Service / Privacy Policy page."""
+    response = templates.TemplateResponse(request=request, name="legal.html")
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+
 # ─── Auth API ────────────────────────────────────────────────────
 @app.post("/api/auth/signup")
 async def signup(req: SignupRequest):
