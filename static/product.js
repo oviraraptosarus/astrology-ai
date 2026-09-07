@@ -594,6 +594,14 @@ function chartWheelSVG(houses) {
     cells += `<text class="planet" x="${x}" y="${y + 9}" text-anchor="middle">${esc(occ)}</text>`;
     cells += `<text class="hnum" x="${x}" y="${y + 22}" text-anchor="middle">${hs.house}</text>`;
   });
+  // Tappable house overlay: a generous circular hit target centred exactly on
+  // each house's sign/planet label, so tapping the cell you see selects that
+  // house — no dead zones between text labels, no wrong-house selection.
+  let hits = '';
+  (houses || []).forEach(hs => {
+    const [x, y] = pos[hs.house] || [c, c];
+    hits += `<circle class="house-hit" data-house="${hs.house}" cx="${x}" cy="${y}" r="34"/>`;
+  });
   return `<svg class="chart-svg" viewBox="0 0 ${S} ${S}" role="img" aria-label="Birth chart">
     <rect class="frame" x="${m}" y="${m}" width="${S - 2 * m}" height="${S - 2 * m}"/>
     <line class="diag" x1="${m}" y1="${m}" x2="${S - m}" y2="${S - m}"/>
@@ -603,6 +611,7 @@ function chartWheelSVG(houses) {
     <line class="diag" x1="${c}" y1="${S - m}" x2="${S - m}" y2="${c}"/>
     <line class="diag" x1="${S - m}" y1="${c}" x2="${c}" y2="${m}"/>
     ${cells}
+    ${hits}
   </svg>`;
 }
 

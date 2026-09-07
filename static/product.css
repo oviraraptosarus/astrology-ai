@@ -4,6 +4,25 @@
    No neon, no glassmorphism everywhere, hierarchy over decoration.
    ========================================================================== */
 
+/* ---- Astro glyph font -----------------------------------------------------
+   Open-source Noto Sans Symbols 2 (full ☉☽♂♀☿♃♄☊☋ + zodiac coverage),
+   bundled locally so planet/sign glyphs render on every platform. System
+   fonts lack these codepoints — without this they show as faint tofu boxes
+   ("black font barely visible") on devices without fallback coverage.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'AstroGlyphs';
+  src: url('/static/fonts/NotoSansSymbols2-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.glyph, .chart-svg .sign, .chart-svg .planet, .chart-svg .hnum,
+.chart-svg text, .retro, .tg {
+  font-family: 'AstroGlyphs', -apple-system, BlinkMacSystemFont,
+    "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 /* ---- System font strategy (NO bundled Apple fonts) ---------------------- */
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
