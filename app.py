@@ -416,106 +416,12 @@ async def get_chart_data(session_id: str, current_user: dict = Depends(get_curre
 
 @app.get("/api/models")
 async def get_models():
-    """Fetch available models dynamically from configured gateways."""
-    import requests
-    import os
-
-    models = [
-        {"id": "auto", "name": "✦ Auto (Smart Fallback)", "provider": "auto", "badge": "Smart", "group": "Auto"}
-    ]
-
-    # ── OmniRoute local gateway check ──────────────────────────────
-    try:
-        resp = requests.get("http://localhost:20128/v1/models", timeout=1.0)
-        if resp.status_code == 200:
-            for m in resp.json().get("data", []):
-                m_id = m.get("id", "")
-                models.append({
-                    "id": f"omniroute:{m_id}",
-                    "name": f"OmniRoute: {m_id}",
-                    "provider": "omniroute",
-                    "badge": "Local Gateway",
-                    "group": "OmniRoute"
-                })
-    except Exception:
-        pass
-
-    # ── AgentRouter check ──────────────────────────────────────────
-    if os.getenv("AGENTROUTER_API_KEY"):
-        # Always add DeepSeek v4 Flash if configured
-        models.append({
-            "id": "agentrouter:deepseek",
-            "name": "AgentRouter: deepseek-v4-flash",
-            "provider": "agentrouter",
-            "badge": "Premium",
-            "group": "AgentRouter"
-        })
-        try:
-            headers = {
-                "Authorization": f"Bearer {os.getenv('AGENTROUTER_API_KEY')}",
-                "User-Agent": "Cline/1.0.0",
-                "X-Requested-With": "XMLHttpRequest"
-            }
-            resp = requests.get("https://agentrouter.org/v1/models", headers=headers, timeout=2.0)
-            if resp.status_code == 200:
-                for m in resp.json().get("data", []):
-                    m_id = m.get("id", "")
-                    if "deepseek" not in m_id.lower(): # Avoid duplicate if it returns it
-                        models.append({
-                            "id": f"agentrouter:{m_id}",
-                            "name": f"AgentRouter: {m_id}",
-                            "provider": "agentrouter",
-                            "badge": "Premium",
-                            "group": "AgentRouter"
-                        })
-        except Exception:
-            pass
-
-    # ── Local Models (Ollama) ───────────────────────────────────────
-    try:
-        resp = requests.get("http://localhost:11434/api/tags", timeout=1.5)
-        if resp.status_code == 200:
-            for m in resp.json().get("models", []):
-                m_name = m.get("name", "")
-                models.append({
-                    "id": m_name,
-                    "name": f"🖥 {m_name}",
-                    "provider": "ollama",
-                    "badge": "Local",
-                    "group": "Local Ollama"
-                })
-    except Exception:
-        pass
-        
-    # ── Standard Providers (Google/Groq) ───────────────────────────
-    if os.getenv("GOOGLE_API_KEY"):
-        models.append({
-            "id": "gemini-3.6-flash",
-            "name": "Gemini 3.6 Flash",
-            "provider": "gemini-3.6-flash",
-            "badge": "Standard",
-            "group": "Google"
-        })
-        
-    if os.getenv("GROQ_API_KEY"):
-        models.append({
-            "id": "groq",
-            "name": "Groq LLaMA 3.3",
-            "provider": "groq",
-            "badge": "Fast",
-            "group": "Groq"
-        })
-
-    if os.getenv("OPENROUTER_API_KEY"):
-        models.append({
-            "id": "openrouter-nemotron",
-            "name": "OpenRouter Nemotron 3.5 (Free)",
-            "provider": "openrouter",
-            "badge": "Free",
-            "group": "OpenRouter"
-        })
-
-    return {"models": models}
+    """Return only the smart auto fallback model."""
+    return {
+        "models": [
+            {"id": "auto", "name": "✦ Auto (Smart Fallback)", "provider": "auto", "badge": "Smart", "group": "Auto"}
+        ]
+    }
 
 @app.get("/api/mode")
 def get_mode_endpoint():
