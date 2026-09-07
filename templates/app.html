@@ -14,7 +14,7 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
   <link rel="icon" href="/static/icons/favicon-64.png">
-  <link rel="stylesheet" href="{{ url_for('static', path='product.css') }}">
+  <link rel="stylesheet" href="/static/product.css">
   <script>
     // Apply saved/OS appearance BEFORE first paint to avoid a flash.
     (function () {
@@ -36,6 +36,6 @@
   <div id="sheet-scrim" class="scrim"></div>
   <div id="sheet" class="sheet" role="dialog" aria-modal="true"></div>
   <div id="toast" class="toast" role="status"></div>
-  <script type="module" src="{{ url_for('static', path='product.js') }}"></script>
+  <script type="module" src="/static/product.js"></script>
 </body>
 </html>
