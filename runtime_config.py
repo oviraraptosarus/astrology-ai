@@ -55,7 +55,8 @@ def _fail_fast(name: str, why: str):
 
 
 # ── Auth & OAuth ────────────────────────────────────────────────────────────
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "").strip()
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "1074117408479-85ralktijlkae9v0assa5kqa9s3kpop2.apps.googleusercontent.com").strip()
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "").strip()
 
 def validate_production() -> list:
     """Raise if any production-critical setting is missing. Returns list of
