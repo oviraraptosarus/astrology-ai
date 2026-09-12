@@ -70,11 +70,12 @@ def main():
     check(f"Current (2026-09-06): {cur['mahadasha']}-{cur['antardasha']}",
           cur["mahadasha"] == "Ketu" and cur["antardasha"] == "Sun")
 
-    print("== 4. Chara Karakas (absolute-longitude ranking) ==")
+    print("== 4. Chara Karakas (degree-in-sign ranking, Parasara mixed 7/8 scheme) ==")
     from jaimini_engine import JaiminiEngine
     mapping = JaiminiEngine.calculate_chara_karakas(chart_obj)
-    expected_karakas = {"AK": "Jupiter", "AmK": "Mars", "BK": "Saturn",
-                        "MK": "Venus", "PK": "Mercury", "GK": "Moon", "DK": "Sun"}
+    expected_karakas = {"AK": "Mars", "AmK": "Jupiter", "BK": "Mercury",
+                        "MK": "Moon", "PK": "Sun", "GK": "Saturn", "DK": "Venus",
+                        "_scheme": "7-karaka (Rahu excluded: no same-degree pair)"}
     check(f"Karakas {mapping}", mapping == expected_karakas)
 
     print("== 5. Arudha Lagna ==")

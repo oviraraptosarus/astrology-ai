@@ -15,30 +15,49 @@ class JaiminiEngine:
         return JaiminiEngine.ZODIAC_SIGNS.index(sign)
 
     @staticmethod
-    def calculate_chara_karakas(chart: Chart, use_8_karakas: bool = False) -> Dict[str, str]:
+    def calculate_chara_karakas(chart: Chart, use_8_karakas: bool = None) -> Dict[str, str]:
         """
-        Determines the Chara Karakas ranked by ABSOLUTE longitude (not degree-in-sign).
-        If use_8_karakas is False, uses 7 karakas (AK, AmK, BK, MK, PK, GK, DK) excluding Rahu.
-        If use_8_karakas is True, uses 8 karakas (AK, AmK, BK, MK, PiK, PK, GK, DK) including Rahu
-        (Rahu's effective longitude is measured in reverse: sign_start + (30 - degree_in_sign)).
+        Determines the Chara Karakas ranked by DEGREE WITHIN SIGN (classical Parasara/Jaimini rule:
+        "whichever has traversed maximum degrees in its rashi becomes Atma Karaka").
+        NOT by absolute longitude — the zodiac position of the sign is irrelevant.
+
+        Scheme selection follows Parasara's Mixed 7/8 rule (P.V.R. Narasimha Rao / JHora):
+        - Default (use_8_karakas=None): Rahu is included ONLY when two or more true planets
+          share the same degree-in-sign (within 1 arc-minute) — the Parasara criterion.
+          Otherwise the 7-karaka scheme applies.
+        - use_8_karakas=True: force 8 karakas (AK, AmK, BK, MK, PiK, PK, GK, DK) with Rahu
+          (Rahu's effective degree measured in reverse: 30 - degree_in_sign).
+        - use_8_karakas=False: force 7 karakas (AK, AmK, BK, MK, PK, GK, DK) excluding Rahu.
         Returns a mapping of karaka name -> planet name, and tags chart.planets[name].chara_karaka.
         """
         ZOD = JaiminiEngine.ZODIAC_SIGNS
 
-        def abs_lon(p: Planet, name: str) -> float:
-            sign_start = ZOD.index(p.sign) * 30.0 if p.sign in ZOD else 0.0
-            return sign_start + (30.0 - p.degree if name == "Rahu" else p.degree)
+        def degree_in_sign(p: Planet, name: str) -> float:
+            return (30.0 - p.degree) if name == "Rahu" else p.degree
+
+        true_planet_names = [n for n in chart.planets if n not in ("Ketu", "Ascendant", "Rahu")]
+        true_degrees = [degree_in_sign(chart.planets[n], n) for n in true_planet_names]
+
+        # Parasara mixed criterion: two or more true planets at the same degree (within 1 arc-minute)
+        same_degree_pair = any(
+            abs(a - b) <= 1.0 / 60.0
+            for i, a in enumerate(true_degrees)
+            for b in true_degrees[i + 1:]
+        )
+
+        if use_8_karakas is None:
+            use_8_karakas = same_degree_pair
 
         if use_8_karakas:
-            candidates = [(name, abs_lon(p, name)) for name, p in chart.planets.items()
+            candidates = [(name, degree_in_sign(p, name)) for name, p in chart.planets.items()
                           if name not in ["Ketu", "Ascendant"]]
             karaka_names = ["AK", "AmK", "BK", "MK", "PiK", "PK", "GK", "DK"]
         else:
-            candidates = [(name, abs_lon(p, name)) for name, p in chart.planets.items()
+            candidates = [(name, degree_in_sign(p, name)) for name, p in chart.planets.items()
                           if name not in ["Rahu", "Ketu", "Ascendant"]]
             karaka_names = ["AK", "AmK", "BK", "MK", "PK", "GK", "DK"]
 
-        # Sort by absolute longitude DESCENDING (highest = AK)
+        # Sort by degree-in-sign DESCENDING (highest = AK)
         candidates.sort(key=lambda x: x[1], reverse=True)
 
         mapping = {}
@@ -46,6 +65,7 @@ class JaiminiEngine:
             mapping[karaka] = planet_name
             if planet_name in chart.planets:
                 setattr(chart.planets[planet_name], "chara_karaka", karaka)
+        mapping["_scheme"] = "8-karaka (Rahu included: same-degree criterion met)" if use_8_karakas else "7-karaka (Rahu excluded: no same-degree pair)"
         return mapping
 
     @staticmethod

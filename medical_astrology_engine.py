@@ -86,19 +86,66 @@ class MedicalAstrologyEngine:
                 surgical_notes.append(f"Ketu in House {ketu_house} ({ketu.sign}) acts as a surgical scalpel trigger, requiring precision care during Ketu/Mars dashas.")
 
         # 3. Tridosha Balance Assessment
+        # Classical method (Prasna Marga Ch.11 + standard medical jyotish practice):
+        # Prakriti is derived from the LAGNA SIGN element, the LAGNA LORD, and the MOON SIGN
+        # element — weighted — not from a flat count of all nine grahas.
+        # Planet doshas: Sun/Mars/Ketu = Pitta; Moon/Jupiter/Venus = Kapha;
+        # Saturn/Rahu/Mercury = Vata (Mercury tridoshic, adapts).
+        DOSHA_OF_SIGN = {
+            "Aries": "Pitta", "Leo": "Pitta", "Sagittarius": "Pitta", "Scorpio": "Pitta",
+            "Taurus": "Kapha", "Cancer": "Kapha", "Pisces": "Kapha",
+            "Gemini": "Vata", "Virgo": "Vata", "Libra": "Vata",
+            "Capricorn": "Vata", "Aquarius": "Vata",
+        }
+        DOSHA_OF_PLANET = {
+            "Sun": "Pitta", "Mars": "Pitta", "Ketu": "Pitta",
+            "Moon": "Kapha", "Jupiter": "Kapha", "Venus": "Kapha",
+            "Saturn": "Vata", "Rahu": "Vata", "Mercury": "Vata",
+        }
+        SIGN_LORDS = {
+            "Aries": "Mars", "Taurus": "Venus", "Gemini": "Mercury", "Cancer": "Moon",
+            "Leo": "Sun", "Virgo": "Mercury", "Libra": "Venus", "Scorpio": "Mars",
+            "Sagittarius": "Jupiter", "Capricorn": "Saturn", "Aquarius": "Saturn", "Pisces": "Jupiter",
+        }
+
         vata_pts = 0
         pitta_pts = 0
         kapha_pts = 0
-        
-        for pname, p in self.chart.planets.items():
-            if pname in ["Saturn", "Rahu", "Mercury"]:
-                vata_pts += 1
-            if pname in ["Sun", "Mars", "Ketu"]:
-                pitta_pts += 1
-            if pname in ["Moon", "Venus", "Jupiter"]:
-                kapha_pts += 1
+        dosha_tally = {"Vata": lambda: None, "Pitta": lambda: None, "Kapha": lambda: None}
 
-        primary_dosha = "Vata (Air/Nerves)" if vata_pts >= max(pitta_pts, kapha_pts) else ("Pitta (Fire/Blood)" if pitta_pts >= kapha_pts else "Kapha (Water/Tissue)")
+        def add_dosha(dosha: str, weight: int = 1):
+            nonlocal vata_pts, pitta_pts, kapha_pts
+            if dosha == "Vata":
+                vata_pts += weight
+            elif dosha == "Pitta":
+                pitta_pts += weight
+            elif dosha == "Kapha":
+                kapha_pts += weight
+
+        # (a) Lagna sign element — the body itself (weight 3)
+        lagna_sign = ZODIAC_SIGNS[self.lagna_sign_idx]
+        add_dosha(DOSHA_OF_SIGN.get(lagna_sign, "Vata"), 3)
+        # (b) Lagna lord's dosha (weight 2)
+        lagna_lord = SIGN_LORDS.get(lagna_sign)
+        if lagna_lord and lagna_lord in self.chart.planets:
+            add_dosha(DOSHA_OF_PLANET.get(lagna_lord, "Vata"), 2)
+        # (c) Moon sign element — the mind/constitution (weight 2)
+        moon = self.chart.planets.get("Moon")
+        if moon:
+            add_dosha(DOSHA_OF_SIGN.get(moon.sign, "Vata"), 2)
+        # (d) Any planet conjunct the lagna (weight 1 each)
+        for pname, p in self.chart.planets.items():
+            if p.sign == lagna_sign and pname != "Ketu":
+                add_dosha(DOSHA_OF_PLANET.get(pname, "Vata"), 1)
+
+        tally = {"Vata": vata_pts, "Pitta": pitta_pts, "Kapha": kapha_pts}
+        top = max(tally.values())
+        leaders = [d for d, v in tally.items() if v == top]
+        if len(leaders) == 1:
+            primary_dosha = {"Vata": "Vata (Air/Nerves)", "Pitta": "Pitta (Fire/Blood)", "Kapha": "Kapha (Water/Tissue)"}[leaders[0]]
+        else:
+            # Genuine tie: report dual dosha instead of an arbitrary code-order winner
+            primary_dosha = "/".join(leaders) + " (dual prakriti — near-equal weights)"
 
         return {
             "primary_ayurvedic_dosha": primary_dosha,
