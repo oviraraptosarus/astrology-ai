@@ -57,6 +57,18 @@ class Config:
         import swisseph as swe
         return swe.TRUE_NODE if cls.NODE_TYPE == "true" else swe.MEAN_NODE
     
+    # YEAR LENGTH MODEL FOR VIMSHOTTARI DASHA
+    # "solar": 365.2422 / 365.25 days (K.N. Rao / modern calendar alignment standard)
+    # "savana": 360.0 days (Surya Siddhanta / JHora default 360-day year)
+    YEAR_LENGTH_MODEL: str = "solar"
+    YEAR_LENGTH_DAYS: float = 365.2422
+
+    @classmethod
+    def get_year_length_days(cls) -> float:
+        if cls.YEAR_LENGTH_MODEL.lower() == "savana":
+            return 360.0
+        return cls.YEAR_LENGTH_DAYS
+
     # COMBUSTION THRESHOLDS
     # The distance from the Sun within which a planet is considered combust.
     COMBUSTION_THRESHOLDS: Dict[str, float] = {
