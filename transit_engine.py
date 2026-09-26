@@ -29,14 +29,16 @@ class TransitEngine:
         hour_dec = utc_dt.hour + (utc_dt.minute / 60.0) + (utc_dt.second / 3600.0)
         jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, hour_dec)
         
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
-        
-        transit_signs = {}
-        for p_name, p_id in TransitEngine.PLANET_MAP.items():
-            res, _ = swe.calc_ut(jd, p_id, swe.FLG_SWIEPH | swe.FLG_SIDEREAL)
-            lon = res[0]
-            sign_idx = int(lon / 30.0)
-            transit_signs[p_name] = TransitEngine.ZODIAC_SIGNS[sign_idx]
+        from astronomy_core import ephemeris_lock
+        with ephemeris_lock:
+            swe.set_sid_mode(Config.ayanamsha_swe_id())
+            
+            transit_signs = {}
+            for p_name, p_id in TransitEngine.PLANET_MAP.items():
+                res, _ = swe.calc_ut(jd, p_id, swe.FLG_SWIEPH | swe.FLG_SIDEREAL)
+                lon = res[0]
+                sign_idx = int(lon / 30.0)
+                transit_signs[p_name] = TransitEngine.ZODIAC_SIGNS[sign_idx]
             
         return transit_signs
 

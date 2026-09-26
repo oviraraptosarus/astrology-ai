@@ -177,8 +177,15 @@ def get_specialist_system_prompt(intent: IntentType) -> str:
         mode_directive = ""
 
     # Load the full system prompt and prepend the specialist context
+    # Mode-aware knowledge base: unconstrained mode loads SYSTEM_RAW.txt (voice rules only,
+    # never-refuse/never-lecture clause); client_safe keeps the sattvic safeguards of SYSTEM.txt.
     try:
-        prompt_path = os.path.join("prompts", "SYSTEM.txt")
+        from modes import is_client_safe
+        prompt_file = "SYSTEM.txt" if is_client_safe() else "SYSTEM_RAW.txt"
+    except Exception:
+        prompt_file = "SYSTEM.txt"
+    try:
+        prompt_path = os.path.join("prompts", prompt_file)
         with open(prompt_path, "r", encoding="utf-8") as f:
             full_system = f.read()
         # Mode directive + specialist focus first, then full knowledge base

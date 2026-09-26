@@ -1,0 +1,2078 @@
+{
+  "Basic_Chart": {
+    "Sun": {
+      "planet": "Sun",
+      "sign": "Pisces",
+      "degree": 21.78,
+      "house": 1,
+      "chalit_house": 1,
+      "retrograde": false,
+      "dignity": "Friendly Sign",
+      "owns_houses": [
+        6
+      ],
+      "dispositor": "Jupiter",
+      "aspects_houses": [
+        7
+      ],
+      "aspected_by": [],
+      "conjunct_with": [
+        "Moon",
+        "Mercury",
+        "Venus"
+      ],
+      "nakshatra": "Revati",
+      "nakshatra_pada": 2,
+      "nakshatra_lord": "Mercury",
+      "combustion": {
+        "status": false,
+        "sun_distance": null,
+        "threshold": null
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Kumara"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Moon",
+          "Mars",
+          "Jupiter"
+        ],
+        "natural_enemies": [
+          "Venus",
+          "Saturn"
+        ],
+        "natural_neutrals": [
+          "Mercury"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [
+          "Mars",
+          "Jupiter"
+        ],
+        "Friends": [],
+        "Neutrals": [
+          "Moon"
+        ],
+        "Enemies": [
+          "Mercury"
+        ],
+        "Bitter_Enemies": [
+          "Venus",
+          "Saturn"
+        ]
+      },
+      "functional_role": "Malefic",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 113.93,
+        "dig_bala": 29.67,
+        "kala_bala": -55.51,
+        "cheshta_bala": 8.35,
+        "naisargika_bala": 60.0,
+        "drik_bala": 4.96,
+        "total": 161.4,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Father",
+        "Soul",
+        "Authority",
+        "Health"
+      ],
+      "chara_karaka": "AmK",
+      "dispositor_chain": [
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 11.65,
+      "vargas": {
+        "D1": "Pisces",
+        "D2": "Leo",
+        "D3": "Scorpio",
+        "D4": "Virgo",
+        "D7": "Aquarius",
+        "D9": "Capricorn",
+        "D10": "Gemini",
+        "D12": "Scorpio",
+        "D16": "Scorpio",
+        "D20": "Libra",
+        "D24": "Sagittarius",
+        "D27": "Leo",
+        "D30": "Capricorn",
+        "D40": "Pisces",
+        "D45": "Leo",
+        "D60": "Libra"
+      }
+    },
+    "Moon": {
+      "planet": "Moon",
+      "sign": "Pisces",
+      "degree": 8.31,
+      "house": 1,
+      "chalit_house": 12,
+      "retrograde": false,
+      "dignity": "Friendly Sign",
+      "owns_houses": [
+        5
+      ],
+      "dispositor": "Jupiter",
+      "aspects_houses": [
+        7
+      ],
+      "aspected_by": [],
+      "conjunct_with": [
+        "Sun",
+        "Mercury",
+        "Venus"
+      ],
+      "nakshatra": "Uttara Bhadrapada",
+      "nakshatra_pada": 2,
+      "nakshatra_lord": "Saturn",
+      "combustion": {
+        "status": false,
+        "sun_distance": 13.47,
+        "threshold": 12.0
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Vriddha"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Sun",
+          "Mercury"
+        ],
+        "natural_enemies": [],
+        "natural_neutrals": [
+          "Mars",
+          "Jupiter",
+          "Venus",
+          "Saturn"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [],
+        "Friends": [
+          "Mars",
+          "Jupiter"
+        ],
+        "Neutrals": [
+          "Sun",
+          "Mercury"
+        ],
+        "Enemies": [
+          "Venus",
+          "Saturn"
+        ],
+        "Bitter_Enemies": []
+      },
+      "functional_role": "Benefic",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 116.77,
+        "dig_bala": 25.84,
+        "kala_bala": 120.0,
+        "cheshta_bala": 21.64,
+        "naisargika_bala": 51.43,
+        "drik_bala": 8.32,
+        "total": 344.0,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Mother",
+        "Mind",
+        "Emotions"
+      ],
+      "chara_karaka": "GK",
+      "dispositor_chain": [
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 14.0,
+      "vargas": {
+        "D1": "Pisces",
+        "D2": "Cancer",
+        "D3": "Pisces",
+        "D4": "Gemini",
+        "D7": "Libra",
+        "D9": "Virgo",
+        "D10": "Capricorn",
+        "D12": "Gemini",
+        "D16": "Aries",
+        "D20": "Capricorn",
+        "D24": "Capricorn",
+        "D27": "Leo",
+        "D30": "Virgo",
+        "D40": "Virgo",
+        "D45": "Sagittarius",
+        "D60": "Cancer"
+      }
+    },
+    "Mars": {
+      "planet": "Mars",
+      "sign": "Gemini",
+      "degree": 18.63,
+      "house": 4,
+      "chalit_house": 4,
+      "retrograde": false,
+      "dignity": "Enemy Sign",
+      "owns_houses": [
+        2,
+        9
+      ],
+      "dispositor": "Mercury",
+      "aspects_houses": [
+        7,
+        10,
+        11
+      ],
+      "aspected_by": [
+        "Jupiter",
+        "Rahu"
+      ],
+      "conjunct_with": [],
+      "nakshatra": "Ardra",
+      "nakshatra_pada": 4,
+      "nakshatra_lord": "Rahu",
+      "combustion": {
+        "status": false,
+        "sun_distance": 86.85,
+        "threshold": 17.0
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Vriddha"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Sun",
+          "Moon",
+          "Jupiter"
+        ],
+        "natural_enemies": [
+          "Mercury"
+        ],
+        "natural_neutrals": [
+          "Venus",
+          "Saturn"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [
+          "Sun",
+          "Moon"
+        ],
+        "Friends": [
+          "Venus",
+          "Saturn"
+        ],
+        "Neutrals": [
+          "Mercury",
+          "Jupiter"
+        ],
+        "Enemies": [],
+        "Bitter_Enemies": []
+      },
+      "functional_role": "Benefic",
+      "detailed_functional_roles": [
+        "Maraka"
+      ],
+      "shadbala": {
+        "sthana_bala": 88.12,
+        "dig_bala": 0.72,
+        "kala_bala": 4.49,
+        "cheshta_bala": 20.96,
+        "naisargika_bala": 17.14,
+        "drik_bala": 10.52,
+        "total": 141.95,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Siblings",
+        "Courage",
+        "Enemies",
+        "Property"
+      ],
+      "chara_karaka": "BK",
+      "dispositor_chain": [
+        "Mercury",
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 11.77,
+      "vargas": {
+        "D1": "Gemini",
+        "D2": "Cancer",
+        "D3": "Libra",
+        "D4": "Sagittarius",
+        "D7": "Libra",
+        "D9": "Pisces",
+        "D10": "Sagittarius",
+        "D12": "Capricorn",
+        "D16": "Virgo",
+        "D20": "Leo",
+        "D24": "Libra",
+        "D27": "Aquarius",
+        "D30": "Gemini",
+        "D40": "Aries",
+        "D45": "Pisces",
+        "D60": "Cancer"
+      }
+    },
+    "Mercury": {
+      "planet": "Mercury",
+      "sign": "Pisces",
+      "degree": 10.51,
+      "house": 1,
+      "chalit_house": 12,
+      "retrograde": false,
+      "dignity": "Debilitated",
+      "owns_houses": [
+        4,
+        7
+      ],
+      "dispositor": "Jupiter",
+      "aspects_houses": [
+        7
+      ],
+      "aspected_by": [],
+      "conjunct_with": [
+        "Sun",
+        "Moon",
+        "Venus"
+      ],
+      "nakshatra": "Uttara Bhadrapada",
+      "nakshatra_pada": 3,
+      "nakshatra_lord": "Saturn",
+      "combustion": {
+        "status": true,
+        "sun_distance": 11.27,
+        "threshold": 14.0
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Vriddha"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Sun",
+          "Venus"
+        ],
+        "natural_enemies": [
+          "Moon"
+        ],
+        "natural_neutrals": [
+          "Mars",
+          "Jupiter",
+          "Saturn"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [],
+        "Friends": [
+          "Mars",
+          "Jupiter"
+        ],
+        "Neutrals": [
+          "Sun",
+          "Venus"
+        ],
+        "Enemies": [
+          "Saturn"
+        ],
+        "Bitter_Enemies": [
+          "Moon"
+        ]
+      },
+      "functional_role": "Neutral",
+      "detailed_functional_roles": [
+        "Badhaka",
+        "Maraka"
+      ],
+      "shadbala": {
+        "sthana_bala": 61.5,
+        "dig_bala": 56.58,
+        "kala_bala": 60.0,
+        "cheshta_bala": 2.12,
+        "naisargika_bala": 25.71,
+        "drik_bala": 7.77,
+        "total": 213.68,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Intellect",
+        "Speech",
+        "Business",
+        "Education"
+      ],
+      "chara_karaka": "MK",
+      "dispositor_chain": [
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 11.75,
+      "vargas": {
+        "D1": "Pisces",
+        "D2": "Cancer",
+        "D3": "Cancer",
+        "D4": "Gemini",
+        "D7": "Scorpio",
+        "D9": "Libra",
+        "D10": "Aquarius",
+        "D12": "Cancer",
+        "D16": "Taurus",
+        "D20": "Pisces",
+        "D24": "Pisces",
+        "D27": "Libra",
+        "D30": "Virgo",
+        "D40": "Sagittarius",
+        "D45": "Pisces",
+        "D60": "Sagittarius"
+      }
+    },
+    "Jupiter": {
+      "planet": "Jupiter",
+      "sign": "Sagittarius",
+      "degree": 26.6,
+      "house": 10,
+      "chalit_house": 10,
+      "retrograde": false,
+      "dignity": "Own House",
+      "owns_houses": [
+        1,
+        10
+      ],
+      "dispositor": "Jupiter",
+      "aspects_houses": [
+        2,
+        4,
+        6
+      ],
+      "aspected_by": [
+        "Mars",
+        "Ketu"
+      ],
+      "conjunct_with": [],
+      "nakshatra": "Purva Ashadha",
+      "nakshatra_pada": 4,
+      "nakshatra_lord": "Venus",
+      "combustion": {
+        "status": false,
+        "sun_distance": 85.18,
+        "threshold": 11.0
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Mrita"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Sun",
+          "Moon",
+          "Mars"
+        ],
+        "natural_enemies": [
+          "Mercury",
+          "Venus"
+        ],
+        "natural_neutrals": [
+          "Saturn"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [
+          "Sun",
+          "Moon"
+        ],
+        "Friends": [],
+        "Neutrals": [
+          "Mars",
+          "Mercury",
+          "Venus"
+        ],
+        "Enemies": [
+          "Saturn"
+        ],
+        "Bitter_Enemies": []
+      },
+      "functional_role": "Benefic",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 77.8,
+        "dig_bala": 31.94,
+        "kala_bala": 60.0,
+        "cheshta_bala": 36.39,
+        "naisargika_bala": 34.28,
+        "drik_bala": -5.89,
+        "total": 234.52,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Children",
+        "Wealth",
+        "Wisdom",
+        "Guru"
+      ],
+      "chara_karaka": "AK",
+      "dispositor_chain": [
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 12.83,
+      "vargas": {
+        "D1": "Sagittarius",
+        "D2": "Cancer",
+        "D3": "Leo",
+        "D4": "Virgo",
+        "D7": "Gemini",
+        "D9": "Scorpio",
+        "D10": "Leo",
+        "D12": "Libra",
+        "D16": "Aquarius",
+        "D20": "Capricorn",
+        "D24": "Taurus",
+        "D27": "Pisces",
+        "D30": "Libra",
+        "D40": "Pisces",
+        "D45": "Pisces",
+        "D60": "Taurus"
+      }
+    },
+    "Venus": {
+      "planet": "Venus",
+      "sign": "Pisces",
+      "degree": 4.72,
+      "house": 1,
+      "chalit_house": 12,
+      "retrograde": false,
+      "dignity": "Exalted",
+      "owns_houses": [
+        3,
+        8
+      ],
+      "dispositor": "Jupiter",
+      "aspects_houses": [
+        7
+      ],
+      "aspected_by": [],
+      "conjunct_with": [
+        "Sun",
+        "Moon",
+        "Mercury"
+      ],
+      "nakshatra": "Uttara Bhadrapada",
+      "nakshatra_pada": 1,
+      "nakshatra_lord": "Saturn",
+      "combustion": {
+        "status": false,
+        "sun_distance": 17.06,
+        "threshold": 10.0
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Mrita"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Mercury",
+          "Saturn"
+        ],
+        "natural_enemies": [
+          "Sun",
+          "Moon"
+        ],
+        "natural_neutrals": [
+          "Mars",
+          "Jupiter"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [],
+        "Friends": [
+          "Mars",
+          "Jupiter"
+        ],
+        "Neutrals": [
+          "Mercury",
+          "Saturn"
+        ],
+        "Enemies": [],
+        "Bitter_Enemies": [
+          "Sun",
+          "Moon"
+        ]
+      },
+      "functional_role": "Malefic",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 127.57,
+        "dig_bala": 24.65,
+        "kala_bala": 0.0,
+        "cheshta_bala": 0.05,
+        "naisargika_bala": 42.85,
+        "drik_bala": 9.22,
+        "total": 204.34,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Marriage",
+        "Spouse",
+        "Relationships",
+        "Luxuries"
+      ],
+      "chara_karaka": "DK",
+      "dispositor_chain": [
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 11.08,
+      "vargas": {
+        "D1": "Pisces",
+        "D2": "Cancer",
+        "D3": "Pisces",
+        "D4": "Pisces",
+        "D7": "Libra",
+        "D9": "Leo",
+        "D10": "Sagittarius",
+        "D12": "Aries",
+        "D16": "Aquarius",
+        "D20": "Scorpio",
+        "D24": "Libra",
+        "D27": "Taurus",
+        "D30": "Taurus",
+        "D40": "Aries",
+        "D45": "Cancer",
+        "D60": "Sagittarius"
+      }
+    },
+    "Saturn": {
+      "planet": "Saturn",
+      "sign": "Leo",
+      "degree": 8.38,
+      "house": 6,
+      "chalit_house": 5,
+      "retrograde": true,
+      "dignity": "Enemy Sign",
+      "owns_houses": [
+        11,
+        12
+      ],
+      "dispositor": "Sun",
+      "aspects_houses": [
+        8,
+        12,
+        3
+      ],
+      "aspected_by": [
+        "Jupiter",
+        "Rahu"
+      ],
+      "conjunct_with": [
+        "Ketu"
+      ],
+      "nakshatra": "Magha",
+      "nakshatra_pada": 3,
+      "nakshatra_lord": "Ketu",
+      "combustion": {
+        "status": false,
+        "sun_distance": 136.6,
+        "threshold": 15.0
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Kumara"
+      },
+      "friendships": {
+        "natural_friends": [
+          "Mercury",
+          "Venus"
+        ],
+        "natural_enemies": [
+          "Sun",
+          "Moon",
+          "Mars"
+        ],
+        "natural_neutrals": [
+          "Jupiter"
+        ]
+      },
+      "compound_friendships": {
+        "Best_Friends": [],
+        "Friends": [],
+        "Neutrals": [
+          "Mars",
+          "Mercury",
+          "Venus"
+        ],
+        "Enemies": [
+          "Jupiter"
+        ],
+        "Bitter_Enemies": [
+          "Sun",
+          "Moon"
+        ]
+      },
+      "functional_role": "Malefic",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 66.13,
+        "dig_bala": 45.87,
+        "kala_bala": 4.49,
+        "cheshta_bala": 37.54,
+        "naisargika_bala": 8.57,
+        "drik_bala": -6.24,
+        "total": 156.36,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Sorrows",
+        "Delays",
+        "Longevity",
+        "Career"
+      ],
+      "chara_karaka": "PK",
+      "dispositor_chain": [
+        "Sun",
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 10.75,
+      "vargas": {
+        "D1": "Leo",
+        "D2": "Leo",
+        "D3": "Leo",
+        "D4": "Scorpio",
+        "D7": "Virgo",
+        "D9": "Gemini",
+        "D10": "Libra",
+        "D12": "Scorpio",
+        "D16": "Sagittarius",
+        "D20": "Taurus",
+        "D24": "Aquarius",
+        "D27": "Scorpio",
+        "D30": "Aquarius",
+        "D40": "Pisces",
+        "D45": "Leo",
+        "D60": "Sagittarius"
+      }
+    },
+    "Rahu": {
+      "planet": "Rahu",
+      "sign": "Aquarius",
+      "degree": 2.78,
+      "house": 12,
+      "chalit_house": 11,
+      "retrograde": false,
+      "dignity": "Neutral",
+      "owns_houses": [],
+      "dispositor": "Saturn",
+      "aspects_houses": [
+        4,
+        6,
+        8
+      ],
+      "aspected_by": [
+        "Saturn",
+        "Ketu"
+      ],
+      "conjunct_with": [],
+      "nakshatra": "Dhanishta",
+      "nakshatra_pada": 3,
+      "nakshatra_lord": "Mars",
+      "combustion": {
+        "status": false,
+        "sun_distance": null,
+        "threshold": null
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Unknown"
+      },
+      "friendships": {
+        "natural_friends": [],
+        "natural_enemies": [],
+        "natural_neutrals": []
+      },
+      "compound_friendships": {},
+      "functional_role": "",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 0.0,
+        "dig_bala": 0.0,
+        "kala_bala": 0.0,
+        "cheshta_bala": 0.0,
+        "naisargika_bala": 0.0,
+        "drik_bala": 0.0,
+        "total": 0.0,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Obsessions",
+        "Foreign",
+        "Illusions"
+      ],
+      "chara_karaka": null,
+      "dispositor_chain": [
+        "Saturn",
+        "Sun",
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 0.0,
+      "vargas": {
+        "D1": "Aquarius",
+        "D2": "Leo",
+        "D3": "Aquarius",
+        "D4": "Aquarius",
+        "D7": "Aquarius",
+        "D9": "Libra",
+        "D10": "Aquarius",
+        "D12": "Pisces",
+        "D16": "Virgo",
+        "D20": "Capricorn",
+        "D24": "Libra",
+        "D27": "Sagittarius",
+        "D30": "Aries",
+        "D40": "Cancer",
+        "D45": "Sagittarius",
+        "D60": "Cancer"
+      }
+    },
+    "Ketu": {
+      "planet": "Ketu",
+      "sign": "Leo",
+      "degree": 2.78,
+      "house": 6,
+      "chalit_house": 5,
+      "retrograde": false,
+      "dignity": "Neutral",
+      "owns_houses": [],
+      "dispositor": "Sun",
+      "aspects_houses": [
+        10,
+        12,
+        2
+      ],
+      "aspected_by": [
+        "Jupiter",
+        "Rahu"
+      ],
+      "conjunct_with": [
+        "Saturn"
+      ],
+      "nakshatra": "Magha",
+      "nakshatra_pada": 1,
+      "nakshatra_lord": "Ketu",
+      "combustion": {
+        "status": false,
+        "sun_distance": null,
+        "threshold": null
+      },
+      "planetary_war": {
+        "in_war": false,
+        "with_planet": null,
+        "is_winner": false
+      },
+      "avasthas": {
+        "balaadi": "Unknown"
+      },
+      "friendships": {
+        "natural_friends": [],
+        "natural_enemies": [],
+        "natural_neutrals": []
+      },
+      "compound_friendships": {},
+      "functional_role": "",
+      "detailed_functional_roles": [],
+      "shadbala": {
+        "sthana_bala": 0.0,
+        "dig_bala": 0.0,
+        "kala_bala": 0.0,
+        "cheshta_bala": 0.0,
+        "naisargika_bala": 0.0,
+        "drik_bala": 0.0,
+        "total": 0.0,
+        "is_partial": false
+      },
+      "natural_karakas": [
+        "Moksha",
+        "Spirituality"
+      ],
+      "chara_karaka": null,
+      "dispositor_chain": [
+        "Sun",
+        "Jupiter"
+      ],
+      "is_parivartana": false,
+      "vimsopaka_bala": 0.0,
+      "vargas": {
+        "D1": "Leo",
+        "D2": "Leo",
+        "D3": "Leo",
+        "D4": "Leo",
+        "D7": "Leo",
+        "D9": "Aries",
+        "D10": "Leo",
+        "D12": "Virgo",
+        "D16": "Virgo",
+        "D20": "Capricorn",
+        "D24": "Libra",
+        "D27": "Gemini",
+        "D30": "Aries",
+        "D40": "Cancer",
+        "D45": "Sagittarius",
+        "D60": "Capricorn"
+      }
+    },
+    "Ascendant": {
+      "sign": "Pisces",
+      "degree": 20.78,
+      "nakshatra": "Revati",
+      "nakshatra_pada": 2,
+      "nakshatra_lord": "Mercury"
+    },
+    "sarvashtakavarga": {
+      "1": 27,
+      "2": 27,
+      "3": 31,
+      "4": 27,
+      "5": 26,
+      "6": 32,
+      "7": 19,
+      "8": 28,
+      "9": 27,
+      "10": 32,
+      "11": 42,
+      "12": 19
+    },
+    "bhava_bala": {
+      "1": 269.73,
+      "2": 169.82,
+      "3": 233.93,
+      "4": 256.62,
+      "5": 415.71,
+      "6": 189.59,
+      "7": 201.11,
+      "8": 185.41,
+      "9": 179.32,
+      "10": 255.72,
+      "11": 156.41,
+      "12": 209.38
+    }
+  },
+  "Yogas_Found": [
+    {
+      "rule_id": "yoga_hamsa",
+      "name": "Hamsa",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Jupiter in Kendra (House 10)",
+        "Jupiter in Own House"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Brihat Parashara Hora Sastra",
+      "confidence": "STRONG",
+      "reason": "Hamsa Yoga (Pancha Mahapurusha) formed by Jupiter in Kendra (House 10) and Own House."
+    },
+    {
+      "rule_id": "yoga_malavya",
+      "name": "Malavya",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Venus in Kendra (House 1)",
+        "Venus in Exalted"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Brihat Parashara Hora Sastra",
+      "confidence": "STRONG",
+      "reason": "Malavya Yoga (Pancha Mahapurusha) formed by Venus in Kendra (House 1) and Exalted."
+    },
+    {
+      "rule_id": "yoga_gajakesari",
+      "name": "Gajakesari",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Jupiter is in Kendra from Moon (House offset 10)"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Brihat Parashara Hora Sastra",
+      "confidence": "STRONG",
+      "reason": "Gajakesari Yoga is present. Imparts intellect, high reputation, and sustained success."
+    },
+    {
+      "rule_id": "yoga_budhaditya",
+      "name": "Budhaditya",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Sun and Mercury conjunct in House 1"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Brihat Parashara Hora Sastra",
+      "confidence": "MODERATE",
+      "reason": "Budhaditya Yoga is present in House 1. Enhances intellect, communication, and executive ability."
+    },
+    {
+      "rule_id": "yoga_kemadruma",
+      "name": "Kemadruma",
+      "domain": "general",
+      "fired": true,
+      "polarity": "modifier",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Moon is isolated"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [
+        "Cancelled by Kendra planets (Sun, Moon, Mars, Mercury, Jupiter, Venus)"
+      ],
+      "modifiers": [],
+      "provenance": "Brihat Parashara Hora Sastra",
+      "confidence": "WEAK",
+      "reason": "Kemadruma Yoga is present but cancelled by Kendra planets. Causes intermittent mental isolation."
+    },
+    {
+      "rule_id": "yoga_raja",
+      "name": "Raja Yoga",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Raja Yoga formed by Mercury (Kendra lord) and Moon (Trikona lord) conjunct in House 1."
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [
+        "Raja Yoga formed by Mercury (Kendra lord) and Moon (Trikona lord) conjunct in House 1."
+      ],
+      "provenance": "Brihat Parashara Hora Sastra",
+      "confidence": "STRONG",
+      "reason": "Raja Yoga is active. 1 Kendra-Trikona conjunction(s) found. Conveys authority, status, and leadership."
+    },
+    {
+      "rule_id": "yoga_viparita_raja",
+      "name": "Viparita Raja",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Vimala Yoga: 12th lord Saturn placed in 6th house."
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "BPHS",
+      "confidence": "STRONG",
+      "reason": "Vimala Yoga: 12th lord Saturn placed in 6th house."
+    },
+    {
+      "rule_id": "yoga_daridra",
+      "name": "Daridra",
+      "domain": "general",
+      "fired": true,
+      "polarity": "contradicting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "11th lord Saturn in House 6"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "BPHS",
+      "confidence": "MODERATE",
+      "reason": "Daridra Yoga: 11th lord (Saturn) placed in 6th Dusthana, causing financial friction."
+    },
+    {
+      "rule_id": "yoga_neechabhanga",
+      "name": "Neechabhanga Raja",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Mercury (Dispositor Jupiter in Kendra (House 10); Lord exalted in Pisces (Venus) in Kendra; Exaltation lord (Mercury) in Kendra)"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "BPHS",
+      "confidence": "STRONG",
+      "reason": "Neechabhanga Raja Yoga formed: Mercury (Dispositor Jupiter in Kendra (House 10); Lord exalted in Pisces (Venus) in Kendra; Exaltation lord (Mercury) in Kendra)"
+    },
+    {
+      "rule_id": "yoga_chamara",
+      "name": "Chaamara",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Benefics Moon, Mercury, Jupiter, Venus in Kendra/Trikona"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "BPHS",
+      "confidence": "STRONG",
+      "reason": "Chaamara Yoga: Benefics (Moon, Mercury, Jupiter, Venus) in Kendra/Trikona. Bestows Deerghayu (long lifespan), deep intellect, and eloquence."
+    },
+    {
+      "rule_id": "yoga_raja_sambandha",
+      "name": "Raja Sambandha",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Amatyakaraka Sun in Kendra/Trikona (4th) from Atmakaraka Jupiter"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Jaimini Sutras",
+      "confidence": "STRONG",
+      "reason": "Raja Sambandha Yoga: Amatyakaraka Sun in Kendra/Trikona (4th) from Atmakaraka Jupiter. Gives high executive post, royal/institutional alliances, and elite advisory rank."
+    },
+    {
+      "rule_id": "yoga_jaimini_ak_pk",
+      "name": "Raja (AK-PK)",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "AK Jupiter & PK Saturn in 9th mutual relation"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Jaimini Sutras",
+      "confidence": "STRONG",
+      "reason": "Jaimini Raja Yoga (AK-PK): Atmakaraka (Jupiter) and Putrakaraka (Saturn) in Kendra/Trikona. Gives loyal following, authority, and power."
+    },
+    {
+      "rule_id": "yoga_yogada",
+      "name": "Yogada (HL)",
+      "domain": "general",
+      "fired": true,
+      "polarity": "supporting",
+      "evidence_used": [],
+      "conditions_satisfied": [
+        "Planets Sun, Moon, Mercury, Venus, Rahu associated with Lagna & HL"
+      ],
+      "conditions_not_satisfied": [],
+      "exceptions_encountered": [],
+      "modifiers": [],
+      "provenance": "Jaimini / BPHS",
+      "confidence": "STRONG",
+      "reason": "Yogada Yoga (HL): Sun, Moon, Mercury, Venus, Rahu associate with Lagna (Pisces) & Hora Lagna (Aquarius). Bestows lasting wealth, liquid capital, and commercial prosperity."
+    }
+  ],
+  "Navamsha_D9": {
+    "Sun": "Capricorn",
+    "Moon": "Virgo",
+    "Mars": "Pisces",
+    "Mercury": "Libra",
+    "Jupiter": "Scorpio",
+    "Venus": "Leo",
+    "Saturn": "Gemini",
+    "Rahu": "Libra",
+    "Ketu": "Aries",
+    "Ascendant": "Capricorn"
+  },
+  "Dasamsha_D10": {
+    "Sun": "Gemini",
+    "Moon": "Capricorn",
+    "Mars": "Sagittarius",
+    "Mercury": "Aquarius",
+    "Jupiter": "Leo",
+    "Venus": "Sagittarius",
+    "Saturn": "Libra",
+    "Rahu": "Aquarius",
+    "Ketu": "Leo",
+    "Ascendant": "Taurus"
+  },
+  "Panchanga": {
+    "Tithi": "Krishna Chaturdashi",
+    "Vara": "Shanivara (Saturday)",
+    "Nakshatra": "Uttara Bhadrapada",
+    "Yoga": "Brahma",
+    "Karana": "Chatushpada",
+    "Nakshatra_Pada": 2,
+    "Drik_Panchang_Full": {
+      "datetime_local": "2008-04-05 06:15:00 AM CEST",
+      "location": {
+        "latitude": 50.348,
+        "longitude": 18.9328
+      },
+      "sun_metrics": {
+        "sunrise": "06:11 AM",
+        "sunset": "07:23 PM",
+        "next_sunrise": "06:09 AM",
+        "dinamana": "13.21 hours",
+        "ratrimana": "10.76 hours"
+      },
+      "panchanga": {
+        "vara": {
+          "name": "Shanivara (Saturday)",
+          "lord": "Saturn"
+        },
+        "tithi": {
+          "index": 29,
+          "name": "Krishna Chaturdashi",
+          "paksha": "Krishna",
+          "ends_at": "08:52 AM"
+        },
+        "nakshatra": {
+          "index": 26,
+          "name": "Uttara Bhadrapada",
+          "pada": 2,
+          "ends_at": "08:05 PM"
+        },
+        "yoga": {
+          "index": 25,
+          "name": "Brahma"
+        },
+        "karana": {
+          "index": 58,
+          "name": "Chatushpada"
+        },
+        "active_hora": "Saturn"
+      },
+      "inauspicious_periods": {
+        "rahu_kalam": "09:29 AM - 11:08 AM",
+        "yamaganda": "02:26 PM - 04:05 PM",
+        "gulika_kalam": "06:11 AM - 07:50 AM"
+      },
+      "auspicious_periods": {
+        "abhijit_muhurta": "12:20 PM - 01:13 PM",
+        "brahma_muhurta": "04:35 AM - 05:23 AM"
+      },
+      "choghadiya_day": [
+        {
+          "choghadiya": "Kaal",
+          "start": "06:11 AM",
+          "end": "07:50 AM",
+          "nature": "Inauspicious"
+        },
+        {
+          "choghadiya": "Shubh",
+          "start": "07:50 AM",
+          "end": "09:29 AM",
+          "nature": "Auspicious"
+        },
+        {
+          "choghadiya": "Rog",
+          "start": "09:29 AM",
+          "end": "11:08 AM",
+          "nature": "Inauspicious"
+        },
+        {
+          "choghadiya": "Udveg",
+          "start": "11:08 AM",
+          "end": "12:47 PM",
+          "nature": "Inauspicious"
+        },
+        {
+          "choghadiya": "Char",
+          "start": "12:47 PM",
+          "end": "02:26 PM",
+          "nature": "Neutral"
+        },
+        {
+          "choghadiya": "Labh",
+          "start": "02:26 PM",
+          "end": "04:05 PM",
+          "nature": "Auspicious"
+        },
+        {
+          "choghadiya": "Amrit",
+          "start": "04:05 PM",
+          "end": "05:44 PM",
+          "nature": "Auspicious"
+        },
+        {
+          "choghadiya": "Kaal",
+          "start": "05:44 PM",
+          "end": "07:23 PM",
+          "nature": "Inauspicious"
+        }
+      ],
+      "choghadiya_night": [
+        {
+          "choghadiya": "Labh",
+          "start": "07:23 PM",
+          "end": "08:44 PM",
+          "nature": "Auspicious"
+        },
+        {
+          "choghadiya": "Udveg",
+          "start": "08:44 PM",
+          "end": "10:04 PM",
+          "nature": "Inauspicious"
+        },
+        {
+          "choghadiya": "Shubh",
+          "start": "10:04 PM",
+          "end": "11:25 PM",
+          "nature": "Auspicious"
+        },
+        {
+          "choghadiya": "Amrit",
+          "start": "11:25 PM",
+          "end": "12:46 AM",
+          "nature": "Auspicious"
+        },
+        {
+          "choghadiya": "Char",
+          "start": "12:46 AM",
+          "end": "02:07 AM",
+          "nature": "Neutral"
+        },
+        {
+          "choghadiya": "Rog",
+          "start": "02:07 AM",
+          "end": "03:27 AM",
+          "nature": "Inauspicious"
+        },
+        {
+          "choghadiya": "Kaal",
+          "start": "03:27 AM",
+          "end": "04:48 AM",
+          "nature": "Inauspicious"
+        },
+        {
+          "choghadiya": "Labh",
+          "start": "04:48 AM",
+          "end": "06:09 AM",
+          "nature": "Auspicious"
+        }
+      ],
+      "tithi_shoonya_rashis": [
+        "Gemini",
+        "Virgo",
+        "Sagittarius",
+        "Pisces"
+      ]
+    }
+  },
+  "Current_Dasha": {
+    "Mahadasha": "Mercury",
+    "Antardasha": "Sun",
+    "Pratyantardasha": "Jupiter",
+    "Mahadasha_Start": "2020-02",
+    "Mahadasha_End": "2037-02"
+  },
+  "Live_Transits_Gochar": {
+    "Sun": {
+      "current_sign": "Leo",
+      "house_from_natal_moon": 6,
+      "is_retrograde_today": false
+    },
+    "Moon": {
+      "current_sign": "Libra",
+      "house_from_natal_moon": 8,
+      "is_retrograde_today": false
+    },
+    "Mars": {
+      "current_sign": "Gemini",
+      "house_from_natal_moon": 4,
+      "is_retrograde_today": false
+    },
+    "Mercury": {
+      "current_sign": "Virgo",
+      "house_from_natal_moon": 7,
+      "is_retrograde_today": false
+    },
+    "Jupiter": {
+      "current_sign": "Cancer",
+      "house_from_natal_moon": 5,
+      "is_retrograde_today": false
+    },
+    "Venus": {
+      "current_sign": "Libra",
+      "house_from_natal_moon": 8,
+      "is_retrograde_today": false
+    },
+    "Saturn": {
+      "current_sign": "Pisces",
+      "house_from_natal_moon": 1,
+      "is_retrograde_today": true
+    },
+    "Rahu": {
+      "current_sign": "Aquarius",
+      "house_from_natal_moon": 12,
+      "is_retrograde_today": false
+    },
+    "Ketu": {
+      "current_sign": "Leo",
+      "house_from_natal_moon": 6,
+      "is_retrograde_today": false
+    }
+  },
+  "Numerology": {
+    "moolank": {
+      "compound": 5,
+      "single": 5,
+      "ruler": "Mercury"
+    },
+    "bhagyank": {
+      "compound": 19,
+      "single": 1,
+      "ruler": "Sun"
+    },
+    "core_harmony": "FRIENDLY (Smooth destiny)",
+    "namank": {
+      "compound": 8,
+      "single": 8,
+      "ruler": "Saturn"
+    },
+    "katapayadi_nama": 5,
+    "name_harmony": "MISALIGNED (Consider Name Correction)"
+  },
+  "Western_Chart": {
+    "Ascendant": {
+      "sign": "Aries",
+      "degree": 14.75
+    },
+    "Midheaven": {
+      "sign": "Capricorn",
+      "degree": 5.99
+    },
+    "Planets": {
+      "Sun": {
+        "sign": "Aries",
+        "degree": 15.76,
+        "absolute_degree": 15.76,
+        "retrograde": false,
+        "house": 1
+      },
+      "Moon": {
+        "sign": "Aries",
+        "degree": 2.29,
+        "absolute_degree": 2.29,
+        "retrograde": false,
+        "house": 12
+      },
+      "Mercury": {
+        "sign": "Aries",
+        "degree": 4.49,
+        "absolute_degree": 4.49,
+        "retrograde": false,
+        "house": 12
+      },
+      "Venus": {
+        "sign": "Pisces",
+        "degree": 28.7,
+        "absolute_degree": 358.7,
+        "retrograde": false,
+        "house": 12
+      },
+      "Mars": {
+        "sign": "Cancer",
+        "degree": 12.61,
+        "absolute_degree": 102.61,
+        "retrograde": false,
+        "house": 4
+      },
+      "Jupiter": {
+        "sign": "Capricorn",
+        "degree": 20.57,
+        "absolute_degree": 290.57,
+        "retrograde": false,
+        "house": 10
+      },
+      "Saturn": {
+        "sign": "Virgo",
+        "degree": 2.35,
+        "absolute_degree": 152.35,
+        "retrograde": false,
+        "house": 6
+      },
+      "Uranus": {
+        "sign": "Pisces",
+        "degree": 20.17,
+        "absolute_degree": 350.17,
+        "retrograde": false,
+        "house": 12
+      },
+      "Neptune": {
+        "sign": "Aquarius",
+        "degree": 23.55,
+        "absolute_degree": 323.55,
+        "retrograde": false,
+        "house": 12
+      },
+      "Pluto": {
+        "sign": "Capricorn",
+        "degree": 1.15,
+        "absolute_degree": 271.15,
+        "retrograde": false,
+        "house": 9
+      }
+    },
+    "Houses": {
+      "1": {
+        "sign": "Aries",
+        "degree": 14.75,
+        "absolute_degree": 14.75
+      },
+      "2": {
+        "sign": "Taurus",
+        "degree": 25.33,
+        "absolute_degree": 55.33
+      },
+      "3": {
+        "sign": "Gemini",
+        "degree": 17.79,
+        "absolute_degree": 77.79
+      },
+      "4": {
+        "sign": "Cancer",
+        "degree": 5.99,
+        "absolute_degree": 95.99
+      },
+      "5": {
+        "sign": "Cancer",
+        "degree": 25.33,
+        "absolute_degree": 115.33
+      },
+      "6": {
+        "sign": "Leo",
+        "degree": 22.48,
+        "absolute_degree": 142.48
+      },
+      "7": {
+        "sign": "Libra",
+        "degree": 14.75,
+        "absolute_degree": 194.75
+      },
+      "8": {
+        "sign": "Scorpio",
+        "degree": 25.33,
+        "absolute_degree": 235.33
+      },
+      "9": {
+        "sign": "Sagittarius",
+        "degree": 17.79,
+        "absolute_degree": 257.79
+      },
+      "10": {
+        "sign": "Capricorn",
+        "degree": 5.99,
+        "absolute_degree": 275.99
+      },
+      "11": {
+        "sign": "Capricorn",
+        "degree": 25.33,
+        "absolute_degree": 295.33
+      },
+      "12": {
+        "sign": "Aquarius",
+        "degree": 22.48,
+        "absolute_degree": 322.48
+      }
+    },
+    "Aspects": [
+      {
+        "planet1": "Sun",
+        "planet2": "Mars",
+        "aspect": "Square",
+        "orb": 3.15
+      },
+      {
+        "planet1": "Sun",
+        "planet2": "Jupiter",
+        "aspect": "Square",
+        "orb": 4.81
+      },
+      {
+        "planet1": "Sun",
+        "planet2": "Neptune",
+        "aspect": "Sextile",
+        "orb": 7.79
+      },
+      {
+        "planet1": "Moon",
+        "planet2": "Mercury",
+        "aspect": "Conjunction",
+        "orb": 2.2
+      },
+      {
+        "planet1": "Moon",
+        "planet2": "Venus",
+        "aspect": "Conjunction",
+        "orb": 3.59
+      },
+      {
+        "planet1": "Moon",
+        "planet2": "Pluto",
+        "aspect": "Square",
+        "orb": 1.14
+      },
+      {
+        "planet1": "Mercury",
+        "planet2": "Venus",
+        "aspect": "Conjunction",
+        "orb": 5.79
+      },
+      {
+        "planet1": "Mercury",
+        "planet2": "Pluto",
+        "aspect": "Square",
+        "orb": 3.34
+      },
+      {
+        "planet1": "Venus",
+        "planet2": "Pluto",
+        "aspect": "Square",
+        "orb": 2.45
+      },
+      {
+        "planet1": "Mars",
+        "planet2": "Jupiter",
+        "aspect": "Opposition",
+        "orb": 7.96
+      },
+      {
+        "planet1": "Mars",
+        "planet2": "Uranus",
+        "aspect": "Trine",
+        "orb": 7.56
+      },
+      {
+        "planet1": "Jupiter",
+        "planet2": "Uranus",
+        "aspect": "Sextile",
+        "orb": 0.4
+      },
+      {
+        "planet1": "Saturn",
+        "planet2": "Pluto",
+        "aspect": "Trine",
+        "orb": 1.2
+      },
+      {
+        "planet1": "Neptune",
+        "planet2": "Pluto",
+        "aspect": "Sextile",
+        "orb": 7.6
+      }
+    ]
+  },
+  "Remedies": {
+    "dasha_remedies": [
+      {
+        "planet": "Mercury",
+        "vedic_mantra": "Om Bram Breem Broum Sah Budhaya Namah",
+        "gayatri_mantra": "Om Saumyarupaya Vidmahe Vaneshaya Dheemahi Tanno Budhah Prachodayat",
+        "japa_count": "9,000 recitations at noon",
+        "daana_charity": {
+          "items": [
+            "Green Moong Dal",
+            "Green vegetables",
+            "Spinach",
+            "Green cloth",
+            "Bronze items"
+          ],
+          "prescribed_day": "Wednesday",
+          "astronomical_timing": "Mercury Hora (Wednesday)",
+          "receiving_entity": "Students, scholars, small children, or animal shelters (cows)"
+        },
+        "lal_kitab_upayas": [
+          "Feed fresh green grass or spinach to cows on Wednesday mornings.",
+          "Clean your teeth with alum (Fitkari) powder.",
+          "Keep all commercial and financial agreements written and verified."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Vata / Pitta (Nervous System, Speech, Skin)",
+          "protocol": "Practice vocal recitation, chanting, and maintain clarity in financial documentation."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Emerald (Panna) or Green Tourmaline.",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Mercury is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        },
+        "dasha_context": "Primary Propitiation for Mahadasha Lord (Mercury)"
+      },
+      {
+        "planet": "Sun",
+        "vedic_mantra": "Om Hram Hreem Hroum Sah Suryaya Namah",
+        "gayatri_mantra": "Om Bhaskaraya Vidmahe Divakaraya Dheemahi Tanno Suryah Prachodayat",
+        "japa_count": "7,000 recitations at dawn",
+        "daana_charity": {
+          "items": [
+            "Wheat",
+            "Jaggery (Gur)",
+            "Copper vessel",
+            "Ruby red flowers",
+            "Gold"
+          ],
+          "prescribed_day": "Sunday",
+          "astronomical_timing": "Sun Hora (Sunrise or 1st/8th hour after sunrise)",
+          "receiving_entity": "Temple priests, father figures, or visually impaired persons"
+        },
+        "lal_kitab_upayas": [
+          "Offer water in a copper vessel to the rising Sun daily.",
+          "Serve and take blessings from father and paternal elders.",
+          "Avoid wearing dark blue or black caps/headgear."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Pitta (Fire/Vitality)",
+          "protocol": "Wake before sunrise, practice Surya Namaskar, avoid excessive pride and arrogance."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Ruby (Manikya).",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Sun is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        },
+        "dasha_context": "Secondary Propitiation for Antardasha Lord (Sun)"
+      }
+    ],
+    "planet_remedies": {
+      "Sun": {
+        "planet": "Sun",
+        "vedic_mantra": "Om Hram Hreem Hroum Sah Suryaya Namah",
+        "gayatri_mantra": "Om Bhaskaraya Vidmahe Divakaraya Dheemahi Tanno Suryah Prachodayat",
+        "japa_count": "7,000 recitations at dawn",
+        "daana_charity": {
+          "items": [
+            "Wheat",
+            "Jaggery (Gur)",
+            "Copper vessel",
+            "Ruby red flowers",
+            "Gold"
+          ],
+          "prescribed_day": "Sunday",
+          "astronomical_timing": "Sun Hora (Sunrise or 1st/8th hour after sunrise)",
+          "receiving_entity": "Temple priests, father figures, or visually impaired persons"
+        },
+        "lal_kitab_upayas": [
+          "Offer water in a copper vessel to the rising Sun daily.",
+          "Serve and take blessings from father and paternal elders.",
+          "Avoid wearing dark blue or black caps/headgear."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Pitta (Fire/Vitality)",
+          "protocol": "Wake before sunrise, practice Surya Namaskar, avoid excessive pride and arrogance."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Ruby (Manikya).",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Sun is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      },
+      "Moon": {
+        "planet": "Moon",
+        "vedic_mantra": "Om Shram Shreem Shroum Sah Chandraya Namah",
+        "gayatri_mantra": "Om Ksheeraputraya Vidmahe Amrutatatvaya Dheemahi Tanno Chandrah Prachodayat",
+        "japa_count": "11,000 recitations in the evening",
+        "daana_charity": {
+          "items": [
+            "Rice",
+            "Cow milk",
+            "White sweets",
+            "Silver coin",
+            "White conch shell"
+          ],
+          "prescribed_day": "Monday",
+          "astronomical_timing": "Moon Hora (Evening or Monday morning)",
+          "receiving_entity": "Mother figures, elderly women, or orphanages"
+        },
+        "lal_kitab_upayas": [
+          "Keep a square silver piece in your wallet or pocket.",
+          "Take blessings from your mother by touching her feet daily.",
+          "Avoid drinking milk directly at night if Moon is afflicted."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Kapha / Pitta (Fluid Balance & Mind)",
+          "protocol": "Maintain emotional stillness through Pranayama, drink water stored in silver vessels."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Wear Pearl (Moti) or Moonstone set in Pure Silver on the Little Finger.",
+          "status": "APPROVED_BENEFIC",
+          "reason": "Planet is an unafflicted functional benefic."
+        }
+      },
+      "Mars": {
+        "planet": "Mars",
+        "vedic_mantra": "Om Kram Kreem Kroum Sah Bhaumaya Namah",
+        "gayatri_mantra": "Om Angarakaya Vidmahe Shaktihastaya Dheemahi Tanno Bhaumah Prachodayat",
+        "japa_count": "10,000 recitations on Tuesdays",
+        "daana_charity": {
+          "items": [
+            "Red lentils (Masoor Dal)",
+            "Jaggery",
+            "Red cloth",
+            "Copper utensils",
+            "Sweets"
+          ],
+          "prescribed_day": "Tuesday",
+          "astronomical_timing": "Mars Hora (Tuesday morning)",
+          "receiving_entity": "Soldiers, athletes, younger brothers, or emergency workers"
+        },
+        "lal_kitab_upayas": [
+          "Recite Hanuman Chalisa daily and apply orange Sindoor on forehead.",
+          "Feed sweet rotis to stray dogs or birds.",
+          "Keep good relations with younger brothers and avoid aggressive outbursts."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Pitta (Blood, Muscles, Marrow)",
+          "protocol": "Engage in disciplined physical training/gym, avoid non-vegetarian food on Tuesdays."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Red Coral (Moonga).",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Mars is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      },
+      "Mercury": {
+        "planet": "Mercury",
+        "vedic_mantra": "Om Bram Breem Broum Sah Budhaya Namah",
+        "gayatri_mantra": "Om Saumyarupaya Vidmahe Vaneshaya Dheemahi Tanno Budhah Prachodayat",
+        "japa_count": "9,000 recitations at noon",
+        "daana_charity": {
+          "items": [
+            "Green Moong Dal",
+            "Green vegetables",
+            "Spinach",
+            "Green cloth",
+            "Bronze items"
+          ],
+          "prescribed_day": "Wednesday",
+          "astronomical_timing": "Mercury Hora (Wednesday)",
+          "receiving_entity": "Students, scholars, small children, or animal shelters (cows)"
+        },
+        "lal_kitab_upayas": [
+          "Feed fresh green grass or spinach to cows on Wednesday mornings.",
+          "Clean your teeth with alum (Fitkari) powder.",
+          "Keep all commercial and financial agreements written and verified."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Vata / Pitta (Nervous System, Speech, Skin)",
+          "protocol": "Practice vocal recitation, chanting, and maintain clarity in financial documentation."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Emerald (Panna) or Green Tourmaline.",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Mercury is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      },
+      "Jupiter": {
+        "planet": "Jupiter",
+        "vedic_mantra": "Om Gram Greem Groum Sah Gurave Namah",
+        "gayatri_mantra": "Om Gurudevaya Vidmahe Parabrahmane Dheemahi Tanno Guruh Prachodayat",
+        "japa_count": "19,000 recitations in the morning",
+        "daana_charity": {
+          "items": [
+            "Chana Dal (Bengal gram)",
+            "Turmeric (Haldi)",
+            "Bananas",
+            "Yellow cloth",
+            "Gold/Brass"
+          ],
+          "prescribed_day": "Thursday",
+          "astronomical_timing": "Jupiter Hora (Thursday morning)",
+          "receiving_entity": "Gurus, mentors, Vedic scholars, educational institutions"
+        },
+        "lal_kitab_upayas": [
+          "Apply yellow saffron or turmeric tilak on the forehead and navel daily.",
+          "Water a Peepal tree without touching it on Thursdays.",
+          "Never insult or disrespect teachers, elders, or spiritual guides."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Kapha (Liver, Fat, Wisdom)",
+          "protocol": "Pursue continuous philosophical study, mentor others, and maintain righteous conduct."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Wear Yellow Sapphire (Pukhraj) or Topaz set in Gold or Brass on the Index Finger.",
+          "status": "APPROVED_BENEFIC",
+          "reason": "Planet is an unafflicted functional benefic."
+        }
+      },
+      "Venus": {
+        "planet": "Venus",
+        "vedic_mantra": "Om Dram Dreem Droum Sah Shukraya Namah",
+        "gayatri_mantra": "Om Bhrigujaya Vidmahe Divyadehaya Dheemahi Tanno Shukrah Prachodayat",
+        "japa_count": "16,000 recitations in the evening",
+        "daana_charity": {
+          "items": [
+            "White sugar",
+            "Ghee",
+            "Curd (Yogurt)",
+            "White silk cloth",
+            "Cosmetics/Perfumes"
+          ],
+          "prescribed_day": "Friday",
+          "astronomical_timing": "Venus Hora (Friday morning/evening)",
+          "receiving_entity": "Artists, women in need, or charitable marriage trusts"
+        },
+        "lal_kitab_upayas": [
+          "Keep your living spaces, clothing, and vehicles impeccably clean and fragrant.",
+          "Feed sweet white rice/kheer to young girls (Kanya Puja).",
+          "Maintain fidelity in partnerships and treat spouse with supreme respect."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Kapha / Vata (Reproductive System, Eyes, Hormones)",
+          "protocol": "Appreciate classical arts, avoid wearing unwashed or torn clothing."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Diamond (Heera) or White Zircon.",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Venus is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      },
+      "Saturn": {
+        "planet": "Saturn",
+        "vedic_mantra": "Om Pram Preem Proum Sah Shanaischaraya Namah",
+        "gayatri_mantra": "Om Nilanjanaya Vidmahe Chhayamartandaya Dheemahi Tanno Mandah Prachodayat",
+        "japa_count": "23,000 recitations after sunset",
+        "daana_charity": {
+          "items": [
+            "Black sesame seeds (Til)",
+            "Mustard oil",
+            "Iron items",
+            "Black blankets",
+            "Urad Dal"
+          ],
+          "prescribed_day": "Saturday",
+          "astronomical_timing": "Saturn Hora (Saturday evening)",
+          "receiving_entity": "Laborers, elderly persons, sanitation workers, or disabled individuals"
+        },
+        "lal_kitab_upayas": [
+          "Donate mustard oil after seeing your face reflection in it (*Chhaya Daan*).",
+          "Serve food or biscuits to black dogs, crows, and laborers on Saturdays.",
+          "Avoid alcohol, non-vegetarian food, and laziness on Saturdays."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Vata (Bones, Joints, Longevity)",
+          "protocol": "Practice punctuality, maintain rigorous discipline, and assist the working class."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Blue Sapphire (Neelam) or Amethyst.",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Saturn is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      },
+      "Rahu": {
+        "planet": "Rahu",
+        "vedic_mantra": "Om Bhram Bhreem Bhroum Sah Rahave Namah",
+        "gayatri_mantra": "Om Nagadhwajaya Vidmahe Padmahastaya Dheemahi Tanno Rahuh Prachodayat",
+        "japa_count": "18,000 recitations at midnight",
+        "daana_charity": {
+          "items": [
+            "Seven grains (Sapta Dhanya)",
+            "Black blankets",
+            "Lead items",
+            "Blue cloth",
+            "Coconut"
+          ],
+          "prescribed_day": "Saturday (or Wednesday evening)",
+          "astronomical_timing": "Rahu Kaal or Saturn Hora",
+          "receiving_entity": "Lepers, sweepers, or stray animal shelters"
+        },
+        "lal_kitab_upayas": [
+          "Immerse raw dry coconuts in flowing water on Saturdays (*Jal Pravah*).",
+          "Keep electrical appliances and electronic devices in your home fully functional.",
+          "Avoid gambling, speculative greed, and ungrounded obsessions."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Vata (Psychological surges, Toxins, Illusions)",
+          "protocol": "Practice grounding meditation in nature, maintain clean toilets and roof terraces."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Hessonite (Gomed) or Spessartite.",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Rahu is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      },
+      "Ketu": {
+        "planet": "Ketu",
+        "vedic_mantra": "Om Sram Sreem Sroum Sah Ketave Namah",
+        "gayatri_mantra": "Om Ashwadhwajaya Vidmahe Shoolahastaya Dheemahi Tanno Ketuh Prachodayat",
+        "japa_count": "17,000 recitations in the evening",
+        "daana_charity": {
+          "items": [
+            "Two-colored blanket (Black & White)",
+            "Sesame seeds",
+            "Warm clothing",
+            "Sour foods"
+          ],
+          "prescribed_day": "Tuesday or Thursday",
+          "astronomical_timing": "Mars/Jupiter Hora",
+          "receiving_entity": "Monks, spiritual seekers, temples, or stray dogs"
+        },
+        "lal_kitab_upayas": [
+          "Feed multi-colored or black-and-white stray dogs daily.",
+          "Donate a two-colored blanket to a temple or ascetic.",
+          "Establish a daily routine of silent meditation and non-attachment."
+        ],
+        "ayurvedic_lifestyle": {
+          "dosha": "Pitta (Spine, Karmic blocks, Hidden roots)",
+          "protocol": "Engage in silent solitary walks, Pranayama, and study of sacred scriptures."
+        },
+        "gemstone_verdict": {
+          "recommendation": "Do NOT wear Cat's Eye (Lehsuniya) or Chrysoberyl.",
+          "status": "CONTRAINDICATED_AFFLICTED",
+          "reason": "Ketu is afflicted, combust, or ruling a Dusthana. Gemstone would amplify negative radiation."
+        }
+      }
+    }
+  }
+}

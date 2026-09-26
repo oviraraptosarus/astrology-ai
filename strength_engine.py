@@ -136,19 +136,19 @@ class StrengthEngine:
                     elif part == 3 and p_name == "Mars": tribhaga = 60.0
             
             # Paksha Bala (Fortnight Strength, max 60 virupas)
-            # Benefics (Moon, Mercury, Jupiter, Venus) gain in Shukla Paksha
-            # Malefics (Sun, Mars, Saturn) gain in Krishna Paksha
-            paksha = 0.0
-            moon_dist_from_full = abs(moon_sun_dist - 180)  # 0 at new moon, 180 at full moon
-            waxing_phase = moon_sun_dist / 180.0  # 0..1 (new to full)
+            # Benefic strength = (Distance from New Moon) / 3 if <= 180, else (360 - Distance) / 3
+            # Malefic strength = 60 - Benefic strength
+            d_val = moon_sun_dist if moon_sun_dist <= 180.0 else 360.0 - moon_sun_dist
+            benefic_paksha = d_val / 3.0
+            malefic_paksha = 60.0 - benefic_paksha
             
             benefics = ["Moon", "Mercury", "Jupiter", "Venus"]
             if p_name in benefics:
-                if is_shukla_paksha:
-                    paksha = 60.0 * waxing_phase  # Gains with waxing
+                paksha = benefic_paksha
             elif p_name in ["Sun", "Mars", "Saturn"]:
-                if not is_shukla_paksha:
-                    paksha = 60.0 * (1.0 - waxing_phase)  # Gains with waning
+                paksha = malefic_paksha
+            else:
+                paksha = 0.0
             
             # NOTE: no "Dina Bala" — not a BPHS component; the day/night rule is
             # already fully covered by Nathonnatha Bala above. Adding it double-counted
@@ -201,15 +201,15 @@ class StrengthEngine:
             p_lon = p.degree + (chart.get_sign_index(p.sign) * 30)
             
             # Determine Seeghrocca based on planet type
-            if p_name in ["Mars", "Jupiter", "Saturn"]:
-                # Outer planets: Seeghrocca is Sun (geocentric)
-                res_sun, _ = swe.calc_ut(jd, swe.SUN, swe.FLG_SWIEPH)
+            from astronomy_core import ephemeris_lock
+            from config import Config
+            with ephemeris_lock:
+                swe.set_sid_mode(Config.ayanamsha_swe_id())
+                flags = swe.FLG_SWIEPH | swe.FLG_SIDEREAL
+                # Seeghrocca for all standard planets in Vedic is Sidereal Geocentric Sun
+                # (For outer planets it's the Sun, for inner planets it's the Sun)
+                res_sun, _ = swe.calc_ut(jd, swe.SUN, flags)
                 seeghrocca = res_sun[0]
-            else:
-                # Inner planets: Seeghrocca is Heliocentric Longitude
-                p_id = {"Mercury": swe.MERCURY, "Venus": swe.VENUS}[p_name]
-                res_hel, _ = swe.calc_ut(jd, p_id, swe.FLG_SWIEPH | swe.FLG_HELCTR)
-                seeghrocca = res_hel[0]
             
             # Cheshta Kendra = Seeghrocca - Planet_Geocentric
             ck = seeghrocca - p_lon

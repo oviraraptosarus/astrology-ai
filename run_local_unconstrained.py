@@ -9,8 +9,10 @@ and direct authoritative Grandmaster synthesis.
 import os
 import sys
 
-# Force local unconstrained mode
+# Force local unconstrained mode BEFORE any app imports
 os.environ["ASTRO_MODE"] = "unconstrained"
+from dotenv import load_dotenv  # noqa: E402
+load_dotenv(override=False)    # .env should NOT override the forced mode above
 
 from modes import set_active_mode, get_active_mode
 set_active_mode("unconstrained")

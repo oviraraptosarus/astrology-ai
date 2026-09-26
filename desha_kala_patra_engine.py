@@ -42,30 +42,6 @@ class DeshaKalaPatraEngine:
                 "somatic_constitution": "Vata Primary (Nervous system sensitivity, dry/fast pacing)"
             }
         },
-        "partner_apr2008": {
-            "name": "Partner / Ania (April 5, 2008)",
-            "dob": "2008-04-05",
-            "age": 18,
-            "desha": {
-                "jurisdiction": "Poland / EU",
-                "target_market": "Local enterprise / technical trade / academic legal",
-                "macro_environment": "European regulatory / service industry"
-            },
-            "kala": {
-                "macro_era": "Mercury Mahadasha (2020-2037) -> Peak Sade Sati exit corridor (2027)",
-                "financial_runway": "Student / lean operational transition",
-                "phase_status": "Sade Sati testing pressure -> Romance & stability (Mar 2027)"
-            },
-            "patra": {
-                "archetype": "The Exalted Artisan (Venus Exalted in Lagna, Jupiter 10th H)",
-                "institutional_reach_index": 70.0,
-                "runway_weeks": 16,
-                "resource_constraint_score": 45.0,
-                "crisis_vector": "Kapha_Freeze (Emotional absorption / quiet boundary exit)",
-                "action_velocity_hours": 24.0,
-                "somatic_constitution": "Kapha Dominant (Deep water processing, gentle surface)"
-            }
-        },
         "sajal_mar2006": {
             "name": "Sajal Kumar Mishra (March 3, 2006)",
             "dob": "2006-03-03",
@@ -89,6 +65,102 @@ class DeshaKalaPatraEngine:
                 "action_velocity_hours": 6.0,
                 "somatic_constitution": "Mercury / Pitta-Vata"
             }
+        },
+        "dad_may1975": {
+            "name": "Dad (May 6, 1975)",
+            "dob": "1975-05-06",
+            "age": 51,
+            "desha": {
+                "jurisdiction": "Mandapeta, East Godavari, AP, India",
+                "target_market": "Local/Regional stability",
+                "macro_environment": "Established conventional infrastructure"
+            },
+            "kala": {
+                "macro_era": "Jupiter Mahadasha -> Saturn Antardasha (Current)",
+                "financial_runway": "Established structural foundation",
+                "phase_status": "Mature operational stability"
+            },
+            "patra": {
+                "archetype": "The Taurian Stabilizer (Mars-AK, Taurus Lagna)",
+                "institutional_reach_index": 60.0,
+                "runway_weeks": 52,
+                "resource_constraint_score": 25.0,
+                "crisis_vector": "Endurance_Grip (Steady, non-reactive processing)",
+                "action_velocity_hours": 48.0,
+                "somatic_constitution": "Kapha Dominant (Water/Tissue, structural density)"
+            }
+        },
+        "mom_oct1980": {
+            "name": "Mom (October 1, 1980)",
+            "dob": "1980-10-01",
+            "age": 46,
+            "desha": {
+                "jurisdiction": "Mandapeta, East Godavari, AP, India",
+                "target_market": "Family and internal structural alignment",
+                "macro_environment": "Domestic/Internal management"
+            },
+            "kala": {
+                "macro_era": "Rahu Mahadasha -> Venus Antardasha (Current)",
+                "financial_runway": "Dependent on/supporting family structure",
+                "phase_status": "High-intensity developmental node"
+            },
+            "patra": {
+                "archetype": "The Gemini Navigator (Mars-AK, Taurus Lagna, Moon-AmK)",
+                "institutional_reach_index": 50.0,
+                "runway_weeks": 52,
+                "resource_constraint_score": 30.0,
+                "crisis_vector": "Vocal_Process (Externalizing stress socially)",
+                "action_velocity_hours": 12.0,
+                "somatic_constitution": "Kapha Dominant"
+            }
+        },
+        "bro_jun2003": {
+            "name": "Brother (June 5, 2003)",
+            "dob": "2003-06-05",
+            "age": 23,
+            "desha": {
+                "jurisdiction": "Visakhapatnam, AP, India",
+                "target_market": "Early career / skill acquisition",
+                "macro_environment": "Transitioning to professional independence"
+            },
+            "kala": {
+                "macro_era": "Moon Mahadasha -> Sun Antardasha (Current)",
+                "financial_runway": "Building initial capital phase",
+                "phase_status": "Visibility and authority establishment"
+            },
+            "patra": {
+                "archetype": "The Scorpio Executor (Mercury-AK, Scorpio Lagna, Malavya Yoga)",
+                "institutional_reach_index": 60.0,
+                "runway_weeks": 12,
+                "resource_constraint_score": 40.0,
+                "crisis_vector": "Pitta_Strike (Aggressive correction/action)",
+                "action_velocity_hours": 8.0,
+                "somatic_constitution": "Pitta Dominant (Fire/Blood, high metabolic burn)"
+            }
+        },
+        "jayendra_nov2007": {
+            "name": "Jayendra (November 16, 2007)",
+            "dob": "2007-11-16",
+            "age": 18,
+            "desha": {
+                "jurisdiction": "Visakhapatnam, AP, India",
+                "target_market": "Education / Early developmental trajectory",
+                "macro_environment": "Pre-professional foundation"
+            },
+            "kala": {
+                "macro_era": "Venus Mahadasha -> Saturn Antardasha (Current)",
+                "financial_runway": "Pre-professional / Family backed",
+                "phase_status": "Strict structural learning phase"
+            },
+            "patra": {
+                "archetype": "The Leonine Strategist (Sun-AK, Leo Lagna, Budhaditya Yoga)",
+                "institutional_reach_index": 40.0,
+                "runway_weeks": 8,
+                "resource_constraint_score": 45.0,
+                "crisis_vector": "Pitta_Command (Attempting to enforce order)",
+                "action_velocity_hours": 18.0,
+                "somatic_constitution": "Pitta Dominant"
+            }
         }
     }
 
@@ -106,11 +178,20 @@ class DeshaKalaPatraEngine:
         if any(k in search_key for k in ["august", "2008-08-01", "user", "vamsi", "founder"]):
             return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["user_aug2008"]}
             
-        if any(k in search_key for k in ["partner", "ania", "ana", "2008-04-05", "poland", "bytom"]):
-            return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["partner_apr2008"]}
-            
         if any(k in search_key for k in ["sajal", "2006-03-03", "mishra", "hyderabad"]):
             return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["sajal_mar2006"]}
+            
+        if any(k in search_key for k in ["dad", "father", "1975-05-06"]):
+            return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["dad_may1975"]}
+            
+        if any(k in search_key for k in ["mom", "mother", "1980-10-01"]):
+            return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["mom_oct1980"]}
+            
+        if any(k in search_key for k in ["bro", "brother", "2003-06-05"]):
+            return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["bro_jun2003"]}
+            
+        if any(k in search_key for k in ["jayendra", "2007-11-16"]):
+            return {"status": "PRE_VERIFIED_KNOWN_PROFILE", "source": "PERSISTENT_MEMORY", "context": cls.KNOWN_PROFILES["jayendra_nov2007"]}
 
         # Auto-derived defaults for unknown native
         birth_year = 2000

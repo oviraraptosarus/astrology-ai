@@ -516,7 +516,15 @@ def run_astrologer(user_input: str, session_id: str, provider: str = "auto") -> 
                 chart_tag = f"[Verified Natal Chart Loaded: {asc.get('sign')} Lagna, {moon.get('sign')} Moon ({moon.get('nakshatra')}), Active Dasha: {dasha.get('Mahadasha')}-{dasha.get('Antardasha')}-{dasha.get('Pratyantardasha')}]"
                 user_message_to_send = f"{chart_tag} {user_input}"
                 
+                from datetime import datetime
+                import pytz
+                current_time = datetime.now(pytz.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+                
                 system_prompt += f"""
+
+CRITICAL SYSTEM CONTEXT:
+- CURRENT SYSTEM TIME: {current_time}
+- NEVER hallucinate timelines. Always compare Dasha dates to the CURRENT SYSTEM TIME above to determine if an event is Past, Present (Active Now), or Future.
 
 CRITICAL: The user's birth chart is ALREADY CALCULATED and ACTIVE in this session:
 - Ascendant (Lagna): {asc.get('sign')} ({asc.get('nakshatra', '')})
@@ -593,7 +601,15 @@ def run_astrologer_stream(user_input: str, session_id: str, provider: str = "aut
                 chart_tag = f"[Verified Natal Chart Loaded: {asc.get('sign')} Lagna, {moon.get('sign')} Moon ({moon.get('nakshatra')}), Active Dasha: {dasha.get('Mahadasha')}-{dasha.get('Antardasha')}-{dasha.get('Pratyantardasha')}]"
                 user_message_to_send = f"{chart_tag} {user_input}"
                 
+                from datetime import datetime
+                import pytz
+                current_time = datetime.now(pytz.utc).strftime('%Y-%m-%d %H:%M:%S UTC')
+                
                 system_prompt += f"""
+
+CRITICAL SYSTEM CONTEXT:
+- CURRENT SYSTEM TIME: {current_time}
+- NEVER hallucinate timelines. Always compare Dasha dates to the CURRENT SYSTEM TIME above to determine if an event is Past, Present (Active Now), or Future.
 
 CRITICAL: The user's birth chart is ALREADY CALCULATED and ACTIVE in this session:
 - Ascendant (Lagna): {asc.get('sign')} ({asc.get('nakshatra', '')})

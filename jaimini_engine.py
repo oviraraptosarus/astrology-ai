@@ -1,6 +1,8 @@
 from typing import Dict, List, Tuple
 from vedic_models import Chart, Planet
 
+from jaimini_chara_dasha_engine import JaiminiCharaDashaEngine
+
 class JaiminiEngine:
     """
     Dedicated engine for Jaimini Jyotisha concepts:
@@ -87,7 +89,7 @@ class JaiminiEngine:
         if al_idx == asc_idx:
             al_idx = (al_idx + 9) % 12  # Move to 10th
         elif al_idx == (asc_idx + 6) % 12:
-            al_idx = (al_idx + 3) % 12  # Move to 4th
+            al_idx = (al_idx + 9) % 12  # Move to 4th
             
         return JaiminiEngine.ZODIAC_SIGNS[al_idx]
 
@@ -152,7 +154,7 @@ class JaiminiEngine:
             if arudha_idx == h_idx:
                 arudha_idx = (arudha_idx + 9) % 12
             elif arudha_idx == (h_idx + 6) % 12:
-                arudha_idx = (arudha_idx + 3) % 12
+                arudha_idx = (arudha_idx + 9) % 12
                 
             arudha_name = "AL" if i == 0 else "UL" if i == 11 else f"A{i+1}"
             arudhas[arudha_name] = JaiminiEngine.ZODIAC_SIGNS[arudha_idx]
@@ -192,42 +194,10 @@ class JaiminiEngine:
     def calculate_chara_dasha(chart: Chart) -> List[Dict]:
         """
         Calculates Chara Dasha duration according to standard K.N. Rao Jaimini rules.
-        Signs 1,2,3 and 7,8,9 count Forward.
-        Signs 4,5,6 and 10,11,12 count Backward.
-        Exception: If lord is in the same sign, duration is 12 years.
-        (Scorpio and Aquarius dual-lordship resolution omitted for brevity here, assuming primary lord)
+        Delegates to the dedicated JaiminiCharaDashaEngine which correctly implements K.N. Rao rules.
         """
-        dashas = []
-        
-        # 1,2,3 and 7,8,9 (0-indexed: 0,1,2 and 6,7,8)
-        forward_signs = [0, 1, 2, 6, 7, 8]
-        
-        for sign in JaiminiEngine.ZODIAC_SIGNS:
-            lord = chart.SIGN_LORDS[sign]
-            # Simplification: if Scorpio, should evaluate Mars vs Ketu. If Aquarius, Saturn vs Rahu.
-            # Using primary lord for now.
-            lord_sign = chart.planets[lord].sign
-            
-            s_idx = JaiminiEngine._get_sign_index(sign)
-            l_idx = JaiminiEngine._get_sign_index(lord_sign)
-            
-            if s_idx == l_idx:
-                duration = 12
-            elif s_idx in forward_signs:
-                # Forward count
-                dist = (l_idx - s_idx) % 12
-                duration = dist
-            else:
-                # Backward count
-                dist = (s_idx - l_idx) % 12
-                duration = dist
-                
-            dashas.append({
-                "sign": sign,
-                "duration_years": duration
-            })
-            
-        return dashas
+        from jaimini_chara_dasha_engine import JaiminiCharaDashaEngine
+        return JaiminiCharaDashaEngine.calculate_chara_dasha_timeline(chart, chart.birth_time)
 
     @staticmethod
     def analyze_domain_jaimini(chart: Chart, domain: str) -> Dict:

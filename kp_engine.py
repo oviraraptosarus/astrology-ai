@@ -10,6 +10,7 @@ import swisseph as swe
 from typing import Dict, List, Any, Optional
 from vedic_models import Chart
 from config import Config
+from astronomy_core import ephemeris_lock
 
 ZODIAC_SIGNS = [
     "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
@@ -37,7 +38,7 @@ PLANET_SIGN_LORDS = {
 SWE_PLANETS = {
     "Sun": swe.SUN, "Moon": swe.MOON, "Mars": swe.MARS,
     "Mercury": swe.MERCURY, "Jupiter": swe.JUPITER,
-    "Venus": swe.VENUS, "Saturn": swe.SATURN, "Rahu": swe.MEAN_NODE
+    "Venus": swe.VENUS, "Saturn": swe.SATURN, "Rahu": Config.node_swe_id()
 }
 
 class KPEngine:
@@ -136,121 +137,122 @@ class KPEngine:
         # sidereal mode stuck on Krishnamurti and silently corrupt every
         # subsequent Lahiri chart in the same process.
         _restore_mode = Config.ayanamsha_swe_id()
-        swe.set_sid_mode(swe.SIDM_KRISHNAMURTI)
-        try:
-            flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
-
-            # 1. Placidus House Cusps (KP Standard) with Polar / High-Latitude Fallback
-            # KP strictly uses Placidus. If Placidus fails (Arctic/Antarctic circles),
-            # the standard KP fallback is Porphyry (b'O') because it preserves the MC.
-            # Very rarely, Porphyry can also have issues, so we fallback to Equal (b'E').
+        with ephemeris_lock:
+            swe.set_sid_mode(swe.SIDM_KRISHNAMURTI)
             try:
-                res_houses = swe.houses_ex(jd, lat, lon, b'P', flags)
-            except Exception:
+                flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
+
+                # 1. Placidus House Cusps (KP Standard) with Polar / High-Latitude Fallback
+                # KP strictly uses Placidus. If Placidus fails (Arctic/Antarctic circles),
+                # the standard KP fallback is Porphyry (b'O') because it preserves the MC.
+                # Very rarely, Porphyry can also have issues, so we fallback to Equal (b'E').
                 try:
-                    res_houses = swe.houses_ex(jd, lat, lon, b'O', flags)
+                    res_houses = swe.houses_ex(jd, lat, lon, b'P', flags)
                 except Exception:
-                    res_houses = swe.houses_ex(jd, lat, lon, b'E', flags)
-            raw_cusps = res_houses[0]  # tuple 1-12
-            cusp_data = []
+                    try:
+                        res_houses = swe.houses_ex(jd, lat, lon, b'O', flags)
+                    except Exception:
+                        res_houses = swe.houses_ex(jd, lat, lon, b'E', flags)
+                raw_cusps = res_houses[0]  # tuple 1-12
+                cusp_data = []
 
-            for h in range(1, 13):
-                c_lon = raw_cusps[h - 1]
-                lords = KPEngine.calculate_kp_lords(c_lon)
-                cusp_data.append({
-                    "house": h,
-                    "longitude": round(c_lon, 4),
-                    "sign": lords["sign"],
-                    "degree": round(c_lon % 30.0, 4),
-                    "sign_lord": lords["sign_lord"],
-                    "star_lord": lords["star_lord"],
-                    "sub_lord": lords["sub_lord"],
-                    "sub_sub_lord": lords["sub_sub_lord"]
-                })
+                for h in range(1, 13):
+                    c_lon = raw_cusps[h - 1]
+                    lords = KPEngine.calculate_kp_lords(c_lon)
+                    cusp_data.append({
+                        "house": h,
+                        "longitude": round(c_lon, 4),
+                        "sign": lords["sign"],
+                        "degree": round(c_lon % 30.0, 4),
+                        "sign_lord": lords["sign_lord"],
+                        "star_lord": lords["star_lord"],
+                        "sub_lord": lords["sub_lord"],
+                        "sub_sub_lord": lords["sub_sub_lord"]
+                    })
 
-            # 2. Planet Positions & Lords
-            planet_data = {}
-            for name, p_id in SWE_PLANETS.items():
-                res, _ = swe.calc_ut(jd, p_id, flags)
-                p_lon = res[0]
-                speed = res[3]
-                lords = KPEngine.calculate_kp_lords(p_lon)
+                # 2. Planet Positions & Lords
+                planet_data = {}
+                for name, p_id in SWE_PLANETS.items():
+                    res, _ = swe.calc_ut(jd, p_id, flags)
+                    p_lon = res[0]
+                    speed = res[3]
+                    lords = KPEngine.calculate_kp_lords(p_lon)
 
-                # Find Placidus house occupied
+                    # Find Placidus house occupied
+                    occ_house = 12
+                    for h in range(1, 13):
+                        c_start = raw_cusps[h - 1]
+                        c_next = raw_cusps[0] if h == 12 else raw_cusps[h]
+
+                        # Handle circular wrap-around
+                        if c_start < c_next:
+                            if c_start <= p_lon < c_next:
+                                occ_house = h
+                                break
+                        else:
+                            if p_lon >= c_start or p_lon < c_next:
+                                occ_house = h
+                                break
+
+                    planet_data[name] = {
+                        "longitude": round(p_lon, 4),
+                        "sign": lords["sign"],
+                        "degree": round(p_lon % 30.0, 4),
+                        "speed": round(speed, 5),
+                        "retrograde": speed < 0 if name not in ["Sun", "Moon", "Rahu"] else False,
+                        "placidus_house": occ_house,
+                        "sign_lord": lords["sign_lord"],
+                        "star_lord": lords["star_lord"],
+                        "sub_lord": lords["sub_lord"],
+                        "sub_sub_lord": lords["sub_sub_lord"]
+                    }
+
+                # Ketu
+                rahu_lon = planet_data["Rahu"]["longitude"]
+                ketu_lon = (rahu_lon + 180.0) % 360.0
+                k_lords = KPEngine.calculate_kp_lords(ketu_lon)
+
                 occ_house = 12
                 for h in range(1, 13):
                     c_start = raw_cusps[h - 1]
                     c_next = raw_cusps[0] if h == 12 else raw_cusps[h]
-
-                    # Handle circular wrap-around
                     if c_start < c_next:
-                        if c_start <= p_lon < c_next:
+                        if c_start <= ketu_lon < c_next:
                             occ_house = h
                             break
                     else:
-                        if p_lon >= c_start or p_lon < c_next:
+                        if ketu_lon >= c_start or ketu_lon < c_next:
                             occ_house = h
                             break
 
-                planet_data[name] = {
-                    "longitude": round(p_lon, 4),
-                    "sign": lords["sign"],
-                    "degree": round(p_lon % 30.0, 4),
-                    "speed": round(speed, 5),
-                    "retrograde": speed < 0 if name not in ["Sun", "Moon", "Rahu"] else False,
+                planet_data["Ketu"] = {
+                    "longitude": round(ketu_lon, 4),
+                    "sign": k_lords["sign"],
+                    "degree": round(ketu_lon % 30.0, 4),
+                    "speed": planet_data["Rahu"]["speed"],
+                    "retrograde": True,
                     "placidus_house": occ_house,
-                    "sign_lord": lords["sign_lord"],
-                    "star_lord": lords["star_lord"],
-                    "sub_lord": lords["sub_lord"],
-                    "sub_sub_lord": lords["sub_sub_lord"]
+                    "sign_lord": k_lords["sign_lord"],
+                    "star_lord": k_lords["star_lord"],
+                    "sub_lord": k_lords["sub_lord"],
+                    "sub_sub_lord": k_lords["sub_sub_lord"]
                 }
 
-            # Ketu
-            rahu_lon = planet_data["Rahu"]["longitude"]
-            ketu_lon = (rahu_lon + 180.0) % 360.0
-            k_lords = KPEngine.calculate_kp_lords(ketu_lon)
+                # 3. Compute 4-Fold ABCD Significator Matrix
+                abcd_matrix = KPEngine._compute_abcd_matrix(cusp_data, planet_data)
 
-            occ_house = 12
-            for h in range(1, 13):
-                c_start = raw_cusps[h - 1]
-                c_next = raw_cusps[0] if h == 12 else raw_cusps[h]
-                if c_start < c_next:
-                    if c_start <= ketu_lon < c_next:
-                        occ_house = h
-                        break
-                else:
-                    if ketu_lon >= c_start or ketu_lon < c_next:
-                        occ_house = h
-                        break
+                # 4. Cuspal Sub-Lord Analysis (Promises for 12 Houses)
+                csl_analysis = KPEngine._evaluate_csl_promises(cusp_data, planet_data, abcd_matrix)
 
-            planet_data["Ketu"] = {
-                "longitude": round(ketu_lon, 4),
-                "sign": k_lords["sign"],
-                "degree": round(ketu_lon % 30.0, 4),
-                "speed": planet_data["Rahu"]["speed"],
-                "retrograde": True,
-                "placidus_house": occ_house,
-                "sign_lord": k_lords["sign_lord"],
-                "star_lord": k_lords["star_lord"],
-                "sub_lord": k_lords["sub_lord"],
-                "sub_sub_lord": k_lords["sub_sub_lord"]
-            }
-
-            # 3. Compute 4-Fold ABCD Significator Matrix
-            abcd_matrix = KPEngine._compute_abcd_matrix(cusp_data, planet_data)
-
-            # 4. Cuspal Sub-Lord Analysis (Promises for 12 Houses)
-            csl_analysis = KPEngine._evaluate_csl_promises(cusp_data, planet_data, abcd_matrix)
-
-            return {
-                "cusps": cusp_data,
-                "planets": planet_data,
-                "abcd_significators": abcd_matrix,
-                "csl_analysis": csl_analysis
-            }
-        finally:
-            # Always restore Lahiri (the system base), even on exception.
-            swe.set_sid_mode(_restore_mode)
+                return {
+                    "cusps": cusp_data,
+                    "planets": planet_data,
+                    "abcd_significators": abcd_matrix,
+                    "csl_analysis": csl_analysis
+                }
+            finally:
+                # Always restore Lahiri (the system base), even on exception.
+                swe.set_sid_mode(_restore_mode)
 
     @staticmethod
     def _compute_abcd_matrix(cusps: List[Dict], planets: Dict[str, Dict]) -> Dict[str, Any]:

@@ -1,7 +1,9 @@
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 import pytz
+import swisseph as swe
 from config import Config
+from astronomy_core import AstronomyCore, NAKSHATRAS, DASHA_LORDS
 
 class DashaEngine:
     """
@@ -11,10 +13,33 @@ class DashaEngine:
     and multi-model transition corridor consensus.
     """
     
-    DASHA_LORDS = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+    DASHA_LORDS = DASHA_LORDS
     DASHA_YEARS = [7, 20, 6, 10, 7, 18, 16, 19, 17]
     TOTAL_YEARS = 120.0
     
+    @staticmethod
+    def _jd_to_iso(jd: float) -> str:
+        y, m, d, h_dec = swe.revjul(jd, swe.GREG_CAL)
+        h = int(h_dec)
+        min_dec = (h_dec - h) * 60.0
+        minute = int(min_dec)
+        sec = int(round((min_dec - minute) * 60.0))
+        if sec >= 60:
+            sec = 0
+            minute += 1
+        if minute >= 60:
+            minute = 0
+            h += 1
+        if h >= 24:
+            return DashaEngine._jd_to_iso(jd + (1.0/24.0))
+        return f"{y:04d}-{m:02d}-{d:02d}T{h:02d}:{minute:02d}:{sec:02d}Z"
+    
+    @staticmethod
+    def _dt_to_jd(dt: datetime) -> float:
+        utc_dt = dt.astimezone(pytz.utc) if dt.tzinfo else pytz.utc.localize(dt)
+        hour_dec = utc_dt.hour + (utc_dt.minute / 60.0) + (utc_dt.second / 3600.0)
+        return swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, hour_dec)
+
     @staticmethod
     def calculate_vimshottari_timeline(birth_time_utc: datetime, moon_longitude: float, num_levels: int = 3, year_length: Optional[float] = None) -> List[Dict]:
         """
@@ -25,15 +50,15 @@ class DashaEngine:
         if year_length is None:
             year_length = Config.get_year_length_days()
 
-        nak_span = 360.0 / 27.0
-        nak_idx = int(moon_longitude / nak_span)
+        nak_idx, _, fraction = AstronomyCore.calculate_nakshatra(moon_longitude)
         lord_idx = nak_idx % 9
         
-        fraction_left = (nak_span - (moon_longitude % nak_span)) / nak_span
+        fraction_left = 1.0 - fraction
         balance_years = fraction_left * DashaEngine.DASHA_YEARS[lord_idx]
         
         timeline = []
-        current_date = birth_time_utc
+        start_jd = DashaEngine._dt_to_jd(birth_time_utc)
+        current_jd = start_jd
         
         # We simulate up to 120 years, starting from the current fractional lord
         c_idx = lord_idx
@@ -41,55 +66,55 @@ class DashaEngine:
         
         # Calculate the first (fractional) Mahadasha
         first_md_years = balance_years
-        first_md_end = current_date + timedelta(days=first_md_years * year_length)
+        first_md_end_jd = current_jd + (first_md_years * year_length)
         
         md_node = {
             "level": 1,
             "lord": DashaEngine.DASHA_LORDS[c_idx],
-            "start": current_date.isoformat(),
-            "end": first_md_end.isoformat(),
+            "start": DashaEngine._jd_to_iso(current_jd),
+            "end": DashaEngine._jd_to_iso(first_md_end_jd),
             "sub_periods": []
         }
         
         if num_levels >= 2:
             md_node["sub_periods"] = DashaEngine._calculate_antardashas(
-                c_idx, current_date, first_md_years, num_levels, is_fractional=True, total_md_years=DashaEngine.DASHA_YEARS[c_idx], year_length=year_length
+                c_idx, current_jd, first_md_years, num_levels, is_fractional=True, total_md_years=DashaEngine.DASHA_YEARS[c_idx], year_length=year_length
             )
             
         timeline.append(md_node)
-        current_date = first_md_end
+        current_jd = first_md_end_jd
         elapsed_years += first_md_years
         c_idx = (c_idx + 1) % 9
         
         # Calculate subsequent Mahadashas
         while elapsed_years < DashaEngine.TOTAL_YEARS:
             md_years = DashaEngine.DASHA_YEARS[c_idx]
-            md_end = current_date + timedelta(days=md_years * year_length)
+            md_end_jd = current_jd + (md_years * year_length)
             
             md_node = {
                 "level": 1,
                 "lord": DashaEngine.DASHA_LORDS[c_idx],
-                "start": current_date.isoformat(),
-                "end": md_end.isoformat(),
+                "start": DashaEngine._jd_to_iso(current_jd),
+                "end": DashaEngine._jd_to_iso(md_end_jd),
                 "sub_periods": []
             }
             
             if num_levels >= 2:
                 md_node["sub_periods"] = DashaEngine._calculate_antardashas(
-                    c_idx, current_date, md_years, num_levels, is_fractional=False, total_md_years=md_years, year_length=year_length
+                    c_idx, current_jd, md_years, num_levels, is_fractional=False, total_md_years=md_years, year_length=year_length
                 )
                 
             timeline.append(md_node)
-            current_date = md_end
+            current_jd = md_end_jd
             elapsed_years += md_years
             c_idx = (c_idx + 1) % 9
             
         return timeline
 
     @staticmethod
-    def _calculate_antardashas(md_lord_idx: int, start_date: datetime, md_duration: float, num_levels: int, is_fractional: bool, total_md_years: float, year_length: float = 365.2422) -> List[Dict]:
+    def _calculate_antardashas(md_lord_idx: int, start_jd: float, md_duration: float, num_levels: int, is_fractional: bool, total_md_years: float, year_length: float) -> List[Dict]:
         sub_periods = []
-        current_date = start_date
+        current_jd = start_jd
         
         ad_idx = md_lord_idx
         
@@ -111,48 +136,48 @@ class DashaEngine:
             else:
                 ad_actual_years = ad_total_years
                 
-            ad_end = current_date + timedelta(days=ad_actual_years * year_length)
+            ad_end_jd = current_jd + (ad_actual_years * year_length)
             
             ad_node = {
                 "level": 2,
                 "lord": DashaEngine.DASHA_LORDS[ad_idx],
-                "start": current_date.isoformat(),
-                "end": ad_end.isoformat(),
+                "start": DashaEngine._jd_to_iso(current_jd),
+                "end": DashaEngine._jd_to_iso(ad_end_jd),
                 "sub_periods": []
             }
             
             if num_levels >= 3:
                 ad_node["sub_periods"] = DashaEngine._calculate_pratyantardashas(
-                    ad_idx, current_date, ad_actual_years, total_md_years, ad_total_years, year_length=year_length
+                    ad_idx, current_jd, ad_actual_years, total_md_years, ad_total_years, year_length=year_length
                 )
                 
             sub_periods.append(ad_node)
-            current_date = ad_end
+            current_jd = ad_end_jd
             accumulated_ad_time += ad_total_years
             ad_idx = (ad_idx + 1) % 9
             
         return sub_periods
 
     @staticmethod
-    def _calculate_pratyantardashas(ad_lord_idx: int, start_date: datetime, ad_duration: float, total_md_years: float, total_ad_years: float, year_length: float = 365.2422) -> List[Dict]:
+    def _calculate_pratyantardashas(ad_lord_idx: int, start_jd: float, ad_duration: float, total_md_years: float, total_ad_years: float, year_length: float) -> List[Dict]:
         sub_periods = []
-        current_date = start_date
+        current_jd = start_jd
         pd_idx = ad_lord_idx
         
         for _ in range(9):
             pd_total_years = (total_ad_years * DashaEngine.DASHA_YEARS[pd_idx]) / DashaEngine.TOTAL_YEARS
             pd_actual_years = pd_total_years * (ad_duration / total_ad_years)
             
-            pd_end = current_date + timedelta(days=pd_actual_years * year_length)
+            pd_end_jd = current_jd + (pd_actual_years * year_length)
             
             sub_periods.append({
                 "level": 3,
                 "lord": DashaEngine.DASHA_LORDS[pd_idx],
-                "start": current_date.isoformat(),
-                "end": pd_end.isoformat()
+                "start": DashaEngine._jd_to_iso(current_jd),
+                "end": DashaEngine._jd_to_iso(pd_end_jd)
             })
             
-            current_date = pd_end
+            current_jd = pd_end_jd
             pd_idx = (pd_idx + 1) % 9
             
         return sub_periods
@@ -182,7 +207,6 @@ class DashaEngine:
         s_savana, e_savana = find_ad_range(tl_savana)
         s_julian, e_julian = find_ad_range(tl_julian)
 
-        # Consensus transition start corridor (earliest model to latest model)
         starts = [s for s in [s_solar, s_savana, s_julian] if s]
         ends = [e for e in [e_solar, e_savana, e_julian] if e]
 
@@ -209,7 +233,8 @@ class DashaEngine:
         """
         result = {"mahadasha": None, "antardasha": None, "pratyantardasha": None}
         
-        target_iso = target_date.isoformat()
+        target_jd = DashaEngine._dt_to_jd(target_date)
+        target_iso = DashaEngine._jd_to_iso(target_jd)
         
         for md in timeline:
             if md["start"] <= target_iso <= md["end"]:

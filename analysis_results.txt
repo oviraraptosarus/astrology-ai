@@ -1,0 +1,44 @@
+==================================================
+1. NATAL CHART BASE
+==================================================
+Ascendant: Capricorn 14.1500° (Makara / Capricorn Lagna)
+  Sun     : Cancer       15.6600° (Abs: 105.660°) | House  7 | Chalit  7 | Retro: False | Nak: Pushya Pada 4 (Lord: Saturn)
+  Moon    : Cancer       17.1700° (Abs: 107.170°) | House  7 | Chalit  7 | Retro: False | Nak: Ashlesha Pada 1 (Lord: Mercury)
+  Mars    : Leo          24.7800° (Abs: 144.780°) | House  8 | Chalit  8 | Retro: False | Nak: Purva Phalguni Pada 4 (Lord: Venus)
+  Mercury : Cancer       18.6700° (Abs: 108.670°) | House  7 | Chalit  7 | Retro: False | Nak: Ashlesha Pada 1 (Lord: Mercury)
+  Jupiter : Sagittarius  20.6900° (Abs: 260.690°) | House 12 | Chalit 12 | Retro: True | Nak: Purva Ashadha Pada 3 (Lord: Venus)
+  Venus   : Leo           0.3100° (Abs: 120.310°) | House  8 | Chalit  7 | Retro: False | Nak: Magha Pada 1 (Lord: Ketu)
+  Saturn  : Leo          13.8200° (Abs: 133.820°) | House  8 | Chalit  7 | Retro: False | Nak: Purva Phalguni Pada 1 (Lord: Venus)
+  Rahu    : Capricorn    24.5400° (Abs: 294.540°) | House  1 | Chalit  1 | Retro: False | Nak: Dhanishta Pada 1 (Lord: Mars)
+  Ketu    : Cancer       24.5400° (Abs: 114.540°) | House  7 | Chalit  7 | Retro: False | Nak: Ashlesha Pada 3 (Lord: Mercury)
+
+--- CHARA KARAKAS ---
+  AK: Mars
+  AmK: Jupiter
+  BK: Mercury
+  MK: Moon
+  PK: Sun
+  GK: Saturn
+  DK: Venus
+  _scheme: 7-karaka (Rahu excluded: no same-degree pair)
+
+--- SENSITIVE POINTS ---
+  22nd_drekkana: {'d3_sign': 'Sagittarius', 'kharesh_lord': 'Jupiter', 'description': '22nd Drekkana falls in Sagittarius governed by Jupiter.'}
+  64th_navamsha: {'from_lagna': {'d9_sign': 'Leo', 'lord': 'Sun', 'd1_arc_start_deg': 134.15}, 'from_moon': {'d9_sign': 'Pisces', 'lord': 'Jupiter', 'd1_arc_start_deg': 317.17}}
+  mrityu_bhagas: []
+  gandanta_points: [{'entity': 'Venus', 'longitude': 120.31, 'knot': 'Magha (Leo)', 'type': 'Magha Nakshatra Gandanta'}]
+  pushkara_status: {'total_pushkara_planets': 1, 'planets': [{'planet': 'Jupiter', 'sign': 'Sagittarius', 'degree': 20.69, 'pushkara_navamsha': True, 'navamsha_sign': 'Libra', 'pushkara_bhaga': False}]}
+  bhrigu_bindu: {'longitude': 20.86, 'sign': 'Aries', 'degree_in_sign': 20.86, 'sign_lord': 'Mars'}
+  indu_lagna: {'indu_lagna_sign': 'Sagittarius', 'total_rays': 18, 'planets_in_indu_lagna': ['Jupiter'], 'wealth_grade': 'EXTRAORDINARY_WEALTH'}
+
+--- WEALTH LAGNAS ---
+  indu_lagna: {'indu_lagna_sign': 'Sagittarius', 'h9_from_lagna_lord': 'Mercury (8 Kalas)', 'h9_from_moon_lord': 'Jupiter (10 Kalas)', 'total_kalas': 18, 'counting_offset_from_moon': 6, 'planets_in_indu_lagna': ['Jupiter'], 'financial_magnitude_verdict': 'KOTI-DHIPATI YOGA (Exceptional Multimillionaire / Generational Wealth Potential)'}
+  shree_lagna: {'sign': 'Capricorn', 'longitude': 297.74, 'description': 'Lakshmi Sthana / Innate Prosperity & Grace'}
+  hora_lagna: {'sign': 'Leo', 'longitude': 138.49, 'description': 'Dhana Sthana / Tangible Liquid Wealth & Capital'}
+  ghatika_lagna: {'sign': 'Cancer', 'longitude': 100.0, 'description': 'Rajya Sthana / Political Power, Authority & Executive Command'}
+
+--- ASHTAKAVARGA SAV ---
+Traceback (most recent call last):
+  File "E:\ASTROLOGY AI\run_full_analysis_2026.py", line 63, in <module>
+    print(f"SAV points: {ashtakavarga.get('sav', {})}")
+AttributeError: 'NoneType' object has no attribute 'get'

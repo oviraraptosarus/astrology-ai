@@ -41,32 +41,34 @@ class WesternEngine:
     @classmethod
     def calculate_chart(cls, year: int, month: int, day: int, hour: float, lat: float, lon: float) -> dict:
         """Calculates a Western Tropical Chart with Placidus houses."""
-        swe.set_ephe_path('ephe')
-        
-        # Calculate UTC Julian Day
-        jd = swe.julday(year, month, day, hour)
-        
-        # Calculate Placidus Houses (Tropical) with High-Latitude Polar Fallback
-        # b'P' for Placidus, b'E' for Equal House fallback
-        try:
-            cusps, ascmc = swe.houses(jd, lat, lon, b'P')
-        except Exception:
-            cusps, ascmc = swe.houses(jd, lat, lon, b'E')
-        
-        ascendant_lon = ascmc[0]
-        mc_lon = ascmc[1]
-        
-        houses = {}
-        for i in range(12):
-            houses[i+1] = {
-                "sign": cls.get_sign(cusps[i]),
-                "degree": round(cusps[i] % 30, 2),
-                "absolute_degree": round(cusps[i], 2)
-            }
+        from astronomy_core import ephemeris_lock
+        with ephemeris_lock:
+            swe.set_ephe_path('ephe')
             
-        planets = {}
-        for name, p_id in cls.PLANETS.items():
-            res, _ = swe.calc_ut(jd, p_id, swe.FLG_SWIEPH)
+            # Calculate UTC Julian Day
+            jd = swe.julday(year, month, day, hour)
+            
+            # Calculate Placidus Houses (Tropical) with High-Latitude Polar Fallback
+            # b'P' for Placidus, b'E' for Equal House fallback
+            try:
+                cusps, ascmc = swe.houses(jd, lat, lon, b'P')
+            except Exception:
+                cusps, ascmc = swe.houses(jd, lat, lon, b'E')
+            
+            ascendant_lon = ascmc[0]
+            mc_lon = ascmc[1]
+            
+            houses = {}
+            for i in range(12):
+                houses[i+1] = {
+                    "sign": cls.get_sign(cusps[i]),
+                    "degree": round(cusps[i] % 30, 2),
+                    "absolute_degree": round(cusps[i], 2)
+                }
+                
+            planets = {}
+            for name, p_id in cls.PLANETS.items():
+                res, _ = swe.calc_ut(jd, p_id, swe.FLG_SWIEPH)
             p_lon = res[0]
             speed = res[3]
             

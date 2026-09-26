@@ -49,7 +49,10 @@ class TajikaVarshaphalaEngine:
     @staticmethod
     def calculate_varsha_pravesha(natal_sun_lon: float, target_year: int, birth_dt: datetime) -> float:
         """Finds the exact Julian Day when transiting Sun returns to natal_sun_lon in target_year."""
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        from astronomy_core import ephemeris_lock
+        ephemeris_lock.acquire()
+        try:
+            swe.set_sid_mode(Config.ayanamsha_swe_id())
         
         # Approximate JD around birthday in target_year
         approx_dt = datetime(target_year, birth_dt.month, birth_dt.day, birth_dt.hour, birth_dt.minute, tzinfo=pytz.utc)
@@ -80,6 +83,8 @@ class TajikaVarshaphalaEngine:
         natal_sun_lon = natal_sun.longitude if natal_sun else 0.0
         
         jd_return = cls.calculate_varsha_pravesha(natal_sun_lon, target_year, birth_dt)
+        finally:
+            ephemeris_lock.release()
         year_val, month_val, day_val, hour_val = swe.revjul(jd_return)
         
         hours = int(hour_val)
@@ -88,11 +93,16 @@ class TajikaVarshaphalaEngine:
         pravesha_utc = datetime(year_val, month_val, day_val, hours, minutes, seconds, tzinfo=pytz.utc)
 
         # Calculate Varsha Ascendant
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        from astronomy_core import ephemeris_lock
+        ephemeris_lock.acquire()
+        try:
+            swe.set_sid_mode(Config.ayanamsha_swe_id())
         try:
             cusps, ascmc = swe.houses_ex(jd_return, lat, lon, b'P', swe.FLG_SIDEREAL)
         except Exception:
             cusps, ascmc = swe.houses_ex(jd_return, lat, lon, b'E', swe.FLG_SIDEREAL)
+        finally:
+            ephemeris_lock.release()
         varsha_asc_lon = ascmc[0] % 360.0
         varsha_asc_sign_idx = int(varsha_asc_lon / 30)
         varsha_asc_sign = ZODIAC_SIGNS[varsha_asc_sign_idx]

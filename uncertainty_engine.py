@@ -54,8 +54,11 @@ class UncertaintyEngine:
         dt_minus_5 = base_birth_time_utc - timedelta(minutes=5)
         # We need the moon's exact longitude 5 minutes ago to see dasha shift
         jd_minus_5 = swe.julday(dt_minus_5.year, dt_minus_5.month, dt_minus_5.day, dt_minus_5.hour + dt_minus_5.minute/60.0)
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
-        moon_res_minus, _ = swe.calc_ut(jd_minus_5, swe.MOON, swe.FLG_SIDEREAL | swe.FLG_SPEED)
+        
+        from astronomy_core import ephemeris_lock
+        with ephemeris_lock:
+            swe.set_sid_mode(Config.ayanamsha_swe_id())
+            moon_res_minus, _ = swe.calc_ut(jd_minus_5, swe.MOON, swe.FLG_SIDEREAL | swe.FLG_SPEED)
         moon_lon_minus = moon_res_minus[0]
 
         timeline_minus = DashaEngine.calculate_vimshottari_timeline(dt_minus_5, moon_lon_minus, num_levels=3)

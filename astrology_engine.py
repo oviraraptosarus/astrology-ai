@@ -3,6 +3,8 @@ import json
 from datetime import datetime
 import pytz
 from varga_engine import VargaEngine
+from astronomy_core import ephemeris_lock
+from dasha_engine import DashaEngine
 from config import Config
 
 ZODIAC_SIGNS = ["Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", 
@@ -41,268 +43,195 @@ def calculate_chalit_house(planet_lon: float, cusps: tuple) -> int:
     # Fallback, shouldn't hit if logic is sound
     return 1
 
-NAKSHATRAS = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra", 
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", 
-    "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha", 
-    "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha", 
-    "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada", 
-    "Uttara Bhadrapada", "Revati"
-]
+from astronomy_core import AstronomyCore, NAKSHATRAS as CORE_NAK, DASHA_LORDS
 
 def calculate_nakshatra(longitude: float) -> tuple:
     """Returns (nakshatra_name, pada, lord_name)"""
-    # 27 Nakshatras spread across 360 degrees. Each is 13 degrees 20 minutes (13.333...)
-    nakshatra_span = 360.0 / 27.0
-    pada_span = nakshatra_span / 4.0
-    
-    nak_index = int(longitude / nakshatra_span)
-    nak_name = NAKSHATRAS[nak_index]
-    
-    # Calculate Pada (1 to 4)
-    remainder = longitude % nakshatra_span
-    pada = int(remainder / pada_span) + 1
-    
-    # Nakshatra Lords follow Vimshottari Dasha order (Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury)
-    lord_name = DASHA_LORDS[nak_index % 9]
-    
-    return nak_name, pada, lord_name
+    nak_index, pada, _ = AstronomyCore.calculate_nakshatra(longitude)
+    return CORE_NAK[nak_index], pada, DASHA_LORDS[nak_index % 9]
 
 def calculate_chart_with_object(year: int, month: int, day: int, hour: int, minute: int, lat: float, lon: float, tz_name: str = 'UTC', name: str = ""):
     native_name = name  # preserve before the planet loop shadows `name`
-    swe.set_sid_mode(Config.ayanamsha_swe_id())
+    with ephemeris_lock:
+        swe.set_sid_mode(Config.ayanamsha_swe_id())
     
-    # Setup time
-    local_tz = pytz.timezone(tz_name)
-    local_dt = local_tz.localize(datetime(year, month, day, hour, minute))
-    utc_dt = local_dt.astimezone(pytz.utc)
+        # Setup time
+        local_tz = pytz.timezone(tz_name)
+        local_dt = local_tz.localize(datetime(year, month, day, hour, minute))
+        utc_dt = local_dt.astimezone(pytz.utc)
     
-    hour_dec = utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
-    jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, hour_dec)
-    # Topocentric positions were removed: Vedic astrology (JHora/Parashara) uses
-    # GEOCENTRIC longitudes. Topocentric parallax shifts the Moon by up to ~1°,
-    # corrupting the nakshatra and the entire Vimshottari dasha timeline.
-    flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
+        hour_dec = utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
+        jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, hour_dec)
+        # Topocentric positions were removed: Vedic astrology (JHora/Parashara) uses
+        # GEOCENTRIC longitudes. Topocentric parallax shifts the Moon by up to ~1°,
+        # corrupting the nakshatra and the entire Vimshottari dasha timeline.
+        flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
     
-    # 1. Base Planets & Relational Graph
-    from vedic_models import Chart, Planet
+        # 1. Base Planets & Relational Graph
+        from vedic_models import Chart, Planet
     
-    # Ascendant
-    # b'O' is Porphyry (equivalent to Sri Pati commonly used in Vedic Bhava Chalit)
-    # High-latitude fallback: Equal house ('E') if polar latitudes fail Porphyry
-    try:
-        cusps, ascmc = swe.houses_ex(jd, lat, lon, b'O', flags)
-    except Exception:
-        cusps, ascmc = swe.houses_ex(jd, lat, lon, b'E', flags)
-    asc_lon = ascmc[0]
-    chart = Chart(ascendant_sign=get_sign(asc_lon), ascendant_degree=asc_lon % 30)
-    chart.birth_time = utc_dt
-    chart.birth_local = local_dt
-    chart.lat = lat
-    chart.lon = lon
-    chart.tz_name = tz_name
-    chart.ascendant_vargas = VargaEngine.calculate_all_vargas(chart.ascendant_sign, chart.ascendant_degree)
-    # Add nakshatra to ascendant for completeness (stored loosely in base_chart dict later if needed)
-    asc_nak, asc_pada, asc_lord = calculate_nakshatra(asc_lon)
-    planet_lons = {}
+        # Ascendant
+        # b'O' is Porphyry (equivalent to Sri Pati commonly used in Vedic Bhava Chalit)
+        # High-latitude fallback: Equal house ('E') if polar latitudes fail Porphyry
+        hs = b'W' if Config.HOUSE_SYSTEM == "whole_sign" else b'O'
+        try:
+            cusps, ascmc = swe.houses_ex(jd, lat, lon, hs, flags)
+        except Exception:
+            cusps, ascmc = swe.houses_ex(jd, lat, lon, b'E', flags)
+        asc_lon = ascmc[0]
+        chart = Chart(ascendant_sign=get_sign(asc_lon), ascendant_degree=asc_lon % 30)
+        chart.birth_time = utc_dt
+        chart.birth_local = local_dt
+        chart.lat = lat
+        chart.lon = lon
+        chart.tz_name = tz_name
+        chart.ascendant_vargas = VargaEngine.calculate_all_vargas(chart.ascendant_sign, chart.ascendant_degree)
+        # Add nakshatra to ascendant for completeness (stored loosely in base_chart dict later if needed)
+        asc_nak, asc_pada, asc_lord = calculate_nakshatra(asc_lon)
+        planet_lons = {}
     
-    for name, p_id in PLANETS.items():
-        res, _ = swe.calc_ut(jd, p_id, flags)
-        p_lon = res[0]
-        speed = res[3]
-        planet_lons[name] = p_lon
-        is_retrograde = speed < 0 if name not in ["Sun", "Moon", "Rahu"] else False
-        p = Planet(name, get_sign(p_lon), p_lon % 30, is_retrograde)
-        p.chalit_house = calculate_chalit_house(p_lon, cusps)
-        p.nakshatra, p.nakshatra_pada, p.nakshatra_lord = calculate_nakshatra(p_lon)
-        p.vargas = VargaEngine.calculate_all_vargas(p.sign, p.degree)
-        chart.add_planet(p)
+        for name, p_id in PLANETS.items():
+            res, _ = swe.calc_ut(jd, p_id, flags)
+            p_lon = res[0]
+            speed = res[3]
+            planet_lons[name] = p_lon
+            is_retrograde = speed < 0 if name not in ["Sun", "Moon", "Rahu"] else False
+            p = Planet(name, get_sign(p_lon), p_lon % 30, is_retrograde)
+            p.chalit_house = calculate_chalit_house(p_lon, cusps)
+            p.nakshatra, p.nakshatra_pada, p.nakshatra_lord = calculate_nakshatra(p_lon)
+            p.vargas = VargaEngine.calculate_all_vargas(p.sign, p.degree)
+            chart.add_planet(p)
     
-    # Ketu
-    ketu_lon = (planet_lons["Rahu"] + 180.0) % 360.0
-    planet_lons["Ketu"] = ketu_lon
-    p_ketu = Planet("Ketu", get_sign(ketu_lon), ketu_lon % 30, False)
-    p_ketu.chalit_house = calculate_chalit_house(ketu_lon, cusps)
-    p_ketu.nakshatra, p_ketu.nakshatra_pada, p_ketu.nakshatra_lord = calculate_nakshatra(ketu_lon)
-    p_ketu.vargas = VargaEngine.calculate_all_vargas(p_ketu.sign, p_ketu.degree)
-    chart.add_planet(p_ketu)
+        # Ketu
+        ketu_lon = (planet_lons["Rahu"] + 180.0) % 360.0
+        planet_lons["Ketu"] = ketu_lon
+        p_ketu = Planet("Ketu", get_sign(ketu_lon), ketu_lon % 30, False)
+        p_ketu.chalit_house = calculate_chalit_house(ketu_lon, cusps)
+        p_ketu.nakshatra, p_ketu.nakshatra_pada, p_ketu.nakshatra_lord = calculate_nakshatra(ketu_lon)
+        p_ketu.vargas = VargaEngine.calculate_all_vargas(p_ketu.sign, p_ketu.degree)
+        chart.add_planet(p_ketu)
     
-    # Compute Graph & Conditions
-    chart.build_relational_graph()
-    from condition_engine import ConditionEngine
-    from strength_engine import StrengthEngine
-    from ashtakavarga_engine import AshtakavargaEngine
-    from jaimini_engine import JaiminiEngine
+        # Compute Graph & Conditions
+        chart.build_relational_graph()
+        from condition_engine import ConditionEngine
+        from strength_engine import StrengthEngine
+        from ashtakavarga_engine import AshtakavargaEngine
+        from jaimini_engine import JaiminiEngine
     
-    ConditionEngine.evaluate_all_conditions(chart)
+        ConditionEngine.evaluate_all_conditions(chart)
     
-    from functional_benefic_engine import FunctionalBeneficEngine
-    FunctionalBeneficEngine.calculate_functional_roles(chart)
-    FunctionalBeneficEngine.calculate_panchadha_maitri(chart)
+        from functional_benefic_engine import FunctionalBeneficEngine
+        FunctionalBeneficEngine.calculate_functional_roles(chart)
+        FunctionalBeneficEngine.calculate_panchadha_maitri(chart)
     
-    StrengthEngine.calculate_shadbala(chart)
-    StrengthEngine.calculate_vimsopaka_bala(chart)
-    StrengthEngine.calculate_bhava_bala(chart)
-    AshtakavargaEngine.calculate_ashtakavarga(chart)
+        StrengthEngine.calculate_shadbala(chart)
+        StrengthEngine.calculate_vimsopaka_bala(chart)
+        StrengthEngine.calculate_bhava_bala(chart)
+        AshtakavargaEngine.calculate_ashtakavarga(chart)
     
-    JaiminiEngine.calculate_chara_karakas(chart)
-    chart.arudhas = JaiminiEngine.calculate_all_arudhas(chart)
+        JaiminiEngine.calculate_chara_karakas(chart)
+        chart.arudhas = JaiminiEngine.calculate_all_arudhas(chart)
     
-    base_chart = chart.to_dict()["planets"]
-    base_chart["Ascendant"] = {
-        "sign": chart.ascendant_sign,
-        "degree": chart.ascendant_degree,
-        "nakshatra": asc_nak,
-        "nakshatra_pada": asc_pada,
-        "nakshatra_lord": asc_lord
-    }
-    base_chart["sarvashtakavarga"] = chart.sarvashtakavarga
-    base_chart["bhava_bala"] = chart.bhava_bala
+        base_chart = chart.to_dict()["planets"]
+        base_chart["Ascendant"] = {
+            "sign": chart.ascendant_sign,
+            "degree": chart.ascendant_degree,
+            "nakshatra": asc_nak,
+            "nakshatra_pada": asc_pada,
+            "nakshatra_lord": asc_lord
+        }
+        base_chart["sarvashtakavarga"] = chart.sarvashtakavarga
+        base_chart["bhava_bala"] = chart.bhava_bala
         
-    # --- Detect Yogas via Rule Framework (Phase 3 & 4) ---
-    from yogas import evaluate_all_yogas
-    yogas = evaluate_all_yogas(chart)
-    # 2. Divisional Charts (D9 Navamsha & D10 Dasamsha)
-    d9_chart = {}
-    d10_chart = {}
+        # --- Detect Yogas via Rule Framework (Phase 3 & 4) ---
+        from yogas import evaluate_all_yogas
+        yogas = evaluate_all_yogas(chart)
+        # 2. Divisional Charts (D9 Navamsha & D10 Dasamsha)
+        d9_chart = {}
+        d10_chart = {}
     
-    # Use VargaEngine for all planets
-    for name, p in chart.planets.items():
-        d9_chart[name] = p.vargas.get("D9")
-        d10_chart[name] = p.vargas.get("D10")
+        # Use VargaEngine for all planets
+        for name, p in chart.planets.items():
+            d9_chart[name] = p.vargas.get("D9")
+            d10_chart[name] = p.vargas.get("D10")
         
-    # Include Ascendant in D9 and D10
-    d9_chart["Ascendant"] = chart.ascendant_vargas.get("D9")
-    d10_chart["Ascendant"] = chart.ascendant_vargas.get("D10")
+        # Include Ascendant in D9 and D10
+        d9_chart["Ascendant"] = chart.ascendant_vargas.get("D9")
+        d10_chart["Ascendant"] = chart.ascendant_vargas.get("D10")
     
-    # 3. Panchanga
-    from panchangam_engine import PanchangamEngine
-    p_engine = PanchangamEngine()
-    # calculate_full_panchang takes a timezone-aware datetime + coordinates.
-    # Reconstruct local dt from the local values we already have.
-    panchanga_data = p_engine.calculate_full_panchang(
-        local_dt, lat, lon, tz_name=tz_name)
+        # 3. Panchanga
+        from panchangam_engine import PanchangamEngine
+        p_engine = PanchangamEngine()
+        # calculate_full_panchang takes a timezone-aware datetime + coordinates.
+        # Reconstruct local dt from the local values we already have.
+        panchanga_data = p_engine.calculate_full_panchang(
+            local_dt, lat, lon, tz_name=tz_name)
     
-    moon_lon = planet_lons["Moon"]
-    nak_span = 360 / 27
-    nak_idx = int(moon_lon / nak_span)
-    pada = int((moon_lon % nak_span) / (nak_span/4)) + 1
+        moon_lon = planet_lons["Moon"]
+        nak_span = 360 / 27
+        nak_idx = int(moon_lon / nak_span)
+        pada = int((moon_lon % nak_span) / (nak_span/4)) + 1
     
-    panch = panchanga_data.get("panchanga", {})
-    panchanga = {
-        "Tithi": panch.get("tithi", {}).get("name", "Unknown"),
-        "Vara": panch.get("vara", {}).get("name", "Unknown"),
-        "Nakshatra": panch.get("nakshatra", {}).get("name", "Unknown"),
-        "Yoga": panch.get("yoga", {}).get("name", "Unknown"),
-        "Karana": panch.get("karana", {}).get("name", "Unknown"),
-        "Nakshatra_Pada": pada,
-        "Drik_Panchang_Full": panchanga_data
-    }
-    
-    # 4. Detailed Dasha (Vimshottari)
-    lord_idx = nak_idx % 9
-    fraction_left = (nak_span - (moon_lon % nak_span)) / nak_span
-    balance = fraction_left * DASHA_YEARS[lord_idx]
-    
-    def dt_to_dec(dt_obj):
-        return dt_obj.year + (dt_obj.timetuple().tm_yday - 1) / 365.25
-        
-    birth_dec = dt_to_dec(utc_dt)
-    age = dt_to_dec(datetime.now(pytz.utc)) - birth_dec
-    
-    curr_dasha = DASHA_LORDS[lord_idx]
-    antardasha = ""
-    pratyantardasha = ""
-    
-    md_start_age = 0
-    md_end_age = balance
-    
-    elapsed = balance
-    if age > balance:
-        c_idx = (lord_idx + 1) % 9
-        while True:
-            if elapsed + DASHA_YEARS[c_idx] > age:
-                curr_dasha = DASHA_LORDS[c_idx]
-                dasha_len = DASHA_YEARS[c_idx]
-                md_start_age = elapsed
-                md_end_age = elapsed + dasha_len
-                
-                time_in_dasha = age - elapsed
-                
-                ad_elapsed = 0
-                ad_idx = c_idx
-                for _ in range(9):
-                    ad_len = (dasha_len * DASHA_YEARS[ad_idx]) / 120.0
-                    if ad_elapsed + ad_len > time_in_dasha:
-                        antardasha = DASHA_LORDS[ad_idx]
-                        
-                        # Calculate Pratyantardasha
-                        time_in_ad = time_in_dasha - ad_elapsed
-                        pd_elapsed = 0
-                        pd_idx = ad_idx
-                        for _ in range(9):
-                            pd_len = (ad_len * DASHA_YEARS[pd_idx]) / 120.0
-                            if pd_elapsed + pd_len > time_in_ad:
-                                pratyantardasha = DASHA_LORDS[pd_idx]
-                                break
-                            pd_elapsed += pd_len
-                            pd_idx = (pd_idx + 1) % 9
-                            
-                        break
-                    ad_elapsed += ad_len
-                    ad_idx = (ad_idx + 1) % 9
-                break
-            elapsed += DASHA_YEARS[c_idx]
-            c_idx = (c_idx + 1) % 9
-            
-    def dec_to_ym(dec):
-        y = int(dec)
-        m = int((dec - y) * 12) + 1
-        return f"{y}-{m:02d}"
-    
-    dashas = {
-        "Mahadasha": curr_dasha,
-        "Antardasha": antardasha,
-        "Pratyantardasha": pratyantardasha,
-        "Mahadasha_Start": dec_to_ym(birth_dec + md_start_age),
-        "Mahadasha_End": dec_to_ym(birth_dec + md_end_age)
-    }
-    
-    # --- Live Transits (Gochar) ---
-    # Calculate live planetary positions right now (UTC)
-    current_utc = datetime.now(pytz.utc)
-    current_hour_dec = current_utc.hour + current_utc.minute / 60.0 + current_utc.second / 3600.0
-    current_jd = swe.julday(current_utc.year, current_utc.month, current_utc.day, current_hour_dec)
-    
-    live_transits = {}
-    natal_moon_sign_idx = ZODIAC_SIGNS.index(base_chart["Moon"]["sign"])
-    
-    for name, p_id in PLANETS.items():
-        res, _ = swe.calc_ut(current_jd, p_id, flags)
-        p_lon = res[0]
-        speed = res[3]
-        t_sign = get_sign(p_lon)
-        t_sign_idx = ZODIAC_SIGNS.index(t_sign)
-        
-        # Gochar (Transits) are read from the Natal Moon!
-        house_from_moon = ((t_sign_idx - natal_moon_sign_idx) % 12) + 1
-        
-        is_retrograde = speed < 0 if name not in ["Sun", "Moon", "Rahu"] else False
-        
-        live_transits[name] = {
-            "current_sign": t_sign,
-            "house_from_natal_moon": house_from_moon,
-            "is_retrograde_today": is_retrograde
+        panch = panchanga_data.get("panchanga", {})
+        panchanga = {
+            "Tithi": panch.get("tithi", {}).get("name", "Unknown"),
+            "Vara": panch.get("vara", {}).get("name", "Unknown"),
+            "Nakshatra": panch.get("nakshatra", {}).get("name", "Unknown"),
+            "Yoga": panch.get("yoga", {}).get("name", "Unknown"),
+            "Karana": panch.get("karana", {}).get("name", "Unknown"),
+            "Nakshatra_Pada": pada,
+            "Drik_Panchang_Full": panchanga_data
         }
     
-    # Live Ketu
-    ketu_lon = (swe.calc_ut(current_jd, Config.node_swe_id(), flags)[0][0] + 180.0) % 360.0
-    k_sign_idx = int(ketu_lon / 30)
-    live_transits["Ketu"] = {
-        "current_sign": ZODIAC_SIGNS[k_sign_idx],
-        "house_from_natal_moon": ((k_sign_idx - natal_moon_sign_idx) % 12) + 1,
-        "is_retrograde_today": False
-    }
+        # 4. Detailed Dasha (Vimshottari) via DashaEngine
+        moon_lon = planet_lons["Moon"]
+        timeline = DashaEngine.calculate_vimshottari_timeline(utc_dt, moon_lon, num_levels=3)
+        curr_dasha_full = DashaEngine.get_current_dasha(timeline, datetime.now(pytz.utc))
+        
+        # Format dashas for backwards compatibility
+        dashas = {
+            "Mahadasha": curr_dasha_full.get("MD", {}).get("lord", ""),
+            "Antardasha": curr_dasha_full.get("AD", {}).get("lord", ""),
+            "Pratyantardasha": curr_dasha_full.get("PD", {}).get("lord", ""),
+            "Mahadasha_Start": curr_dasha_full.get("MD", {}).get("start_date", utc_dt).strftime("%Y-%m"),
+            "Mahadasha_End": curr_dasha_full.get("MD", {}).get("end_date", utc_dt).strftime("%Y-%m")
+        }
+    
+        # --- Live Transits (Gochar) ---
+        # Calculate live planetary positions right now (UTC)
+        current_utc = datetime.now(pytz.utc)
+        current_hour_dec = current_utc.hour + current_utc.minute / 60.0 + current_utc.second / 3600.0
+        current_jd = swe.julday(current_utc.year, current_utc.month, current_utc.day, current_hour_dec)
+    
+        live_transits = {}
+        natal_moon_sign_idx = ZODIAC_SIGNS.index(base_chart["Moon"]["sign"])
+    
+        for name, p_id in PLANETS.items():
+            res, _ = swe.calc_ut(current_jd, p_id, flags)
+            p_lon = res[0]
+            speed = res[3]
+            t_sign = get_sign(p_lon)
+            t_sign_idx = ZODIAC_SIGNS.index(t_sign)
+        
+            # Gochar (Transits) are read from the Natal Moon!
+            house_from_moon = ((t_sign_idx - natal_moon_sign_idx) % 12) + 1
+        
+            is_retrograde = speed < 0 if name not in ["Sun", "Moon", "Rahu"] else False
+        
+            live_transits[name] = {
+                "current_sign": t_sign,
+                "house_from_natal_moon": house_from_moon,
+                "is_retrograde_today": is_retrograde
+            }
+    
+        # Live Ketu
+        ketu_lon = (swe.calc_ut(current_jd, Config.node_swe_id(), flags)[0][0] + 180.0) % 360.0
+        k_sign_idx = int(ketu_lon / 30)
+        live_transits["Ketu"] = {
+            "current_sign": ZODIAC_SIGNS[k_sign_idx],
+            "house_from_natal_moon": ((k_sign_idx - natal_moon_sign_idx) % 12) + 1,
+            "is_retrograde_today": False
+        }
 
     # --- Integration of Numerology and Western Astrology ---
     from numerology_engine import NumerologyEngine
@@ -314,7 +243,7 @@ def calculate_chart_with_object(year: int, month: int, day: int, hour: int, minu
     
     r_engine = RemedyEngine()
     remedies = {
-        "dasha_remedies": r_engine.generate_dasha_remedies(curr_dasha, antardasha),
+        "dasha_remedies": r_engine.generate_dasha_remedies(dashas.get("Mahadasha", ""), dashas.get("Antardasha", "")),
         "planet_remedies": {}
     }
     for p_name, p_obj in chart.planets.items():

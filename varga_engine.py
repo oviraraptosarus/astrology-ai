@@ -26,25 +26,35 @@ class VargaEngine:
             return "Cancer" if degree < 15.0 else "Leo"
 
     @staticmethod
+    def _get_varga_idx(degree: float, divisions: int) -> int:
+        import math
+        quotient = (degree * divisions) / 30.0
+        rounded = round(quotient)
+        if math.isclose(quotient, rounded, rel_tol=0.0, abs_tol=1e-11):
+            idx = int(rounded)
+        else:
+            idx = int(quotient)
+        if idx >= divisions:
+            idx = divisions - 1
+        return idx
+
+    @staticmethod
     def calc_d3_drekkana(sign: str, degree: float) -> str:
-        div3 = int(degree / 10.0)
-        if div3 >= 3: div3 = 2 # Handle floating point edge case for exactly 30.0
+        div3 = VargaEngine._get_varga_idx(degree, 3)
         base_idx = VargaEngine.get_sign_index(sign)
         offset = [0, 4, 8][div3]
         return VargaEngine.get_sign_from_index(base_idx + offset)
 
     @staticmethod
     def calc_d4_chaturthamsha(sign: str, degree: float) -> str:
-        div4 = int(degree / 7.5)
-        if div4 >= 4: div4 = 3
+        div4 = VargaEngine._get_varga_idx(degree, 4)
         base_idx = VargaEngine.get_sign_index(sign)
         offset = [0, 3, 6, 9][div4]
         return VargaEngine.get_sign_from_index(base_idx + offset)
 
     @staticmethod
     def calc_d7_saptamsha(sign: str, degree: float) -> str:
-        div7 = int(degree / (30.0 / 7.0))
-        if div7 >= 7: div7 = 6
+        div7 = VargaEngine._get_varga_idx(degree, 7)
         base_idx = VargaEngine.get_sign_index(sign)
         is_odd = (base_idx % 2 == 0)
         start_idx = base_idx if is_odd else base_idx + 6
@@ -52,8 +62,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d9_navamsha(sign: str, degree: float) -> str:
-        division = int(degree / (30.0 / 9.0))
-        if division >= 9: division = 8
+        division = VargaEngine._get_varga_idx(degree, 9)
         sign_idx = VargaEngine.get_sign_index(sign)
         element_idx = sign_idx % 4 # 0=Fire, 1=Earth, 2=Air, 3=Water
         start_idx = [0, 9, 6, 3][element_idx]
@@ -61,8 +70,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d10_dasamsha(sign: str, degree: float) -> str:
-        division = int(degree / 3.0)
-        if division >= 10: division = 9
+        division = VargaEngine._get_varga_idx(degree, 10)
         sign_idx = VargaEngine.get_sign_index(sign)
         is_odd = (sign_idx % 2 == 0)
         start_idx = sign_idx if is_odd else sign_idx + 8
@@ -70,15 +78,13 @@ class VargaEngine:
 
     @staticmethod
     def calc_d12_dwadashamsha(sign: str, degree: float) -> str:
-        div12 = int(degree / 2.5)
-        if div12 >= 12: div12 = 11
+        div12 = VargaEngine._get_varga_idx(degree, 12)
         base_idx = VargaEngine.get_sign_index(sign)
         return VargaEngine.get_sign_from_index(base_idx + div12)
 
     @staticmethod
     def calc_d16_shodashamsha(sign: str, degree: float) -> str:
-        div16 = int(degree / 1.875)
-        if div16 >= 16: div16 = 15
+        div16 = VargaEngine._get_varga_idx(degree, 16)
         base_idx = VargaEngine.get_sign_index(sign)
         modality = base_idx % 3 # 0=Movable, 1=Fixed, 2=Dual
         start_16 = [0, 4, 8][modality]
@@ -86,8 +92,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d20_vimshamsha(sign: str, degree: float) -> str:
-        div20 = int(degree / 1.5)
-        if div20 >= 20: div20 = 19
+        div20 = VargaEngine._get_varga_idx(degree, 20)
         base_idx = VargaEngine.get_sign_index(sign)
         modality = base_idx % 3 # 0=Movable, 1=Fixed, 2=Dual
         start_20 = [0, 8, 4][modality]
@@ -95,8 +100,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d24_chaturvimshamsha(sign: str, degree: float) -> str:
-        div24 = int(degree / 1.25)
-        if div24 >= 24: div24 = 23
+        div24 = VargaEngine._get_varga_idx(degree, 24)
         base_idx = VargaEngine.get_sign_index(sign)
         is_odd = (base_idx % 2 == 0)
         start_24 = 4 if is_odd else 3
@@ -104,8 +108,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d27_saptavimshamsha(sign: str, degree: float) -> str:
-        div27 = int(degree / (30.0 / 27.0))
-        if div27 >= 27: div27 = 26
+        div27 = VargaEngine._get_varga_idx(degree, 27)
         sign_idx = VargaEngine.get_sign_index(sign)
         element_idx = sign_idx % 4 # 0=Fire, 1=Earth, 2=Air, 3=Water
         start_idx = [0, 3, 6, 9][element_idx] # Aries, Cancer, Libra, Capricorn
@@ -130,8 +133,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d40_khavedamsha(sign: str, degree: float) -> str:
-        div40 = int(degree / 0.75)
-        if div40 >= 40: div40 = 39
+        div40 = VargaEngine._get_varga_idx(degree, 40)
         base_idx = VargaEngine.get_sign_index(sign)
         is_odd = (base_idx % 2 == 0)
         start_40 = 0 if is_odd else 6 # Aries or Libra
@@ -139,8 +141,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d45_akshavedamsha(sign: str, degree: float) -> str:
-        div45 = int(degree / (30.0 / 45.0))
-        if div45 >= 45: div45 = 44
+        div45 = VargaEngine._get_varga_idx(degree, 45)
         base_idx = VargaEngine.get_sign_index(sign)
         modality = base_idx % 3 # 0=Movable, 1=Fixed, 2=Dual
         start_45 = [0, 4, 8][modality]
@@ -148,8 +149,7 @@ class VargaEngine:
 
     @staticmethod
     def calc_d60_shashtiamsha(sign: str, degree: float) -> str:
-        div60 = int(degree / 0.5)
-        if div60 >= 60: div60 = 59
+        div60 = VargaEngine._get_varga_idx(degree, 60)
         base_idx = VargaEngine.get_sign_index(sign)
         return VargaEngine.get_sign_from_index(base_idx + div60)
 

@@ -45,11 +45,14 @@ class TajakaEngine:
         Numerically solves for the exact Julian Day when the transiting Sun
         crosses the exact natal Sun longitude in the target year.
         """
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
-        flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
-
-        # Estimate JD near birthday in target year
-        est_dt = datetime(target_year, birth_dt_utc.month, birth_dt_utc.day, birth_dt_utc.hour, birth_dt_utc.minute, tzinfo=pytz.utc)
+        from astronomy_core import ephemeris_lock
+        ephemeris_lock.acquire()
+        try:
+            swe.set_sid_mode(Config.ayanamsha_swe_id())
+            flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
+    
+            # Estimate JD near birthday in target year
+            est_dt = datetime(target_year, birth_dt_utc.month, birth_dt_utc.day, birth_dt_utc.hour, birth_dt_utc.minute, tzinfo=pytz.utc)
         hour_dec = est_dt.hour + (est_dt.minute / 60.0) + (est_dt.second / 3600.0)
         jd_guess = swe.julday(est_dt.year, est_dt.month, est_dt.day, hour_dec)
 
@@ -83,7 +86,6 @@ class TajakaEngine:
         """
         Calculates complete Annual Varshaphala Chart, Muntha, Sahams, and Tajaka Yogas.
         """
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
         flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
 
         natal_sun = chart.planets.get("Sun")

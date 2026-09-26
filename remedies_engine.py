@@ -81,7 +81,8 @@ class RemediesEngine:
         """
         afflicted_planets = []
         for p_name, p in chart.planets.items():
-            if p.dignity == "Debilitated" or p.combust:
+            combustion_status = getattr(getattr(p, "combustion", None), "status", False)
+            if p.dignity == "Debilitated" or combustion_status:
                 afflicted_planets.append(p_name)
                 
             # Rahu/Ketu conjunction is a basic affliction check

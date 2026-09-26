@@ -540,7 +540,7 @@ class ForwardTimingScanner:
         # Shared coarse tracks per planet (computed once, reused across all targets)
         self._track_cache = {}
         planet_tracks = {}
-        for pid in (swe.MARS, swe.SATURN, swe.JUPITER, swe.VENUS):
+        for pid in (swe.MARS, swe.SATURN, swe.JUPITER, swe.VENUS, swe.TRUE_NODE):
             grid = self._build_track(pid, start_dt, end_dt)
             planet_tracks[pid] = grid
             for dt in grid:
@@ -579,7 +579,7 @@ class ForwardTimingScanner:
                 _record(swe.SATURN, "Saturn", natal_lons["Sun"], "Natal Sun (Father Karaka Eclipse)",
                         "paternal vitality eclipse", orb_limit=1.5, half_width_days=3)
 
-        # 2. Health / accident / surgery / trauma family
+        # 2. Health / accident / surgery / trauma / passing family
         elif is_health_accident:
             # Saturn in 8th crushing natal planets (evaluated at window mid for house placement)
             mid = start_dt + (end_dt - start_dt) / 2
@@ -593,10 +593,32 @@ class ForwardTimingScanner:
             if "Mars" in natal_lons:
                 _record(swe.MARS, "Mars", natal_lons["Mars"], "Natal Mars (Physical Trauma / Surgery Trigger)",
                         "acute bodily trauma trigger")
-            # Mars exact aspect to Lagna degree (conjunction/trine/square/opposition)
-            for asp in (0.0, 60.0, 90.0, 120.0, 180.0):
+            # Mars exact aspect to Lagna degree (conjunction/trine/square/opposition/quincunx)
+            for asp in (0.0, 60.0, 90.0, 120.0, 150.0, 180.0):
                 _record(swe.MARS, "Mars", (lagna_lon + asp) % 360.0, f"Ascendant degree (aspect {asp:.0f}° axis)",
-                        "bodily impact on the Ascendant", orb_limit=1.0)
+                        "bodily impact on the Ascendant", orb_limit=1.2)
+            # Saturn exact aspect/conjunction to Sun (Ayur Karaka Eclipse / Vitality Severance)
+            if "Sun" in natal_lons:
+                for asp in (0.0, 60.0, 90.0, 180.0):
+                    _record(swe.SATURN, "Saturn", (natal_lons["Sun"] + asp) % 360.0, f"Natal Sun (aspect {asp:.0f}° axis)",
+                            "vitality/solar eclipse crisis", orb_limit=1.2, half_width_days=3)
+            # Saturn exact conjunction / aspect to Natal 8th Lord or Natal Moon
+            h8_lord = SIGN_LORDS[ZODIAC_SIGNS[(self.lagna_sign_idx + 7) % 12]]
+            if h8_lord in natal_lons:
+                for asp in (0.0, 60.0, 90.0, 180.0):
+                    _record(swe.SATURN, "Saturn", (natal_lons[h8_lord] + asp) % 360.0, f"Natal 8th Lord {h8_lord} (aspect {asp:.0f}° axis)",
+                            "8th-house longevity lord confrontation", orb_limit=1.2, half_width_days=3)
+            if "Moon" in natal_lons:
+                for asp in (0.0, 90.0, 180.0):
+                    _record(swe.SATURN, "Saturn", (natal_lons["Moon"] + asp) % 360.0, f"Natal Moon (aspect {asp:.0f}° axis)",
+                            "severe lunar compression / terminal transit", orb_limit=1.2, half_width_days=3)
+            # Rahu collision over Lagna, Sun, or Mars
+            for p_target in ["Sun", "Mars"]:
+                if p_target in natal_lons:
+                    _record(swe.TRUE_NODE, "Rahu", natal_lons[p_target], f"Natal {p_target} (Nodal Eclipse Axis)",
+                            "karmic nodal affliction", orb_limit=1.2, half_width_days=3)
+            _record(swe.TRUE_NODE, "Rahu", lagna_lon, "Ascendant degree (Nodal Axis)",
+                    "karmic nodal axis on Lagna", orb_limit=1.2, half_width_days=3)
 
         # 3. Career / business / wealth / education / fame family
         elif is_career_wealth:

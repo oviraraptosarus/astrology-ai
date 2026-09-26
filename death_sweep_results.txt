@@ -1,0 +1,269 @@
+========================================================================================================
+ACUTE SUB-DEGREE DEATH SWEEP — Saturn/Mars/Rahu over Sun/Moon/Lagna/8L/Saturn/Mars — all charts
+Aspect sets: Saturn 0/60/90/180 | Mars 0/90/150/180 | Rahu 0/180 | orb <= 1.2 deg | inside Jaimini bracket
+========================================================================================================
+
+========================================================================================================
+### YOU (2008-08-01)  |  Bracket Deerghayu (age 66-105)  |  Marakas: Saturn, Moon
+    Natal targets: Sun=15.7°Can, Moon=17.2°Can, Lagna=14.2°Cap, 8L(Sun)=15.7°Can, Saturn=13.8°Leo, Mars=24.8°Leo
+    8th-house ingresses in bracket: 2074-05-09 Mars INGRESS into natal 8th house; 2075-10-20 Mars INGRESS into natal 8th house; 2076-04-01 Mars INGRESS into natal 8th house; 2077-09-27 Mars INGRESS into natal 8th house; 2079-09-08 Mars INGRESS into natal 8th house; 2081-08-20 Mars INGRESS into natal 8th house; 2083-08-02 Mars INGRESS into natal 8th house; 2085-07-13 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2076-04-25  Mars conj Mars                         orb   0.0'
+      2090-08-15  Mars 150° Lagna                        orb   0.0'
+      2110-01-13  Saturn opp 8L(Sun)                     orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Saturn -> Venus
+      2110-01-13  Saturn opp Sun                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Saturn -> Venus
+      2111-04-24  Rahu conj Moon                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Saturn -> Rahu
+      2080-07-12  Mars 90° Mars                          orb   0.0'
+      2080-09-27  Saturn conj Lagna                      orb   0.0'
+      2080-10-27  Saturn conj Lagna                      orb   0.0'
+      2088-03-01  Saturn 90° Lagna                       orb   0.0'
+      2089-12-21  Mars 150° Moon                         orb   0.0'
+      2090-10-28  Rahu conj Mars                         orb   0.0'
+      2099-08-15  Saturn 60° 8L(Sun)                     orb   0.0'
+
+========================================================================================================
+### HER (2008-04-05)  |  Bracket Deerghayu (age 66-105)  |  Marakas: Mars, Mercury
+    Natal targets: Sun=21.8°Pis, Moon=8.3°Pis, Lagna=20.7°Pis, 8L(Venus)=4.7°Pis, Saturn=8.4°Leo, Mars=18.6°Gem
+    8th-house ingresses in bracket: 2074-08-29 Mars INGRESS into natal 8th house; 2076-08-03 Mars INGRESS into natal 8th house; 2078-01-11 Mars INGRESS into natal 8th house; 2079-12-14 Mars INGRESS into natal 8th house; 2081-11-22 Mars INGRESS into natal 8th house; 2083-11-03 Mars INGRESS into natal 8th house; 2085-10-15 Mars INGRESS into natal 8th house; 2087-04-20 Rahu INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2089-06-13  Rahu opp Lagna                         orb   0.0'
+      2089-07-27  Mars opp 8L(Venus)                     orb   0.0'
+      2090-04-05  Rahu opp 8L(Venus)                     orb   0.0'
+      2093-04-28  Mars opp Lagna                         orb   0.0'
+      2084-03-23  Mars 150° Saturn                       orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Mercury -> Rahu
+      2085-07-14  Saturn conj Sun                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Venus -> Rahu
+      2092-02-01  Saturn 90° Moon                        orb   0.0'
+      2098-08-19  Rahu conj Lagna                        orb   0.0'
+      2099-01-02  Saturn 90° Mars                        orb   0.0'
+      2099-09-12  Saturn 90° Mars                        orb   0.0'
+      2106-06-19  Mars 150° Sun                          orb   0.0'
+      2107-11-20  Mars 150° Lagna                        orb   0.0'
+
+========================================================================================================
+### BROTHER (2003-06-05)  |  Bracket Deerghayu (age 66-105)  |  Marakas: Jupiter, Venus
+    Natal targets: Sun=20.5°Tau, Moon=21.5°Can, Lagna=11.4°Sco, 8L(Mercury)=26.5°Ari, Saturn=6.3°Gem, Mars=0.8°Aqu
+    8th-house ingresses in bracket: 2070-03-21 Mars INGRESS into natal 8th house; 2071-09-02 Mars INGRESS into natal 8th house; 2072-01-01 Mars INGRESS into natal 8th house; 2073-08-07 Mars INGRESS into natal 8th house; 2074-11-30 Rahu INGRESS into natal 8th house; 2075-07-17 Mars INGRESS into natal 8th house; 2076-08-10 Rahu INGRESS into natal 8th house; 2077-06-27 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2083-10-28  Mars 150° 8L(Mercury)                  orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Jupiter -> Moon
+      2089-07-06  Saturn opp Lagna                       orb   0.0'
+      2103-10-22  Mars 150° Mars                         orb   0.0'
+      2106-07-20  Saturn opp Saturn                      orb   0.0'
+      2106-10-18  Saturn opp Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Venus -> Jupiter
+      2085-07-27  Rahu opp Saturn                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Saturn -> Venus
+      2087-03-02  Mars conj Saturn                       orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Mercury -> Mercury
+      2091-07-08  Saturn conj Saturn                     orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Venus -> Jupiter
+      2095-03-11  Saturn 60° Sun                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Mars -> Jupiter
+      2098-09-01  Saturn 90° Saturn                      orb   0.0'
+      2107-06-30  Mars conj Sun                          orb   0.0'
+      2074-04-15  Saturn conj Lagna                      orb   0.0'
+
+========================================================================================================
+### FATHER (1975-05-06)  |  Bracket Deerghayu (age 66-105)  |  Marakas: Mercury, Mars
+    Natal targets: Sun=21.4°Ari, Moon=22.4°Aqu, Lagna=16.6°Tau, 8L(Jupiter)=17.9°Pis, Saturn=20.8°Gem, Mars=24.9°Aqu
+    8th-house ingresses in bracket: 2042-11-26 Mars INGRESS into natal 8th house; 2044-11-05 Mars INGRESS into natal 8th house; 2046-10-14 Mars INGRESS into natal 8th house; 2046-12-08 Saturn INGRESS into natal 8th house; 2047-02-26 Rahu INGRESS into natal 8th house; 2048-09-08 Mars INGRESS into natal 8th house; 2049-07-10 Saturn INGRESS into natal 8th house; 2050-03-01 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2042-12-31  Saturn opp Sun                         orb   0.0'
+      2060-10-18  Saturn 90° Moon                        orb   0.0'
+      2060-11-21  Mars opp Mars                          orb   0.0'
+      2067-11-20  Rahu opp Lagna                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Rahu -> Rahu
+      2070-06-12  Saturn opp 8L(Jupiter)                 orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Saturn -> Sun
+      2077-05-02  Mars conj Sun                          orb   0.0'
+      2043-04-27  Saturn opp Sun                         orb   0.0'
+      2044-03-23  Mars opp Moon                          orb   0.0'
+      2054-03-27  Saturn conj Mars                       orb   0.0'
+      2061-03-11  Saturn conj Lagna                      orb   0.0'
+      2061-06-25  Mars opp 8L(Jupiter)                   orb   0.0'
+      2067-12-12  Rahu opp Lagna                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Rahu -> Rahu
+
+========================================================================================================
+### MOTHER (1980-10-01)  |  Bracket Deerghayu (age 66-105)  |  Marakas: Mercury, Mars
+    Natal targets: Sun=15.0°Vir, Moon=20.9°Gem, Lagna=0.9°Tau, 8L(Jupiter)=1.1°Vir, Saturn=7.7°Vir, Mars=28.9°Lib
+    8th-house ingresses in bracket: 2046-10-14 Mars INGRESS into natal 8th house; 2046-12-08 Saturn INGRESS into natal 8th house; 2047-02-26 Rahu INGRESS into natal 8th house; 2048-09-08 Mars INGRESS into natal 8th house; 2049-07-10 Saturn INGRESS into natal 8th house; 2050-03-01 Mars INGRESS into natal 8th house; 2052-02-04 Mars INGRESS into natal 8th house; 2054-01-13 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2052-06-30  Rahu conj Sun                          orb   0.0'
+      2068-11-01  Saturn conj Saturn                     orb   0.0'
+      2078-10-09  Mars 90° 8L(Jupiter)                   orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Mercury -> Rahu
+      2080-12-20  Mars 150° Sun                          orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Sun -> Saturn
+      2055-07-15  Saturn opp Sun                         orb   0.0'
+      2055-07-27  Saturn opp Sun                         orb   0.0'
+      2061-04-12  Mars conj Sun                          orb   0.0'
+      2062-10-17  Saturn conj Moon                       orb   0.0'
+      2068-09-29  Rahu conj Mars                         orb   0.0'
+      2071-05-07  Mars opp Saturn                        orb   0.0'
+      2073-01-17  Saturn conj Mars                       orb   0.0'
+      2077-03-09  Saturn 90° Sun                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Saturn -> Saturn
+
+========================================================================================================
+### STEVE JOBS  |  Bracket Deerghayu (age 66-105)  |  Marakas: Mercury, Saturn
+    Natal targets: Sun=12.5°Aqu, Moon=14.5°Pis, Lagna=29.1°Leo, 8L(Jupiter)=27.3°Gem, Saturn=27.9°Lib, Mars=5.8°Ari
+    8th-house ingresses in bracket: 2022-05-18 Mars INGRESS into natal 8th house; 2023-11-29 Rahu INGRESS into natal 8th house; 2024-04-24 Mars INGRESS into natal 8th house; 2025-03-30 Saturn INGRESS into natal 8th house; 2026-04-03 Mars INGRESS into natal 8th house; 2027-10-21 Saturn INGRESS into natal 8th house; 2028-03-13 Mars INGRESS into natal 8th house; 2030-02-21 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2022-06-17  Rahu opp Saturn                        orb   0.0'
+      2033-01-24  Mars conj Saturn                       orb   0.0'
+      2035-02-12  Saturn 90° Mars                        orb   0.0'
+      2043-12-29  Rahu opp Lagna                         orb   0.0'
+      2055-09-05  Mars opp Moon                          orb   0.0'
+      2028-04-13  Saturn conj Mars                       orb   0.0'
+      2028-11-13  Saturn 60° Sun                         orb   0.0'
+      2037-11-09  Rahu conj 8L(Jupiter)                  orb   0.0'
+      2046-12-30  Mars 150° Lagna                        orb   0.0'
+      2059-05-26  Mars 150° Moon                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Saturn -> Saturn
+      2022-08-12  Saturn 90° Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Mars -> Mercury -> Saturn
+      2023-07-13  Saturn conj Sun                        orb   0.0'
+    ACTUAL DEATH 2011-10-05: acute collision within ±5d: NONE | 8th-ingress within ±60d: no
+
+========================================================================================================
+### EINSTEIN  |  Bracket Alpayu (age 0-33)  |  Marakas: Moon, Jupiter
+    Natal targets: Sun=1.3°Pis, Moon=22.2°Sco, Lagna=16.8°Gem, 8L(Saturn)=12.0°Pis, Saturn=12.0°Pis, Mars=4.7°Cap
+    8th-house ingresses in bracket: 1879-03-08 Mars INGRESS into natal 8th house; 1881-02-14 Mars INGRESS into natal 8th house; 1883-01-25 Mars INGRESS into natal 8th house; 1885-01-04 Mars INGRESS into natal 8th house; 1886-12-15 Mars INGRESS into natal 8th house; 1888-11-23 Mars INGRESS into natal 8th house; 1890-10-27 Mars INGRESS into natal 8th house; 1892-04-22 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      1883-04-01  Saturn 60° Sun                         orb   0.0'
+      1886-06-10  Saturn conj Lagna                      orb   0.0'
+      1897-12-11  Rahu conj Mars                         orb   0.0'
+      1906-06-08  Saturn 90° Moon                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Jupiter -> Jupiter
+      1909-01-13  Saturn conj 8L(Saturn)                 orb   0.0'
+      1909-01-13  Saturn conj Saturn                     orb   0.0'
+      1898-10-24  Mars opp Mars                          orb   0.0'
+      1902-03-24  Mars conj 8L(Saturn)                   orb   0.0'
+      1902-03-24  Mars conj Saturn                       orb   0.0'
+      1904-06-03  Rahu opp Sun                           orb   0.0'
+      1904-09-27  Saturn 60° Moon                        orb   0.0'
+      1907-06-25  Saturn 60° Mars                        orb   0.0'
+    ACTUAL DEATH 1955-04-18: acute collision within ±5d: NONE | 8th-ingress within ±60d: no
+
+========================================================================================================
+### PRINCESS DIANA  |  Bracket Deerghayu (age 66-105)  |  Marakas: Jupiter, Venus
+    Natal targets: Sun=16.3°Gem, Moon=1.7°Aqu, Lagna=25.1°Sco, 8L(Mercury)=9.9°Gem, Saturn=4.5°Cap, Mars=8.3°Leo
+    8th-house ingresses in bracket: 2028-07-13 Mars INGRESS into natal 8th house; 2030-06-24 Mars INGRESS into natal 8th house; 2032-05-31 Saturn INGRESS into natal 8th house; 2032-06-04 Mars INGRESS into natal 8th house; 2034-05-15 Mars INGRESS into natal 8th house; 2036-04-24 Mars INGRESS into natal 8th house; 2037-10-20 Rahu INGRESS into natal 8th house; 2038-03-28 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2037-07-12  Rahu opp Saturn                        orb   0.0'
+      2048-11-06  Mars 150° Mars                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Rahu -> Jupiter
+      2063-12-28  Mars opp Mars                          orb   0.0'
+      2029-08-05  Rahu opp 8L(Mercury)                   orb   0.0'
+      2033-09-13  Mars opp Sun                           orb   0.0'
+      2035-03-08  Saturn opp Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Ketu -> Venus -> Jupiter
+      2037-05-07  Saturn opp Moon                        orb   0.0'
+      2037-08-10  Rahu opp Saturn                        orb   0.1'
+      2048-06-12  Mars 150° Sun                          orb   0.0'
+      2058-07-22  Mars opp Lagna                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Mercury -> Mars
+      2060-05-29  Mars 90° Moon                          orb   0.0'
+      2063-04-30  Saturn conj Sun                        orb   0.0'
+    ACTUAL DEATH 1997-08-31: acute collision within ±5d: NONE | 8th-ingress within ±60d: no
+
+========================================================================================================
+### WALT DISNEY  |  Bracket Deerghayu (age 66-105)  |  Marakas: Venus, Jupiter
+    Natal targets: Sun=19.9°Sco, Moon=16.6°Vir, Lagna=1.4°Vir, 8L(Mars)=16.0°Sag, Saturn=22.2°Sag, Mars=16.0°Sag
+    8th-house ingresses in bracket: 1968-03-20 Mars INGRESS into natal 8th house; 1968-06-18 Saturn INGRESS into natal 8th house; 1969-03-08 Saturn INGRESS into natal 8th house; 1970-02-26 Mars INGRESS into natal 8th house; 1972-02-01 Mars INGRESS into natal 8th house; 1973-07-31 Mars INGRESS into natal 8th house; 1975-06-23 Mars INGRESS into natal 8th house; 1977-05-29 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      1968-04-07  Saturn 90° Saturn                      orb   0.0'
+      1979-03-16  Mars 90° Sun                           orb   0.0' | MARAKA-DASHA CONVERGENCE: Mercury -> Jupiter -> Jupiter
+      1988-01-16  Rahu opp Lagna                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Ketu -> Jupiter -> Jupiter
+      1991-03-01  Mars opp Sun                           orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Venus -> Venus
+      1992-08-19  Mars 150° Saturn                       orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Venus -> Rahu
+      1998-02-07  Saturn 90° Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Mars -> Moon
+      2002-08-30  Rahu opp Sun                           orb   0.0' | MARAKA-DASHA CONVERGENCE: Venus -> Jupiter -> Venus
+      2004-04-11  Mars opp Sun                           orb   0.0'
+      1967-11-13  Mars conj Saturn                       orb   0.0'
+      1968-08-29  Rahu opp Moon                          orb   0.0'
+      1969-10-05  Mars conj 8L(Mars)                     orb   0.0'
+      1969-10-05  Mars conj Mars                         orb   0.0'
+    ACTUAL DEATH 1966-12-15: acute collision within ±5d: NONE | 8th-ingress within ±60d: no
+
+========================================================================================================
+### ELON MUSK  |  Bracket Madhyayu (age 33-66)  |  Marakas: Moon, Jupiter
+    Natal targets: Sun=12.4°Gem, Moon=14.8°Leo, Lagna=20.1°Gem, 8L(Saturn)=7.7°Tau, Saturn=7.7°Tau, Mars=27.4°Cap
+    8th-house ingresses in bracket: 2005-03-13 Mars INGRESS into natal 8th house; 2007-02-19 Mars INGRESS into natal 8th house; 2008-05-06 Rahu INGRESS into natal 8th house; 2009-01-28 Mars INGRESS into natal 8th house; 2011-01-09 Mars INGRESS into natal 8th house; 2012-12-19 Mars INGRESS into natal 8th house; 2014-11-28 Mars INGRESS into natal 8th house; 2016-11-02 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2016-04-15  Mars 90° Moon                          orb   0.0'
+      2025-11-16  Mars 90° Moon                          orb   0.0'
+      2035-03-19  Mars opp Lagna                         orb   0.0'
+      2037-01-13  Saturn 90° 8L(Saturn)                  orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Mercury -> Saturn
+      2037-01-13  Saturn 90° Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Mercury -> Saturn
+      2004-02-28  Saturn conj Sun                        orb   0.0'
+      2021-11-02  Rahu conj 8L(Saturn)                   orb   0.0'
+      2021-11-02  Rahu conj Saturn                       orb   0.0'
+      2028-11-30  Rahu opp Lagna                         orb   0.0'
+      2010-11-25  Saturn 90° Lagna                       orb   0.0'
+      2016-03-11  Mars opp 8L(Saturn)                    orb   0.0'
+      2016-03-11  Mars opp Saturn                        orb   0.0'
+
+========================================================================================================
+### DONALD TRUMP  |  Bracket Deerghayu (age 66-105)  |  Marakas: Mercury, Saturn
+    Natal targets: Sun=29.8°Tau, Moon=28.1°Sco, Lagna=6.9°Leo, 8L(Jupiter)=24.3°Vir, Saturn=0.7°Can, Mars=3.7°Leo
+    8th-house ingresses in bracket: 2013-03-05 Mars INGRESS into natal 8th house; 2015-02-13 Mars INGRESS into natal 8th house; 2017-01-21 Mars INGRESS into natal 8th house; 2018-12-24 Mars INGRESS into natal 8th house; 2020-06-19 Mars INGRESS into natal 8th house; 2020-10-05 Mars INGRESS into natal 8th house; 2022-05-18 Mars INGRESS into natal 8th house; 2023-11-29 Rahu INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2018-05-04  Mars opp Saturn                        orb   0.0'
+      2017-05-27  Rahu conj Mars                         orb   0.0'
+      2017-05-24  Mars opp Moon                          orb   0.0'
+      2017-07-20  Saturn conj Moon                       orb   0.0'
+      2033-06-17  Rahu conj 8L(Jupiter)                  orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Saturn -> Mercury
+      2036-04-19  Mars opp Moon                          orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Mercury -> Ketu
+      2041-11-23  Saturn 60° Lagna                       orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Venus -> Saturn
+      2047-01-09  Rahu opp Saturn                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Rahu -> Jupiter
+      2048-12-14  Mars opp Lagna                         orb   0.0'
+      2049-03-15  Saturn opp Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Rahu -> Mars
+      2016-12-06  Saturn 60° 8L(Jupiter)                 orb   0.0'
+      2019-03-09  Saturn 90° 8L(Jupiter)                 orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Saturn -> Saturn
+
+========================================================================================================
+### BARACK OBAMA  |  Bracket Madhyayu (age 33-66)  |  Marakas: Saturn, Moon
+    Natal targets: Sun=19.2°Can, Moon=10.0°Tau, Lagna=24.7°Cap, 8L(Sun)=19.2°Can, Saturn=2.0°Cap, Mars=29.3°Leo
+    8th-house ingresses in bracket: 1994-11-23 Mars INGRESS into natal 8th house; 1995-05-11 Mars INGRESS into natal 8th house; 1996-10-20 Mars INGRESS into natal 8th house; 1997-03-25 Mars INGRESS into natal 8th house; 1997-06-20 Rahu INGRESS into natal 8th house; 1998-09-28 Mars INGRESS into natal 8th house; 2000-09-08 Mars INGRESS into natal 8th house; 2002-08-21 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      1996-02-10  Saturn opp Mars                        orb   0.0'
+      1999-07-18  Rahu conj 8L(Sun)                      orb   0.0'
+      1999-07-18  Rahu conj Sun                          orb   0.0'
+      2014-03-01  Saturn 60° Mars                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Saturn -> Sun
+      2025-05-28  Mars opp Lagna                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Saturn -> Mars -> Jupiter
+      1997-06-26  Rahu conj Mars                         orb   0.1'
+      2002-06-25  Mars 150° Lagna                        orb   0.0'
+      2002-12-22  Mars 90° 8L(Sun)                       orb   0.0'
+      2002-12-22  Mars 90° Sun                           orb   0.0'
+      2006-09-06  Saturn opp Lagna                       orb   0.0'
+      2019-07-22  Mars conj 8L(Sun)                      orb   0.0'
+      2019-07-22  Mars conj Sun                          orb   0.0'
+
+========================================================================================================
+### AMITABH BACHCHAN  |  Bracket Deerghayu (age 66-105)  |  Marakas: Jupiter, Sun
+    Natal targets: Sun=24.4°Vir, Moon=10.3°Lib, Lagna=1.9°Aqu, 8L(Mercury)=23.7°Vir, Saturn=19.2°Tau, Mars=22.6°Vir
+    8th-house ingresses in bracket: 2008-08-10 Mars INGRESS into natal 8th house; 2009-09-10 Saturn INGRESS into natal 8th house; 2010-07-21 Mars INGRESS into natal 8th house; 2012-05-17 Saturn INGRESS into natal 8th house; 2012-06-22 Mars INGRESS into natal 8th house; 2013-11-27 Mars INGRESS into natal 8th house; 2014-03-26 Mars INGRESS into natal 8th house; 2014-07-14 Rahu INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2010-12-31  Saturn conj Mars                       orb   0.0'
+      2016-11-21  Saturn 60° Mars                        orb   0.0'
+      2033-06-26  Rahu conj 8L(Mercury)                  orb   0.0'
+      2035-07-01  Mars 150° Mars                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Sun -> Moon -> Mercury
+      2038-07-24  Saturn 90° Saturn                      orb   0.0' | MARAKA-DASHA CONVERGENCE: Sun -> Saturn -> Jupiter
+      2022-05-31  Mars 150° Moon                         orb   0.0'
+      2024-01-31  Rahu opp 8L(Mercury)                   orb   0.1'
+      2026-05-24  Mars opp Moon                          orb   0.0'
+      2028-03-13  Saturn 60° Lagna                       orb   0.0'
+      2028-12-22  Saturn opp Moon                        orb   0.0'
+      2029-01-19  Saturn opp Moon                        orb   0.0'
+      2012-08-05  Mars conj Sun                          orb   0.0'
+
+========================================================================================================
+### TIGER WOODS  |  Bracket Deerghayu (age 66-105)  |  Marakas: Venus, Jupiter
+    Natal targets: Sun=15.4°Sag, Moon=28.9°Sco, Lagna=1.2°Vir, 8L(Mars)=24.0°Tau, Saturn=7.6°Can, Mars=24.0°Tau
+    8th-house ingresses in bracket: 2041-05-20 Mars INGRESS into natal 8th house; 2043-04-30 Mars INGRESS into natal 8th house; 2045-04-09 Mars INGRESS into natal 8th house; 2047-03-20 Mars INGRESS into natal 8th house; 2049-02-26 Mars INGRESS into natal 8th house; 2051-01-31 Mars INGRESS into natal 8th house; 2052-07-28 Mars INGRESS into natal 8th house; 2054-06-22 Mars INGRESS into natal 8th house
+    Top acute collisions (40; sorted by exact orb):
+      2046-06-29  Saturn opp 8L(Mars)                    orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Jupiter -> Ketu
+      2046-06-29  Saturn opp Mars                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Jupiter -> Ketu
+      2048-12-21  Rahu opp 8L(Mars)                      orb   0.0'
+      2048-12-21  Rahu opp Mars                          orb   0.0'
+      2076-01-27  Saturn 90° Lagna                       orb   0.0'
+      2076-09-20  Saturn conj Moon                       orb   0.0'
+      2054-09-16  Saturn 90° Moon                        orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Venus -> Jupiter
+      2054-09-13  Mars conj 8L(Mars)                     orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Venus -> Jupiter
+      2054-09-13  Mars conj Mars                         orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Venus -> Jupiter
+      2078-05-09  Mars 90° Saturn                        orb   0.0'
+      2046-11-27  Saturn conj Moon                       orb   0.0' | MARAKA-DASHA CONVERGENCE: Jupiter -> Jupiter -> Sun
+      2048-12-02  Rahu opp 8L(Mars)                      orb   0.0'
+
+========================================================================================================
+EMPIRICAL SCORECARD — acute layer vs 4 known deaths (±5 days)
+  STEVE JOBS         died 2011-10-05  ->  MISS
+  EINSTEIN           died 1955-04-18  ->  MISS
+  PRINCESS DIANA     died 1997-08-31  ->  MISS
+  WALT DISNEY        died 1966-12-15  ->  MISS
+  ACUTE LAYER: 0/4
+========================================================================================================

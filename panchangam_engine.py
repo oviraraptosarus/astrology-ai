@@ -105,7 +105,7 @@ class PanchangamEngine:
     """High-precision astronomical Drik Panchanga and Muhurta engine."""
 
     def __init__(self):
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        pass
 
     def calculate_full_panchang(self, dt: datetime, lat: float, lon: float, tz_name: str = "Asia/Kolkata") -> Dict[str, Any]:
         """
@@ -121,6 +121,10 @@ class PanchangamEngine:
         hour_dec = utc_dt.hour + (utc_dt.minute / 60.0) + (utc_dt.second / 3600.0)
         jd_now = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, hour_dec)
 
+        from astronomy_core import ephemeris_lock
+        ephemeris_lock.acquire()
+        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        
         # 1. Sunrise & Sunset for the Day
         # We find the sunrise preceding or on this day with Polar Fallback
         jd_midnight = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, 0.0)
@@ -147,6 +151,8 @@ class PanchangamEngine:
         flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
         sun_res, _ = swe.calc_ut(jd_now, swe.SUN, flags)
         moon_res, _ = swe.calc_ut(jd_now, swe.MOON, flags)
+
+        ephemeris_lock.release()
 
         sun_lon = sun_res[0] % 360.0
         moon_lon = moon_res[0] % 360.0
