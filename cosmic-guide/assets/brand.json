@@ -1,0 +1,5 @@
+{
+ "source": "static/product.css + locally-run app (live Railway URL returns 404)",
+ "colors": {"accent":"#5e5ce6","bg_light":"#f5f5f7","card":"#ffffff","text":"#1c1c1e","muted":"#8a8a8e","good":"#34c759","warn":"#ff9f0a","night":"#0e0d1a"},
+ "fonts": {"app":"-apple-system / SF Pro","film_ui":"Inter","film_display":"TBD with user"}
+}

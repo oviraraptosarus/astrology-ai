@@ -1,0 +1,26 @@
+{
+  "name": "astrology-ai",
+  "version": "1.0.0",
+  "description": "> **Live Web Application:** [https://astrology-ai-web-production.up.railway.app](https://astrology-ai-web-production.up.railway.app/)   > **Repository:** [https://github.com/oviraraptosarus/astrology-ai](https://github.com/oviraraptosarus/astrology-ai)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oviraraptosarus/astrology-ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oviraraptosarus/astrology-ai/issues"
+  },
+  "homepage": "https://github.com/oviraraptosarus/astrology-ai#readme",
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
+}
