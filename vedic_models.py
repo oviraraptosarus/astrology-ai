@@ -177,6 +177,29 @@ class Chart:
             c.add_planet(p)
         return c
 
+    @classmethod
+    def from_chart_dict(cls, chart_dict: dict):
+        """Rebuild a Chart from a full engine chart dict, restoring the non-planetary state
+        (birth time/location, current dasha, live transits) that from_dict() alone drops."""
+        from datetime import datetime
+        import pytz
+        c = cls.from_dict(chart_dict.get("Basic_Chart", {}))
+        c.current_dasha = chart_dict.get("Current_Dasha", {})
+        c.current_transits = chart_dict.get("Live_Transits_Gochar", {})
+        meta = chart_dict.get("Birth_Meta") or {}
+        try:
+            if meta.get("birth_utc"):
+                dt = datetime.fromisoformat(meta["birth_utc"])
+                c.birth_time = dt if dt.tzinfo else pytz.utc.localize(dt)
+            if meta.get("birth_local"):
+                c.birth_local = datetime.fromisoformat(meta["birth_local"])
+            for k_src, k_dst in (("lat", "lat"), ("lon", "lon"), ("tz_name", "tz_name")):
+                if meta.get(k_src) is not None:
+                    setattr(c, k_dst, meta[k_src])
+        except (TypeError, ValueError):
+            pass
+        return c
+
     def add_planet(self, planet: Planet):
         self.planets[planet.name] = planet
         

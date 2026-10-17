@@ -250,7 +250,7 @@ def scan_forward_event_timing(domain: str, config: RunnableConfig) -> str:
     if not chart_dict:
         return "Error: No birth chart calculated yet. Please ask user for birth details and call get_birth_chart first."
     try:
-        chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
+        chart_obj = Chart.from_chart_dict(chart_dict)
         chart_obj.current_dasha = chart_dict.get("Current_Dasha", {})
         scanner = ForwardTimingScanner(chart_obj)
         now = datetime.now(pytz.utc)
@@ -271,7 +271,7 @@ def check_critical_sensitivities(config: RunnableConfig) -> str:
     if not chart_dict:
         return "Error: No birth chart calculated yet."
     try:
-        chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
+        chart_obj = Chart.from_chart_dict(chart_dict)
         sp = SensitivePointsEngine(chart_obj).calculate_all()
         return json.dumps(sp, indent=2)
     except Exception as e:
@@ -305,7 +305,7 @@ def check_institutional_defense(entity_name: str = "", config: RunnableConfig = 
     if not chart_dict:
         return "Error: No primary chart calculated yet. Call get_birth_chart first."
     try:
-        chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
+        chart_obj = Chart.from_chart_dict(chart_dict)
         now = datetime.datetime.now(pytz.utc)
         jd = swe.julday(now.year, now.month, now.day, now.hour + now.minute/60.0)
         live_planets = RealtimeEngine.get_live_planets(jd)
@@ -343,7 +343,7 @@ def check_biorhythm_pakshi(config: RunnableConfig) -> str:
     if not chart_dict:
         return "Error: No birth chart calculated yet."
     try:
-        chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
+        chart_obj = Chart.from_chart_dict(chart_dict)
         now = datetime.now(pytz.timezone("Asia/Kolkata"))
         res = PanchaPakshiEngine.get_pakshi_reading(chart_obj, now)
         return json.dumps(res, indent=2)
@@ -358,7 +358,7 @@ def get_remedies_and_gemstones(planet_name: str = "", config: RunnableConfig = N
     r_engine = RemedyEngine()
     session_id = config.get("configurable", {}).get("thread_id", "current") if config else "current"
     chart_dict = load_chart(session_id)
-    chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {})) if chart_dict else None
+    chart_obj = Chart.from_chart_dict(chart_dict) if chart_dict else None
     
     target_planet = planet_name.strip().capitalize() if planet_name else ""
     planets_to_check = [target_planet] if target_planet and target_planet in RemedyEngine.REMEDY_DATABASE else ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"]
@@ -394,7 +394,7 @@ def rectify_birth_time(events_json: str = "", config: RunnableConfig = None) -> 
     if not events or len(events) < 2:
         return "Error: Provide at least 2 life events for meaningful rectification."
     
-    chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
+    chart_obj = Chart.from_chart_dict(chart_dict)
     birth_info = chart_dict.get("birth_details", {})
     
     # Reconstruct birth datetime

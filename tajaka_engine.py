@@ -53,33 +53,35 @@ class TajakaEngine:
     
             # Estimate JD near birthday in target year
             est_dt = datetime(target_year, birth_dt_utc.month, birth_dt_utc.day, birth_dt_utc.hour, birth_dt_utc.minute, tzinfo=pytz.utc)
-        hour_dec = est_dt.hour + (est_dt.minute / 60.0) + (est_dt.second / 3600.0)
-        jd_guess = swe.julday(est_dt.year, est_dt.month, est_dt.day, hour_dec)
+            hour_dec = est_dt.hour + (est_dt.minute / 60.0) + (est_dt.second / 3600.0)
+            jd_guess = swe.julday(est_dt.year, est_dt.month, est_dt.day, hour_dec)
 
-        # Newton-Raphson / Binary refinement
-        jd = jd_guess - 2.0
-        step = 0.01  # ~14 minutes
-        best_jd = jd_guess
-        min_diff = 999.0
+            # Newton-Raphson / Binary refinement
+            jd = jd_guess - 2.0
+            step = 0.01  # ~14 minutes
+            best_jd = jd_guess
+            min_diff = 999.0
 
-        for _ in range(500):
-            res, _ = swe.calc_ut(jd, swe.SUN, flags)
-            sun_lon = res[0]
-            diff = (sun_lon - natal_sun_longitude) % 360.0
-            if diff > 180.0:
-                diff -= 360.0
+            for _ in range(500):
+                res, _ = swe.calc_ut(jd, swe.SUN, flags)
+                sun_lon = res[0]
+                diff = (sun_lon - natal_sun_longitude) % 360.0
+                if diff > 180.0:
+                    diff -= 360.0
 
-            if abs(diff) < min_diff:
-                min_diff = abs(diff)
-                best_jd = jd
+                if abs(diff) < min_diff:
+                    min_diff = abs(diff)
+                    best_jd = jd
 
-            if abs(diff) < 0.0001:  # within 0.36 arcseconds
-                return jd
+                if abs(diff) < 0.0001:  # within 0.36 arcseconds
+                    return jd
 
-            # Sun moves ~0.9856 deg/day
-            jd -= diff / 0.9856
+                # Sun moves ~0.9856 deg/day
+                jd -= diff / 0.9856
 
-        return best_jd
+            return best_jd
+        finally:
+            ephemeris_lock.release()
 
     @staticmethod
     def calculate_varshaphala(chart: Chart, birth_dt_utc: datetime, target_year: int, lat: float, lon: float) -> Dict[str, Any]:

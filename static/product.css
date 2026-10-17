@@ -492,7 +492,7 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; }
   display: flex; align-items: center; gap: var(--s2);
 }
 .disclose summary::-webkit-details-marker { display: none; }
-.disclose summary .caret { transition: transform 0.2s var(--ease); }
+.disclose summary .caret { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.2s var(--ease); }
 .disclose[open] summary .caret { transform: rotate(90deg); }
 .disclose .disclose-body { padding-bottom: var(--s4); animation: fade 0.3s var(--ease); }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
@@ -547,7 +547,7 @@ svg.ic { width: 20px; height: 20px; flex-shrink: 0; }
   padding: 10px 12px; box-shadow: var(--shadow-sm); min-width: 0;
 }
 .id-chip .k { font-size: 0.6875rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 650; }
-.id-chip .v { font-size: 0.9375rem; font-weight: 650; color: var(--text); display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.id-chip .v { font-size: 0.9375rem; font-weight: 650; color: var(--text); display: flex; align-items: center; gap: 4px; min-width: 0; overflow-wrap: anywhere; line-height: 1.2; }
 
 .today-plain { font-size: 1.0625rem; line-height: 1.5; color: var(--text); }
 .transit-row { display: flex; align-items: center; gap: var(--s3); padding: var(--s3) 0; border-bottom: 1px solid var(--border); }

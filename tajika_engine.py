@@ -54,23 +54,25 @@ class TajikaVarshaphalaEngine:
         try:
             swe.set_sid_mode(Config.ayanamsha_swe_id())
         
-        # Approximate JD around birthday in target_year
-        approx_dt = datetime(target_year, birth_dt.month, birth_dt.day, birth_dt.hour, birth_dt.minute, tzinfo=pytz.utc)
-        hour_dec = approx_dt.hour + (approx_dt.minute / 60.0)
-        jd_approx = swe.julday(approx_dt.year, approx_dt.month, approx_dt.day, hour_dec)
+            # Approximate JD around birthday in target_year
+            approx_dt = datetime(target_year, birth_dt.month, birth_dt.day, birth_dt.hour, birth_dt.minute, tzinfo=pytz.utc)
+            hour_dec = approx_dt.hour + (approx_dt.minute / 60.0)
+            jd_approx = swe.julday(approx_dt.year, approx_dt.month, approx_dt.day, hour_dec)
         
-        # Bounded Newton-Raphson search for exact Sun return
-        jd_curr = jd_approx - 2.0
-        for _ in range(25):
-            res, _ = swe.calc_ut(jd_curr, swe.SUN, swe.FLG_SIDEREAL)
-            curr_lon = res[0] % 360.0
-            diff = (natal_sun_lon - curr_lon + 180.0) % 360.0 - 180.0
-            if abs(diff) < 0.00001:  # Sub-arcsecond precision
-                break
-            daily_motion = res[3] if len(res) > 3 and res[3] > 0 else 0.9856
-            jd_curr += diff / daily_motion
+            # Bounded Newton-Raphson search for exact Sun return
+            jd_curr = jd_approx - 2.0
+            for _ in range(25):
+                res, _ = swe.calc_ut(jd_curr, swe.SUN, swe.FLG_SIDEREAL)
+                curr_lon = res[0] % 360.0
+                diff = (natal_sun_lon - curr_lon + 180.0) % 360.0 - 180.0
+                if abs(diff) < 0.00001:  # Sub-arcsecond precision
+                    break
+                daily_motion = res[3] if len(res) > 3 and res[3] > 0 else 0.9856
+                jd_curr += diff / daily_motion
 
-        return jd_curr
+            return jd_curr
+        finally:
+            ephemeris_lock.release()
 
     @classmethod
     def calculate_annual_chart(cls, chart: Chart, target_year: int, lat: float, lon: float) -> Dict[str, Any]:
@@ -83,8 +85,6 @@ class TajikaVarshaphalaEngine:
         natal_sun_lon = natal_sun.longitude if natal_sun else 0.0
         
         jd_return = cls.calculate_varsha_pravesha(natal_sun_lon, target_year, birth_dt)
-        finally:
-            ephemeris_lock.release()
         year_val, month_val, day_val, hour_val = swe.revjul(jd_return)
         
         hours = int(hour_val)
@@ -97,10 +97,10 @@ class TajikaVarshaphalaEngine:
         ephemeris_lock.acquire()
         try:
             swe.set_sid_mode(Config.ayanamsha_swe_id())
-        try:
-            cusps, ascmc = swe.houses_ex(jd_return, lat, lon, b'P', swe.FLG_SIDEREAL)
-        except Exception:
-            cusps, ascmc = swe.houses_ex(jd_return, lat, lon, b'E', swe.FLG_SIDEREAL)
+            try:
+                cusps, ascmc = swe.houses_ex(jd_return, lat, lon, b'P', swe.FLG_SIDEREAL)
+            except Exception:
+                cusps, ascmc = swe.houses_ex(jd_return, lat, lon, b'E', swe.FLG_SIDEREAL)
         finally:
             ephemeris_lock.release()
         varsha_asc_lon = ascmc[0] % 360.0

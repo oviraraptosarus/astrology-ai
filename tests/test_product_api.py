@@ -82,6 +82,55 @@ class TestProductAPI(unittest.TestCase):
         self.assertIn("auspicious", cal)
         self.assertIn("inauspicious", cal)
 
+    PROFILE = {"latitude": 16.83, "longitude": 81.98, "timezone": "Asia/Kolkata"}
+
+    def test_calendar_uses_todays_panchang_not_birth_day(self):
+        """Regression: 'today' tithi/nakshatra used to be read from the natal chart."""
+        import pytz
+        import swisseph as swe
+        from config import Config
+        cal = product.calendar_view(self.chart, self.PROFILE)
+        now = datetime.now(pytz.utc)
+        jd = swe.julday(now.year, now.month, now.day, now.hour + now.minute / 60.0)
+        swe.set_sid_mode(Config.ayanamsha_swe_id())
+        sun = swe.calc_ut(jd, swe.SUN, swe.FLG_SIDEREAL)[0][0]
+        moon = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)[0][0]
+        expected_tithi = int(((moon - sun) % 360) // 12) + 1
+        expected_nak = int((moon % 360) // (360 / 27)) + 1
+        # The panchang is evaluated at 'now' in the engine too; allow a boundary slip of one step.
+        live = product.live_panchang(self.PROFILE)["panchanga"]
+        self.assertIn(live["tithi"]["index"], {expected_tithi, expected_tithi % 30 + 1, (expected_tithi - 2) % 30 + 1})
+        self.assertIn(live["nakshatra"]["index"], {expected_nak, expected_nak % 27 + 1, (expected_nak - 2) % 27 + 1})
+        self.assertEqual(cal["today"]["tithi"], live["tithi"]["name"])
+        self.assertTrue(cal["auspicious"] and cal["inauspicious"])
+
+    def test_calendar_without_profile_shows_no_stale_natal_panchang(self):
+        cal = product.calendar_view(self.chart)
+        self.assertEqual(cal["today"]["tithi"], "")
+        self.assertEqual(cal["auspicious"], [])
+
+    def test_current_dasha_is_populated(self):
+        """Regression: engine read non-existent MD/AD/PD keys so the dasha was always blank."""
+        d = self.chart["Current_Dasha"]
+        for k in ("Mahadasha", "Antardasha", "Pratyantardasha"):
+            self.assertTrue(d[k], k)
+        self.assertLess(d["Mahadasha_Start"], d["Mahadasha_End"])
+        period = product.dasha_period(self.chart)
+        self.assertTrue(period["label"])
+
+    def test_timing_windows_use_real_birth_time(self):
+        """Regression: the dict->Chart round trip dropped birth_time, so the forward scanner
+        silently assumed a 2000-01-01 birth and returned windows from the wrong dasha."""
+        sv = get_semantic_view(self.chart, "career")
+        sv = json.loads(sv) if isinstance(sv, str) else sv
+        windows = sv.get("timing_windows", [])
+        self.assertTrue(windows)
+        current_md = self.chart["Current_Dasha"]["Mahadasha"]
+        # 2008 native: every 24-month window must sit inside a Mahadasha the engine reports
+        # for the same birth data, i.e. the one that is current now or the next one.
+        for w in windows:
+            self.assertEqual(w["trigger_dasha"].split(" -> ")[0], current_md)
+
 
 if __name__ == "__main__":
     unittest.main()

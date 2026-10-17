@@ -288,7 +288,7 @@ def get_live_today_transits(chart: dict) -> dict:
             }
         
         # Rahu / Ketu
-        res_node, _ = swe.calc_ut(jd_now, swe.MEAN_NODE, flags)
+        res_node, _ = swe.calc_ut(jd_now, Config.node_swe_id(), flags)
         rahu_lon = res_node[0] % 360.0
         ketu_lon = (rahu_lon + 180.0) % 360.0
         r_idx = int(rahu_lon / 30)
@@ -308,9 +308,40 @@ def get_live_today_transits(chart: dict) -> dict:
         return chart.get("Live_Transits_Gochar", {})
 
 
+def _profile_tz(profile: dict):
+    """Resolve the user's timezone (falls back to UTC) so dates/greetings match them."""
+    import pytz
+    try:
+        return pytz.timezone((profile or {}).get("timezone") or "UTC")
+    except Exception:
+        return pytz.utc
+
+
+def _now_local(profile: dict = None):
+    from datetime import datetime as _dt
+    import pytz
+    return _dt.now(pytz.utc).astimezone(_profile_tz(profile))
+
+
+def live_panchang(profile: dict = None) -> dict:
+    """Today's Drik Panchang for the user's saved location (NOT the birth-day panchang).
+    Returns {} when no profile/location is available so callers never show stale natal data."""
+    if not profile:
+        return {}
+    try:
+        from panchangam_engine import PanchangamEngine
+        return PanchangamEngine().calculate_full_panchang(
+            _now_local(profile),
+            float(profile["latitude"]), float(profile["longitude"]),
+            profile.get("timezone") or "UTC",
+        )
+    except Exception:
+        return {}
+
+
 # ── daily insight ─────────────────────────────────────────────────────────────
-def daily_insight(chart: dict) -> dict:
-    pan = chart.get("Panchanga", {})
+def daily_insight(chart: dict, profile: dict = None) -> dict:
+    pan = (live_panchang(profile) or {}).get("panchanga", {})
     transits = get_live_today_transits(chart)
     moon_t = transits.get("Moon", {})
     moon_sign_today = moon_t.get("current_sign", "")
@@ -328,12 +359,12 @@ def daily_insight(chart: dict) -> dict:
         plain = f"Today the Moon moves through {moon_sign_today}. Follow its calm, steady rhythm."
 
     return {
-        "date_label": _pretty_today(),
-        "tithi": pan.get("Tithi", ""),
-        "vara": pan.get("Vara", ""),
-        "nakshatra": pan.get("Nakshatra", ""),
-        "yoga": pan.get("Yoga", ""),
-        "karana": pan.get("Karana", ""),
+        "date_label": _pretty_today(profile),
+        "tithi": (pan.get("tithi") or {}).get("name", ""),
+        "vara": (pan.get("vara") or {}).get("name", ""),
+        "nakshatra": (pan.get("nakshatra") or {}).get("name", ""),
+        "yoga": (pan.get("yoga") or {}).get("name", ""),
+        "karana": (pan.get("karana") or {}).get("name", ""),
         "moon_sign_today": moon_sign_today,
         "moon_glyph": SIGN_GLYPH.get(moon_sign_today, ""),
         "focus": house_focus[0],
@@ -460,8 +491,8 @@ def _numerology_brief(chart: dict) -> dict:
 
 
 # ── home overview (Home screen) ───────────────────────────────────────────────
-def home_overview(chart: dict, display_name: str = "") -> dict:
-    hour = datetime.now().hour
+def home_overview(chart: dict, display_name: str = "", profile: dict = None) -> dict:
+    hour = _now_local(profile).hour
     if hour < 12:
         greeting = "Good morning"
     elif hour < 17:
@@ -471,14 +502,14 @@ def home_overview(chart: dict, display_name: str = "") -> dict:
     first = (display_name or "").strip().split(" ")[0] if display_name else ""
 
     ident = _identity(chart)
-    daily = daily_insight(chart)
+    daily = daily_insight(chart, profile)
     dasha = dasha_period(chart)
     transits = transit_highlights(chart, limit=3)
 
     return {
         "greeting": greeting,
         "name": first,
-        "date_label": _pretty_today(),
+        "date_label": _pretty_today(profile),
         "identity": ident,
         "today": {
             "headline": "Today",
@@ -505,9 +536,9 @@ def _supports_dash() -> bool:
         return False
 
 
-def _pretty_today() -> str:
+def _pretty_today(profile: dict = None) -> str:
     """Cross-platform 'Monday, September 7' (no %-d, which fails on Windows)."""
-    now = datetime.now()
+    now = _now_local(profile)
     return f"{now.strftime('%A, %B')} {now.day}"
 
 
@@ -655,10 +686,9 @@ def compatibility_summary(compat: dict, person_label: str, relation: str = "part
 
 
 # ── calendar / sky ────────────────────────────────────────────────────────────
-def calendar_view(chart: dict) -> dict:
-    pan = chart.get("Panchanga", {})
-    full = pan.get("Drik_Panchang_Full", {}) or {}
-    daily = daily_insight(chart)
+def calendar_view(chart: dict, profile: dict = None) -> dict:
+    full = live_panchang(profile) or {}
+    daily = daily_insight(chart, profile)
     transits = transit_highlights(chart, limit=6)
 
     # Auspicious / inauspicious windows if the deep panchang provides them.

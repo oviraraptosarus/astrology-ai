@@ -123,36 +123,38 @@ class PanchangamEngine:
 
         from astronomy_core import ephemeris_lock
         ephemeris_lock.acquire()
-        swe.set_sid_mode(Config.ayanamsha_swe_id())
-        
-        # 1. Sunrise & Sunset for the Day
-        # We find the sunrise preceding or on this day with Polar Fallback
-        jd_midnight = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, 0.0)
         try:
-            res_rise = swe.rise_trans(jd_midnight, swe.SUN, swe.CALC_RISE, (lon, lat, 0.0))
-            sunrise_jd = res_rise[1][0]
-            if jd_now < sunrise_jd:
-                res_rise_prev = swe.rise_trans(jd_midnight - 1.0, swe.SUN, swe.CALC_RISE, (lon, lat, 0.0))
-                sunrise_jd = res_rise_prev[1][0]
-            res_set = swe.rise_trans(sunrise_jd, swe.SUN, swe.CALC_SET, (lon, lat, 0.0))
-            sunset_jd = res_set[1][0]
-            res_next_rise = swe.rise_trans(sunset_jd, swe.SUN, swe.CALC_RISE, (lon, lat, 0.0))
-            next_sunrise_jd = res_next_rise[1][0]
-        except Exception:
-            # Polar / Ephemeris fallback (e.g. Arctic midnight sun / continuous polar night)
-            sunrise_jd = jd_midnight + (6.0 / 24.0)
-            sunset_jd = jd_midnight + (18.0 / 24.0)
-            next_sunrise_jd = jd_midnight + 1.0 + (6.0 / 24.0)
+            swe.set_sid_mode(Config.ayanamsha_swe_id())
+        
+            # 1. Sunrise & Sunset for the Day
+            # We find the sunrise preceding or on this day with Polar Fallback
+            jd_midnight = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, 0.0)
+            try:
+                res_rise = swe.rise_trans(jd_midnight, swe.SUN, swe.CALC_RISE, (lon, lat, 0.0))
+                sunrise_jd = res_rise[1][0]
+                if jd_now < sunrise_jd:
+                    res_rise_prev = swe.rise_trans(jd_midnight - 1.0, swe.SUN, swe.CALC_RISE, (lon, lat, 0.0))
+                    sunrise_jd = res_rise_prev[1][0]
+                res_set = swe.rise_trans(sunrise_jd, swe.SUN, swe.CALC_SET, (lon, lat, 0.0))
+                sunset_jd = res_set[1][0]
+                res_next_rise = swe.rise_trans(sunset_jd, swe.SUN, swe.CALC_RISE, (lon, lat, 0.0))
+                next_sunrise_jd = res_next_rise[1][0]
+            except Exception:
+                # Polar / Ephemeris fallback (e.g. Arctic midnight sun / continuous polar night)
+                sunrise_jd = jd_midnight + (6.0 / 24.0)
+                sunset_jd = jd_midnight + (18.0 / 24.0)
+                next_sunrise_jd = jd_midnight + 1.0 + (6.0 / 24.0)
 
-        dinamana_hours = (sunset_jd - sunrise_jd) * 24.0
-        ratrimana_hours = (next_sunrise_jd - sunset_jd) * 24.0
+            dinamana_hours = (sunset_jd - sunrise_jd) * 24.0
+            ratrimana_hours = (next_sunrise_jd - sunset_jd) * 24.0
 
-        # Planetary positions
-        flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
-        sun_res, _ = swe.calc_ut(jd_now, swe.SUN, flags)
-        moon_res, _ = swe.calc_ut(jd_now, swe.MOON, flags)
+            # Planetary positions
+            flags = swe.FLG_SIDEREAL | swe.FLG_SPEED
+            sun_res, _ = swe.calc_ut(jd_now, swe.SUN, flags)
+            moon_res, _ = swe.calc_ut(jd_now, swe.MOON, flags)
 
-        ephemeris_lock.release()
+        finally:
+            ephemeris_lock.release()
 
         sun_lon = sun_res[0] % 360.0
         moon_lon = moon_res[0] % 360.0

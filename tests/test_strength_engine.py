@@ -49,8 +49,9 @@ class TestStrengthEngine(unittest.TestCase):
         sun = self.chart.planets["Sun"]
         # Sun is in 1st house -> Night birth
         # Therefore Sun gets 0 Kala Bala (from Nathonnatha).
-        # And 0 from Tribhaga. Shukla paksha -> malefics get no Paksha Bala.
-        self.assertEqual(sun.shadbala["kala_bala"], 0.0)
+        # And 0 from Tribhaga. Paksha Bala is complementary for malefics (BPHS):
+        # benefics = Moon-Sun elongation / 3 = 95/3 = 31.67, malefics get 60 - 31.67 = 28.33.
+        self.assertAlmostEqual(sun.shadbala["kala_bala"], 28.33, places=1)
         
         moon = self.chart.planets["Moon"]
         # Night birth: Moon gets 60 Nathonnatha + 60 Tribhaga (lord of 1st part of night).

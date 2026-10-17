@@ -239,6 +239,8 @@ class DashaEngine:
         for md in timeline:
             if md["start"] <= target_iso <= md["end"]:
                 result["mahadasha"] = md["lord"]
+                result["mahadasha_start"] = md["start"]
+                result["mahadasha_end"] = md["end"]
                 for ad in md.get("sub_periods", []):
                     if ad["start"] <= target_iso <= ad["end"]:
                         result["antardasha"] = ad["lord"]

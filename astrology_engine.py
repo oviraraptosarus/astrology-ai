@@ -188,13 +188,14 @@ def calculate_chart_with_object(year: int, month: int, day: int, hour: int, minu
         timeline = DashaEngine.calculate_vimshottari_timeline(utc_dt, moon_lon, num_levels=3)
         curr_dasha_full = DashaEngine.get_current_dasha(timeline, datetime.now(pytz.utc))
         
-        # Format dashas for backwards compatibility
+        # Format dashas for backwards compatibility.
+        # get_current_dasha() returns lower-case lord names plus ISO start/end strings.
         dashas = {
-            "Mahadasha": curr_dasha_full.get("MD", {}).get("lord", ""),
-            "Antardasha": curr_dasha_full.get("AD", {}).get("lord", ""),
-            "Pratyantardasha": curr_dasha_full.get("PD", {}).get("lord", ""),
-            "Mahadasha_Start": curr_dasha_full.get("MD", {}).get("start_date", utc_dt).strftime("%Y-%m"),
-            "Mahadasha_End": curr_dasha_full.get("MD", {}).get("end_date", utc_dt).strftime("%Y-%m")
+            "Mahadasha": curr_dasha_full.get("mahadasha") or "",
+            "Antardasha": curr_dasha_full.get("antardasha") or "",
+            "Pratyantardasha": curr_dasha_full.get("pratyantardasha") or "",
+            "Mahadasha_Start": (curr_dasha_full.get("mahadasha_start") or "")[:7],
+            "Mahadasha_End": (curr_dasha_full.get("mahadasha_end") or "")[:7],
         }
     
         # --- Live Transits (Gochar) ---
@@ -259,6 +260,12 @@ def calculate_chart_with_object(year: int, month: int, day: int, hour: int, minu
     chart.current_transits = live_transits
     
     return chart, {
+        # Birth metadata the Chart object needs after a dict round-trip (Chart.from_chart_dict);
+        # without it timing engines silently fall back to a 2000-01-01 birth and shift every dasha.
+        "Birth_Meta": {
+            "birth_utc": utc_dt.isoformat(), "birth_local": local_dt.isoformat(),
+            "lat": lat, "lon": lon, "tz_name": tz_name,
+        },
         "Basic_Chart": base_chart,
         "Yogas_Found": yogas,
         "Navamsha_D9": d9_chart,
@@ -406,7 +413,7 @@ def get_semantic_view(chart_dict, topic):
         from dosha_engine import DoshaEngine
         from cancellations import CancellationEngine
         
-        chart_obj = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
+        chart_obj = Chart.from_chart_dict(chart_dict)
         sp_data = SensitivePointsEngine(chart_obj).calculate_all()
         av_data = AdvancedAvasthaEngine(chart_obj).combine_all()
         dosha_data = DoshaEngine(chart_obj).evaluate_all()
@@ -425,11 +432,7 @@ def get_semantic_view(chart_dict, topic):
         })
         
     # Reconstruct Chart object
-    chart = Chart.from_dict(chart_dict.get("Basic_Chart", {}))
-    
-    # Attach dynamic fields needed for activation (from the dict we pass in)
-    chart.current_dasha = chart_dict.get("Current_Dasha", {})
-    chart.current_transits = chart_dict.get("Live_Transits_Gochar", {})
+    chart = Chart.from_chart_dict(chart_dict)
     
     # 1. Rule Evaluation
     rule_eval = RuleEvaluator(chart)

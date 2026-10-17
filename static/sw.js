@@ -4,7 +4,7 @@
      * API calls (/api/*): NEVER cached — always network (private, live astrology).
      * Offline fallback: the cached shell renders an offline notice screen.
    Bump CACHE_VERSION to invalidate old caches on deploy. */
-const CACHE_VERSION = 'astro-v3';
+const CACHE_VERSION = 'astro-v4';
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 
 const SHELL_ASSETS = [

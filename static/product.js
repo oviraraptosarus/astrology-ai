@@ -382,7 +382,7 @@ Screens.home = async (host) => {
       <div class="identity-line">
         <div class="id-chip"><span class="k">Rising</span><span class="v">${esc(id.ascendant?.glyph || '')} ${esc(id.ascendant?.sign || '—')}</span></div>
         <div class="id-chip"><span class="k">Moon</span><span class="v">${esc(id.moon?.glyph || '')} ${esc(id.moon?.sign || '—')}</span></div>
-        <div class="id-chip"><span class="k">Nakshatra</span><span class="v">${esc(id.nakshatra || '—')}</span></div>
+        <div class="id-chip"><span class="k">Birth star</span><span class="v">${esc(id.nakshatra || '—')}</span></div>
       </div>
     </section>
 
@@ -571,7 +571,7 @@ function chartPatterns(data) {
     ${y.map(yo => `
       <div class="card">
         <div class="row-between"><h3>${esc(yo.name)}</h3>${badge(yo.confidence, yo.tone)}</div>
-        ${yo.domain ? `<div class="muted" style="font-size:var(--t-cap);margin-top:4px;">${esc(yo.domain)}</div>` : ''}
+        ${yo.domain ? `<div class="muted" style="font-size:var(--t-cap);margin-top:4px;">${esc(cap(yo.domain))}</div>` : ''}
         <p class="text-2" style="margin-top:10px;line-height:1.5;">${esc(yo.reason)}</p>
       </div>`).join('')}
   </div><div style="height:24px;"></div>`;

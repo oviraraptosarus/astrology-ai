@@ -182,7 +182,11 @@ def build_user_chart(user: dict):
     if not profile:
         return None
     # Cache key includes the birth fingerprint so edits invalidate the cache.
-    fp = f"{profile['birth_date']}|{profile['birth_time']}|{profile['latitude']}|{profile['longitude']}|{profile['timezone']}|{profile['full_name']}"
+    # The chart embeds time-sensitive data (current dasha, live gochara), so the key also
+    # carries today's UTC date (stale cache = yesterday's dasha) and a schema version.
+    from datetime import datetime as _dt, timezone as _tz
+    fp = (f"v2|{_dt.now(_tz.utc).strftime('%Y-%m-%d')}|{profile['birth_date']}|{profile['birth_time']}|"
+          f"{profile['latitude']}|{profile['longitude']}|{profile['timezone']}|{profile['full_name']}")
     key = chart_session_key(user, "primary:" + hashlib.sha256(fp.encode()).hexdigest()[:16])
     cached = load_chart(key)
     if cached is not None:
@@ -584,7 +588,7 @@ async def product_summary(current_user: dict = Depends(get_current_user)):
 @app.get("/api/product/home")
 async def product_home(current_user: dict = Depends(get_current_user)):
     chart = _require_chart(current_user)
-    return product.home_overview(chart, current_user["full_name"])
+    return product.home_overview(chart, current_user["full_name"], get_user_profile(current_user["id"]))
 
 
 @app.get("/api/product/chart")
@@ -622,7 +626,7 @@ async def product_forecast_domain(domain: str, current_user: dict = Depends(get_
 @app.get("/api/product/calendar")
 async def product_calendar(current_user: dict = Depends(get_current_user)):
     chart = _require_chart(current_user)
-    return product.calendar_view(chart)
+    return product.calendar_view(chart, get_user_profile(current_user["id"]))
 
 
 # ─── Relationships ────────────────────────────────────────────────────────────
